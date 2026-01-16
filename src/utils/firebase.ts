@@ -1,5 +1,5 @@
 import { Category, Product } from "@/types/products";
-import { getFirebaseApp } from "../config/firebase";
+import { db } from "../config/firebase";
 import {
   addDoc,
   collection,
@@ -16,7 +16,7 @@ import {
 // import { redirect } from "next/navigation";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { log } from "console";
-const { db } = getFirebaseApp();
+
 
 const slugify = (title: string) => {
   return title

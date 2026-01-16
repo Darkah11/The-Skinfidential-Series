@@ -7,9 +7,9 @@ import logo from "../../public/logo.jpg";
 import google from "../../public/google.svg";
 import Link from "next/link";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { getFirebaseApp } from "@/config/firebase";
+import { auth } from "@/config/firebase";
 import { useRouter } from "next/navigation";
-const { auth } = getFirebaseApp();
+
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");
