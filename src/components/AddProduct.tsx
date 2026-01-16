@@ -17,12 +17,16 @@ import { addProduct } from "@/utils/firebase";
 interface MyComponentProps {
   categories: Category[];
 }
+type CategoryOption = {
+  value: string;
+  label: string;
+};
 
 export default function AddProduct({ categories }: MyComponentProps) {
   //   const dispatch = useDispatch();
   //   const billing = useAppSelector((state) => state.billing);
-  const [category, setCategory] = useState(null);
-  const [file, setFile] = useState(null);
+const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
+  const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState<Product>({
     name: "",
@@ -43,16 +47,18 @@ export default function AddProduct({ categories }: MyComponentProps) {
     description?: string;
   };
 
-  const formattedCategories = categories.map((category) => ({
-    value: category.id, // Use the document ID or name as the internal value
-    label: category.name, // Use the category name as the visible label
+ const formattedCategories: CategoryOption[] = categories
+  .filter((category) => category.id) // only categories with id
+  .map((category) => ({
+    value: category.id as string, // safe cast because of filter
+    label: category.name,
   }));
   const optionsTag = [
     { value: "bestseller", label: "Bestseller" },
     { value: "trending", label: "Trending" },
   ];
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     console.log(formData);
@@ -91,24 +97,25 @@ export default function AddProduct({ categories }: MyComponentProps) {
   //   // }
   // };
 
-  const handleFileChange = (e: any) => {
-    console.log(e);
-    setFormData({ ...formData, image: e.target.files[0] });
-  };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
+
+  const file = files[0];
+
+  setFormData({ ...formData, image: file });
+};
 
   const handleSelectCategories = (
-    // react-select passes an array of objects when isMulti is true
-    selectedOptions: MultiValue<any>
-  ) => {
-    // Map the array of option objects to an array of just their values
-    const valuesArray = selectedOptions.map((option) => option.value);
-
-    setFormData({ ...formData, categories: valuesArray });
-    console.log(`Values array:`, valuesArray);
-  };
+  selectedOptions: MultiValue<CategoryOption>
+) => {
+  const valuesArray = selectedOptions.map((option) => option.value);
+  setFormData({ ...formData, categories: valuesArray });
+  console.log(`Values array:`, valuesArray);
+};
   const handleSelectTags = (
     // react-select passes an array of objects when isMulti is true
-    selectedOptions: MultiValue<any>
+    selectedOptions: MultiValue<CategoryOption>
   ) => {
     // Map the array of option objects to an array of just their values
     const valuesArray = selectedOptions.map((option) => option.value);
@@ -117,7 +124,7 @@ export default function AddProduct({ categories }: MyComponentProps) {
     console.log(formData);
   };
 
-  const handleAddProduct = async (e: any) => {
+  const handleAddProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log(formData);
 
@@ -153,12 +160,13 @@ export default function AddProduct({ categories }: MyComponentProps) {
         stock: 0,
         image: undefined
       });
+      setCategory([]);
       setFile(null);
       setPreviewUrl(null);
     }
   };
 
-  const handlePreview = (event: any) => {
+  const handlePreview = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files && event.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
@@ -184,10 +192,10 @@ export default function AddProduct({ categories }: MyComponentProps) {
     return () => {
       URL.revokeObjectURL(objectUrl);
     };
-  }, [file, previewUrl]); // Dependency on the file state
+  }, [file]); // Dependency on the file state
 
   return (
-    <form onSubmit={handleAddProduct}>
+    <form>
       <div>
         <div>
           <h3 className=" text-gray-600 text-lg mb-5 lg:text-2xl">
