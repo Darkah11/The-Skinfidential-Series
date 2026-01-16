@@ -111,7 +111,7 @@ export default function SignInForm() {
       </form>
 
       <div className="mt-12 text-center text-sm text-gray-500">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/sign-up" className="font-medium text-accent hover:opacity-80">
           Sign up
         </Link>

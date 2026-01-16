@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Instagram } from "lucide-react";
+// import { Github, Linkedin, Twitter, Instagram } from "lucide-react";
 import logo from "../../public/logo.png";
 import Image from "next/image";
 import Container from "./Container";

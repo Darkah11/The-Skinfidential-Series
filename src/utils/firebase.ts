@@ -3,19 +3,19 @@ import { db, storage } from "../config/firebase";
 import {
   addDoc,
   collection,
-  deleteDoc,
-  doc,
-  getDoc,
+  // deleteDoc,
+  // doc,
+  // getDoc,
   getDocs,
-  limit,
-  orderBy,
-  query,
-  updateDoc,
-  where,
+  // limit,
+  // orderBy,
+  // query,
+  // updateDoc,
+  // where,
 } from "firebase/firestore";
-import { redirect } from "next/navigation";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { log } from "console";
+// import { redirect } from "next/navigation";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { log } from "console";
 
 const slugify = (title: string) => {
   return title

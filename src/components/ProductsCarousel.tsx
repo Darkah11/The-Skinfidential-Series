@@ -2,7 +2,7 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styles from "./Carousel.module.css";
-import Link from "next/link";
+// import Link from "next/link";
 import ProductCard from "./ProductCard";
 import { Product, ProductWithId } from "@/types/products";
 

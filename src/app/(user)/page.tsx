@@ -1,9 +1,6 @@
 import Image from "next/image";
-import hero from "../../public/hero-bg.jpg";
 import jessica from "../../../public/jessica.png";
 import { GoldButton, OutlineButton, PrimaryButton } from "@/components/Button";
-import Navbar from "@/components/Navbar";
-import ProductCard from "@/components/ProductCard";
 import ProductsCarousel from "@/components/ProductsCarousel";
 import Container from "../../components/Container";
 import { getProducts } from "@/utils/firebase";

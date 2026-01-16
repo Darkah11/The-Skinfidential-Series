@@ -2,7 +2,6 @@ import Image from "next/image";
 import React from "react";
 import lineBg from "../../../public/line-bg.png";
 import sideImage from "../../../public/register.jpg";
-import LoginForm from "@/components/SignInForm";
 import SignUpForm from "@/components/SignUpForm";
 
 export default function SignUpPage() {
