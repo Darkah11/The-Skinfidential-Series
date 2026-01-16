@@ -19,7 +19,7 @@ export interface Category {
   description: string;
   id?: string;
 }
-interface image {
+export interface image {
   name?: string,
   type?: string;
   size?: number;

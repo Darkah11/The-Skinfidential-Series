@@ -184,7 +184,7 @@ export default function AddProduct({ categories }: MyComponentProps) {
     return () => {
       URL.revokeObjectURL(objectUrl);
     };
-  }, [file]); // Dependency on the file state
+  }, [file, previewUrl]); // Dependency on the file state
 
   return (
     <form onSubmit={handleAddProduct}>

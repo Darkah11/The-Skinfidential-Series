@@ -1,5 +1,5 @@
 import { Category, Product } from "@/types/products";
-import { db, storage } from "../config/firebase";
+import { db } from "../config/firebase";
 import {
   addDoc,
   collection,
