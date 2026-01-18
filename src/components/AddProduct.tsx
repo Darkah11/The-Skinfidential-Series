@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 // import right from "@/public/arrow-right.svg";
 // import back from "@/public/arrow-left.svg";
 import Image from "next/image";
-import { Category, Product } from "@/types/products";
+import { CategoryWithId, Product } from "@/types/products";
 import Select, { MultiValue } from "react-select";
 // import { log } from "util";
 import { addProduct } from "@/utils/firebase";
@@ -15,7 +15,7 @@ import { addProduct } from "@/utils/firebase";
 // import { useAppSelector } from "@/redux/hooks";
 
 interface MyComponentProps {
-  categories: Category[];
+  categories: CategoryWithId[];
 }
 type CategoryOption = {
   value: string;

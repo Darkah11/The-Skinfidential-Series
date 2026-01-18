@@ -17,7 +17,6 @@ import {
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { log } from "console";
 
-
 const slugify = (title: string) => {
   return title
     .toLowerCase() // Convert to lowercase
@@ -69,6 +68,27 @@ export const addProduct = async (body: Product) => {
   } catch (err) {
     console.error(err);
     alert("Error uploading product");
+  } finally {
+    console.log("all done");
+  }
+};
+export const addCategory = async (body: Category) => {
+  try {
+    // setLoading(true);
+    const categoryDataToSave = {
+      name: body.name,
+      description: body.description,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    // 2️⃣ Save product details + image URL to Firestore
+    await addDoc(collection(db, "categories"), categoryDataToSave);
+
+    alert("✅ category added successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Error uploading category");
   } finally {
     console.log("all done");
   }
