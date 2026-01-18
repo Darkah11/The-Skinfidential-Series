@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Category } from "@/types/products";
-import { addCategory, addProduct } from "@/utils/firebase";
+import { addCategory } from "@/utils/firebase";
 
 export default function AddCategories() {
   type formErrors = {
