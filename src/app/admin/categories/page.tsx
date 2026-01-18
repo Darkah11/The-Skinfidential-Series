@@ -1,5 +1,4 @@
 import AddCategories from '@/components/AddCategories';
-import { getCategories } from '@/utils/firebase';
 import React from 'react'
 
 export default async function AdminCategories() {
