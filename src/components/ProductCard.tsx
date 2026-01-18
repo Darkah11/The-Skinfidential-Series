@@ -5,7 +5,7 @@ import { AddToCartBtn } from "./Button";
 import { ProductWithId } from "@/types/products";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
-import { useAppSelector } from "@/redux/hooks";
+// import { useAppSelector } from "@/redux/hooks";
 import { formatPrice } from "@/utils/formatters";
 
 interface MyComponentProps {
@@ -14,7 +14,7 @@ interface MyComponentProps {
 
 export default function ProductCard({ product }: MyComponentProps) {
   const dispatch = useDispatch();
-  const cart = useAppSelector((state) => state.cart);
+  // const cart = useAppSelector((state) => state.cart);
   return (
     <Link href={"/"}>
       <div className=" flex flex-col h-full group transition-all duration-500 group shadow-lg rounded-lg overflow-hidden">

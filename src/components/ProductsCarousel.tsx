@@ -46,7 +46,7 @@ export default function ProductsCarousel({ products }: MyComponentProps) {
       containerClass={styles.customCarouselContainer}
       itemClass={styles.carouselItem}
     >
-      {products.map((item, index) => (
+      {products.map((item) => (
           <ProductCard key={item.id} product={item} />
       ))}
     </Carousel>

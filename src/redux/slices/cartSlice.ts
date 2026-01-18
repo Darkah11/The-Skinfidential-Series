@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ProductWithId, ProductWithQuantity } from "@/types/products";
+import { ProductWithQuantity } from "@/types/products";
 
 
 interface Billing {

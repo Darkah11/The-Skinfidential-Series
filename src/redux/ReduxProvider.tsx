@@ -7,7 +7,7 @@ import { store, persistor } from './store';
 
 // This is the client component that provides Redux to your app
 export default function ReduxProvider({ children }: { children: React.ReactNode }) {
-  const storeRef = useRef<any>();
+  const storeRef = useRef<typeof store | null>(null);
   if (!storeRef.current) {
     storeRef.current = store;
   }
