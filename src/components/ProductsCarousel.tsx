@@ -47,7 +47,7 @@ export default function ProductsCarousel({ products }: MyComponentProps) {
       itemClass={styles.carouselItem}
     >
       {products.map((item, index) => (
-          <ProductCard key={index} product={item} id={index} />
+          <ProductCard key={item.id} product={item} />
       ))}
     </Carousel>
   );

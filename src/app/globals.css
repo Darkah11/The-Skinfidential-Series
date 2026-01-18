@@ -18,6 +18,9 @@ body {
     font-family: 'Poppins', sans-serif;
     color: black; 
 }
+.no-scroll {
+  overflow: hidden;
+}
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
       display: none;

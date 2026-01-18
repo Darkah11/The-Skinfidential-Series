@@ -13,6 +13,10 @@ export interface Product {
 export type ProductWithId = Product & {
   id: string;
 };
+export type ProductWithQuantity = ProductWithId & {
+  quantity: number;
+  subtotal: number;
+};
 
 export interface Category {
   name: string;

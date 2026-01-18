@@ -4,6 +4,7 @@
 interface ButtonProp {
     text?: string;
     style?: string;
+    handleClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const PrimaryButton = ({text, style}: ButtonProp) => {
@@ -27,9 +28,9 @@ export const OutlineButton = ({text, style}: ButtonProp) => {
         </button>
     )
 }
-export const AddToCartBtn = ({style}: ButtonProp) => {
+export const AddToCartBtn = ({style, handleClick}: ButtonProp) => {
     return (
-        <button className={` ${style} text-white text-sm py-[5px] px-[13px] rounded-full bg-primary-100 `}>
+        <button onClick={handleClick} className={` ${style} text-white text-sm py-[5px] px-[13px] rounded-full bg-primary-100 `}>
             + Cart
         </button>
     )
