@@ -11,7 +11,7 @@ export interface Product {
 }
 export type ProductWithId = Product & {
   id: string;
-  slug: string;
+  slug?: string;
 };
 export type ProductWithQuantity = ProductWithId & {
   quantity: number;
