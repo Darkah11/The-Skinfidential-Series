@@ -1,6 +1,5 @@
 export interface Product {
   name: string;
-  slug?: string;
   price: number;
   description: string;
   categories: string[];
