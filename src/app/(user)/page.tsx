@@ -118,9 +118,9 @@ export default async function Home() {
   // ];
   return (
     <>
-      <main className="">
+      
         <section className=" ">
-          <Container className=" relative  px-5 lg:px-12 xl:px-24 py-16 pt-32 text-primary-100">
+          <Container className=" relative  px-5 lg:px-12 xl:px-24 py-16  text-primary-100">
             <div className=" hidden lg:block absolute top-0 right-0 h-full w-[30%] bg-gold" />
             <div className=" relative md:flex items-center">
               <div className=" max-w-[500px] mx-auto md:max-w-none md:mx-0 md:flex-1">
@@ -412,7 +412,7 @@ export default async function Home() {
             </div>
           </Container>
         </section>
-      </main>
+      {/* </main> */}
     </>
   );
 }

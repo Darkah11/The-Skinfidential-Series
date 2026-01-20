@@ -12,6 +12,7 @@ export interface Product {
 }
 export type ProductWithId = Product & {
   id: string;
+  slug: string;
 };
 export type ProductWithQuantity = ProductWithId & {
   quantity: number;
@@ -20,7 +21,6 @@ export type ProductWithQuantity = ProductWithId & {
 
 export interface Category {
   name: string;
-  description: string;
   createdAt?: string;
   updatedAt?: string;
 }

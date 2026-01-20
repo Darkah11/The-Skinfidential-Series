@@ -16,7 +16,7 @@ export default function ProductCard({ product }: MyComponentProps) {
   const dispatch = useDispatch();
   // const cart = useAppSelector((state) => state.cart);
   return (
-    <Link href={"/"}>
+    <Link href={`/product/${product.slug}`}>
       <div className=" flex flex-col h-full group transition-all duration-500 group shadow-lg rounded-lg overflow-hidden">
         <div>
           <Image

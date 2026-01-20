@@ -77,7 +77,6 @@ export const addCategory = async (body: Category) => {
     // setLoading(true);
     const categoryDataToSave = {
       name: body.name,
-      description: body.description,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
