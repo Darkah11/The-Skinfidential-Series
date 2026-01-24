@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 // import cards from "@/public/payment-cards.png";
 // import { PaystackButton } from "react-paystack";
-import { useAppSelector } from "@/redux/hooks";
 // import { useSession } from "next-auth/react";
 import AccordionItem from "./AccordionItem";
 import { DeliveryWithId } from "@/types/delivery";

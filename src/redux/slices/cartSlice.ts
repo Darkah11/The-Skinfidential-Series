@@ -63,8 +63,9 @@ const cartSlice = createSlice({
         (item) => item.id === action.payload,
       );
       if (itemToIncrement) {
-        itemToIncrement.quantity < itemToIncrement.stock &&
+        if (itemToIncrement.quantity < itemToIncrement.stock) {
           itemToIncrement.quantity++;
+        }
         itemToIncrement.subtotal =
           itemToIncrement.price * itemToIncrement.quantity;
         // itemToIncrement.total = itemToIncrement.price * itemToIncrement.quantity

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import CheckoutDetails from "@/components/CheckoutDetails";
 import OrderSummary from "@/components/OrderSummary";
