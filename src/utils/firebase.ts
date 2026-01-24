@@ -1,4 +1,4 @@
-import { Category, Product } from "@/types/products";
+import { Category, Product, ProductWithId } from "@/types/products";
 import { db } from "../config/firebase";
 import {
   addDoc,
@@ -7,12 +7,16 @@ import {
   // doc,
   // getDoc,
   getDocs,
+  orderBy,
+  query,
+  where,
   // limit,
   // orderBy,
   // query,
   // updateDoc,
   // where,
 } from "firebase/firestore";
+import { DeliveryWithId } from "@/types/delivery";
 // import { redirect } from "next/navigation";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { log } from "console";
@@ -43,7 +47,7 @@ export const addProduct = async (body: Product) => {
       {
         method: "POST",
         body: formData,
-      }
+      },
     );
 
     const cloudinaryData = await cloudinaryRes.json();
@@ -117,4 +121,36 @@ export async function getProducts() {
     console.error("Error fetching products:", error);
     return [];
   }
+}
+
+export async function getProductBySlug(
+  slug: string,
+): Promise<ProductWithId | null> {
+  const q = query(collection(db, "products"), where("slug", "==", slug));
+
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) return null;
+
+  const doc = snapshot.docs[0];
+
+  return {
+    id: doc.id,
+    ...(doc.data() as Omit<ProductWithId, "id">),
+  };
+}
+
+export async function getDeliveryOptions() {
+  const q = query(
+    collection(db, "deliveryOptions"),
+    where("isActive", "==", true),
+    orderBy("order", "asc"),
+  );
+
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as Omit<DeliveryWithId, "id">),
+  }));
 }

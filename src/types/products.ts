@@ -8,6 +8,7 @@ export interface Product {
   image?: File;
   createdAt?: string;
   imageUrl?: string;
+  costPrice: number;
 }
 export type ProductWithId = Product & {
   id: string;

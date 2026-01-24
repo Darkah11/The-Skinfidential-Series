@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { PrimaryButton } from "./Button";
 import { formatPrice } from "@/utils/formatters";
+import Link from "next/link";
 
 interface ChildProps {
   onUpdate: () => void;
@@ -27,7 +28,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
   useEffect(() => {
     const total = cart.reduce(
       (sum, product) => sum + Number(product.price) * product.quantity,
-      0
+      0,
     );
     setSubtotalPrice(total);
   }, [cart]);
@@ -116,9 +117,12 @@ export default function CartMenu({ onUpdate }: ChildProps) {
               </p>
             </div>
             <div className=" flex items-center justify-between">
-              <p className=" text-gray-600 text-sm">Delivery Fee</p>
+              <p className=" text-gray-600 text-sm">Tax (7.5%)</p>
               <p className="  text-sm font-semibold">
-                ₦{cart.length > 0 ? formatPrice(5000) : formatPrice(0)}
+                ₦
+                {cart.length > 0
+                  ? formatPrice((7.5 / 100) * subtotalPrice)
+                  : formatPrice(0)}
               </p>
             </div>
           </div>
@@ -128,14 +132,16 @@ export default function CartMenu({ onUpdate }: ChildProps) {
               <p className=" text-lg font-semibold">
                 ₦
                 {cart.length > 0
-                  ? formatPrice(subtotalPrice + 5000)
+                  ? formatPrice(subtotalPrice + (7.5 / 100) * subtotalPrice)
                   : formatPrice(0)}
               </p>
             </div>
-            <PrimaryButton
-              text="Procced to Checkout"
-              style=" bg-primary-100 rounded-md"
-            />
+            <Link href={"/checkout"} onClick={() => onUpdate()}>
+              <PrimaryButton
+                text="Procced to Checkout"
+                style=" bg-primary-100 rounded-md"
+              />
+            </Link>
           </div>
         </div>
       </div>

@@ -36,7 +36,7 @@ export default function Navbar() {
               <button className=" md:hidden">
                 <Image src={menu} alt=" menu icon" className=" w-10" />
               </button>
-              <Link href={""} className=" flex items-center gap-2">
+              <Link href={"/"} className=" flex items-center gap-2">
                 <Image src={logo} alt="tss logo" className=" w-10" />
                 <h1 className=" hidden lg:block leading-none text-xs font-bold">
                   The <br />

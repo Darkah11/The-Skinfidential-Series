@@ -1,35 +1,44 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ProductWithQuantity } from "@/types/products";
-
+import { DeliveryWithId } from "@/types/delivery";
 
 interface Billing {
-    first_name: string,
-    last_name: string,
-    email: string,
-    address_1: string,
-    address_2?: string,
-    company?: string,
-    country: string,
-    state: string,
-    phone: string,
-    city: string,
+  first_name: string;
+  last_name: string;
+  email: string;
+  address_1: string;
+  company?: string;
+  country: string;
+  state: string;
+  phone: string;
+  city: string;
 }
 interface CartState {
   cart: ProductWithQuantity[];
   billing: Billing;
+  deliveryOption: Omit<DeliveryWithId, "id">;
 }
-const initialState: CartState = { cart: [], billing: {
+const initialState: CartState = {
+  cart: [],
+  deliveryOption: {
+    name: "",
+    isActive: true,
+    description: "",
+    price: 0,
+    order: 0,
+  },
+  billing: {
     first_name: "",
     last_name: "",
     email: "",
     address_1: "",
-    address_2: "",
     company: "",
     country: "",
     state: "",
     phone: "",
     city: "",
-  }};
+  },
+};
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -38,7 +47,7 @@ const cartSlice = createSlice({
       const newItem = action.payload;
       const existingItem = state.cart.find((item) => item.id === newItem.id);
       if (!existingItem) {
-      state.cart.push({...action.payload});
+        state.cart.push({ ...action.payload });
       }
     },
     clearCart: (state) => {
@@ -48,34 +57,47 @@ const cartSlice = createSlice({
     },
     removeFromCart: (state, action) => {
       state.cart = state.cart.filter((item) => item.id !== action.payload);
-
     },
     incrementQuantity: (state, action) => {
       const itemToIncrement = state.cart.find(
-        (item) => item.id === action.payload
+        (item) => item.id === action.payload,
       );
       if (itemToIncrement) {
-        itemToIncrement.quantity++;
-        itemToIncrement.subtotal = itemToIncrement.price * itemToIncrement.quantity
+        itemToIncrement.quantity < itemToIncrement.stock &&
+          itemToIncrement.quantity++;
+        itemToIncrement.subtotal =
+          itemToIncrement.price * itemToIncrement.quantity;
         // itemToIncrement.total = itemToIncrement.price * itemToIncrement.quantity
       }
     },
     decrementQuantity: (state, action) => {
       const itemToDecrement = state.cart.find(
-        (item) => item.id === action.payload
+        (item) => item.id === action.payload,
       );
       if (itemToDecrement && itemToDecrement.quantity > 1) {
-          itemToDecrement.quantity--;
-          itemToDecrement.subtotal = itemToDecrement.price * itemToDecrement.quantity
+        itemToDecrement.quantity--;
+        itemToDecrement.subtotal =
+          itemToDecrement.price * itemToDecrement.quantity;
         // itemToDecrement.total = itemToDecrement.price * itemToDecrement.quantity
         // }
       }
     },
     updateBilling: (state, action) => {
-      state.billing = action.payload
-    }
+      state.billing = action.payload;
+    },
+    updateDeliveryOption: (state, action) => {
+      state.deliveryOption = action.payload;
+    },
   },
 });
 // export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, updateBilling } = cartSlice.actions;
-export const { addToCart, removeFromCart, updateBilling, clearCart, incrementQuantity, decrementQuantity } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  updateBilling,
+  clearCart,
+  incrementQuantity,
+  decrementQuantity,
+  updateDeliveryOption,
+} = cartSlice.actions;
 export default cartSlice.reducer;

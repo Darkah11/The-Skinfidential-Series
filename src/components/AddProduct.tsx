@@ -25,12 +25,13 @@ type CategoryOption = {
 export default function AddProduct({ categories }: MyComponentProps) {
   //   const dispatch = useDispatch();
   //   const billing = useAppSelector((state) => state.billing);
-const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
+  const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState<Product>({
     name: "",
     price: 0,
+    costPrice: 0,
     description: "",
     categories: [],
     tags: [],
@@ -40,6 +41,7 @@ const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
   type formErrors = {
     name?: string;
     price?: string;
+    costPrice?: string;
     image?: string;
     categories?: string;
     tags?: string;
@@ -47,12 +49,12 @@ const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
     description?: string;
   };
 
- const formattedCategories: CategoryOption[] = categories
-  .filter((category) => category.id) // only categories with id
-  .map((category) => ({
-    value: category.id as string, // safe cast because of filter
-    label: category.name,
-  }));
+  const formattedCategories: CategoryOption[] = categories
+    .filter((category) => category.id) // only categories with id
+    .map((category) => ({
+      value: category.name as string, // safe cast because of filter
+      label: category.name,
+    }));
   const optionsTag = [
     { value: "bestseller", label: "Bestseller" },
     { value: "trending", label: "Trending" },
@@ -98,24 +100,24 @@ const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
   // };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const files = e.target.files;
-  if (!files || files.length === 0) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
-  const file = files[0];
+    const file = files[0];
 
-  setFormData({ ...formData, image: file });
-};
+    setFormData({ ...formData, image: file });
+  };
 
   const handleSelectCategories = (
-  selectedOptions: MultiValue<CategoryOption>
-) => {
-  const valuesArray = selectedOptions.map((option) => option.value);
-  setFormData({ ...formData, categories: valuesArray });
-  console.log(`Values array:`, valuesArray);
-};
+    selectedOptions: MultiValue<CategoryOption>,
+  ) => {
+    const valuesArray = selectedOptions.map((option) => option.value);
+    setFormData({ ...formData, categories: valuesArray });
+    console.log(`Values array:`, valuesArray);
+  };
   const handleSelectTags = (
     // react-select passes an array of objects when isMulti is true
-    selectedOptions: MultiValue<CategoryOption>
+    selectedOptions: MultiValue<CategoryOption>,
   ) => {
     // Map the array of option objects to an array of just their values
     const valuesArray = selectedOptions.map((option) => option.value);
@@ -134,6 +136,9 @@ const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
     }
     if (formData.price == 0) {
       newErrors.price = "Price is required.";
+    }
+    if (formData.costPrice == 0) {
+      newErrors.costPrice = "Cost price is required.";
     }
     if (!formData.image) {
       newErrors.image = "Image is required.";
@@ -154,11 +159,12 @@ const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
       setFormData({
         name: "",
         price: 0,
+        costPrice: 0,
         description: "",
         categories: [],
         tags: [],
         stock: 0,
-        image: undefined
+        image: undefined,
       });
       setCategory([]);
       setFile(null);
@@ -245,6 +251,32 @@ const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
               <p className=" mt-2 text-red-500 text-xs">{errors.price}</p>
             )}
           </div>
+          <div className=" mb-5 lg:w-1/2">
+            <label
+              htmlFor="cost_price"
+              className=" text-gray-700 text-[11px] font-semibold  uppercase"
+            >
+              Cost Price <span className=" text-red-700">*</span>
+            </label>
+            <input
+              onChange={handleChange}
+              value={formData.costPrice}
+              type="number"
+              name="costPrice"
+              id="cost_price"
+              className={` hide-number-arrows outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300 ${
+                errors.costPrice && formData.costPrice == 0
+                  ? " border-red-500"
+                  : ""
+              }`}
+            />
+            {errors.costPrice && (
+              <p className=" mt-2 text-red-500 text-xs">{errors.costPrice}</p>
+            )}
+          </div>
+          {formData.costPrice > 0 && (
+            <p className=" text-sm my-2 text-green-600">Profit is {formData.price - formData.costPrice}</p>
+          )}
           <div className=" mb-5 lg:w-1/2">
             <label
               htmlFor="description"
