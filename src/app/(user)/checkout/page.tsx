@@ -21,7 +21,7 @@ export default async function CheckoutPage() {
               </h3>
               <OrderSummary />
             </div>
-            <div className=" lg:py-12 lg:border-r border-gold py-16 lg:mt-0 lg:order-1 lg:w-[60%] lg:pr-12">
+            <div className=" lg:py-12 lg:border-r border-gold pt-5 pb-10 lg:mt-0 lg:order-1 lg:w-[60%] lg:pr-12">
               <h2 className="hidden lg:block text-4xl font-bold text-primary-100">
                 Checkout
               </h2>

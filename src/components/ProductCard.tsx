@@ -32,22 +32,9 @@ export default function ProductCard({ product }: MyComponentProps) {
           <p className=" capitalize text-black text-sm font-medium transition-all duration-300">
             {product.name}
           </p>
-          <div className=" flex justify-between items-center mt-[5px]">
+          <div className=" flex justify-between items-center mt-[10px]">
             <p className=" font-bold text-sm">₦{formatPrice(product.price)}</p>
-            <div className=" absolute md:relative md:top-0 md:right-0 -top-[15px] right-3">
-              <AddToCartBtn
-                handleClick={(e) => {
-                  e.preventDefault();
-                  dispatch(
-                    addToCart({
-                      ...product,
-                      quantity: 1,
-                      subtotal: product.price,
-                    })
-                  );
-                }}
-              />
-            </div>
+           
           </div>
         </div>
       </div>

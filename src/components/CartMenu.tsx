@@ -54,7 +54,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
             onClick={() => dispatch(clearCart())}
             className=" text-accent underline hover:no-underline transition-all duration-300"
           >
-            clear cart
+            Clear Cart
           </button>
         </div>
         <div className=" flex flex-col flex-1 ">
@@ -139,7 +139,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
             <Link href={"/checkout"} onClick={() => onUpdate()}>
               <PrimaryButton
                 text="Procced to Checkout"
-                style=" bg-primary-100 rounded-md"
+                style=" bg-primary-100 rounded-md w-full"
               />
             </Link>
           </div>
