@@ -1,10 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { AddToCartBtn } from "./Button";
 import { ProductWithId } from "@/types/products";
-import { useDispatch } from "react-redux";
-import { addToCart } from "@/redux/slices/cartSlice";
 // import { useAppSelector } from "@/redux/hooks";
 import { formatPrice } from "@/utils/formatters";
 
@@ -13,7 +10,6 @@ interface MyComponentProps {
 }
 
 export default function ProductCard({ product }: MyComponentProps) {
-  const dispatch = useDispatch();
   // const cart = useAppSelector((state) => state.cart);
   return (
     <Link href={`/product/${product.slug}`}>
