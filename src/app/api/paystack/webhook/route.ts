@@ -50,11 +50,8 @@ function generateOrderNumber() {
   return `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // required for raw body verification
-  },
-};
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
