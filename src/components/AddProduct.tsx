@@ -167,7 +167,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       if (product) {
-        const editedProduct = await editProduct(
+        await editProduct(
           product.id,
           formData,
           product.imageUrl || "",
