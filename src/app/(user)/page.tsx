@@ -306,7 +306,7 @@ export default async function Home() {
                 </p>
                 <PrimaryButton
                   text="Check It Now"
-                  style=" bg-primary-100 text-white mt-5"
+                  style=" bg-primary-100 text-white mt-5 mx-auto"
                 />
               </div>
               <div className=" mt-5 md:w-1/2 md:mt-0">

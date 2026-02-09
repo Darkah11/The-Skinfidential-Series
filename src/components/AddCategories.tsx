@@ -1,12 +1,19 @@
 "use client";
-import React, { useState } from "react";
-import { Category } from "@/types/products";
-import { addCategory } from "@/utils/firebase";
+import React, { useEffect, useState } from "react";
+import { Category, CategoryWithId } from "@/types/products";
+import { addCategory, editCategory } from "@/utils/firebase";
+import { usePathname } from "next/navigation";
 
-export default function AddCategories() {
-  type formErrors = {
-    name?: string;
-  };
+interface MyComponentProps {
+  category?: CategoryWithId | null;
+}
+type formErrors = {
+  name?: string;
+};
+
+export default function AddCategories({ category }: MyComponentProps) {
+  const pathname = usePathname();
+  const editPath = "/admin/categories/edit-category";
   const [formData, setFormData] = useState<Category>({
     name: "",
   });
@@ -18,7 +25,7 @@ export default function AddCategories() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleAddProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddCategory = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
     e.preventDefault();
     console.log(formData);
@@ -38,13 +45,39 @@ export default function AddCategories() {
     }
     setLoading(false);
   };
+  const handleEditCategory = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    console.log(formData);
+
+    const newErrors: formErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = "Category Name is required.";
+    }
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      if (category) {
+        await editCategory(category.id, formData);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (category && pathname.includes(editPath)) {
+      setFormData({
+        name: category.name,
+      });
+    }
+  }, [category, pathname]);
 
   return (
     <form>
       <div>
         <div>
-          <h3 className=" text-gray-600 text-lg mb-5 lg:text-2xl">
-            Information
+          <h3 className=" text-primary-100 font-semibold text-2xl">
+            {pathname.includes(editPath) ? "Edit Category" : "Add Category"}
           </h3>
         </div>
         <div className=" mt-5">
@@ -70,15 +103,22 @@ export default function AddCategories() {
             )}
           </div>
         </div>
-
         <button
           disabled={loading}
-          onClick={(e) => handleAddProduct(e)}
+          onClick={(e) =>
+            pathname.includes(editPath)
+              ? handleEditCategory(e)
+              : handleAddCategory(e)
+          }
           type="submit"
-          className=" mt-5 w-[120px] px-3 py-2 bg-primary-100 flex items-center justify-center gap-2"
+          className=" mt-5 w-auto px-3 py-2 bg-primary-100 flex items-center justify-center gap-2"
         >
           <span className=" text-xs text-center font-medium text-white">
-            {loading ? "loading..." : "ADD CATEGORY"}
+            {loading
+              ? "loading..."
+              : pathname.includes(editPath)
+                ? "SAVE CATEGORY"
+                : "ADD CATEGORY"}
           </span>
         </button>
       </div>

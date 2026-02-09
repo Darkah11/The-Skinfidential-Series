@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { PrimaryButton } from "./Button";
 import { formatPrice } from "@/utils/formatters";
 import Link from "next/link";
+import { getGeneralSettings } from "@/utils/firebase";
 
 interface ChildProps {
   onUpdate: () => void;
@@ -19,12 +20,22 @@ interface ChildProps {
 
 export default function CartMenu({ onUpdate }: ChildProps) {
   const [subtotalPrice, setSubtotalPrice] = useState(0);
+  const [tax, setTax] = useState(0);
   const cart = useAppSelector((state) => state.cart);
   console.log(cart);
   const dispatch = useDispatch();
   const handleClose = () => {
     onUpdate();
   };
+  const getTask = async () => {
+    const settings = await getGeneralSettings();
+    if (settings) {
+      setTax(settings.tax.percentage);
+    }
+  };
+  useEffect(() => {
+    getTask();
+  }, []);
   useEffect(() => {
     const total = cart.reduce(
       (sum, product) => sum + Number(product.price) * product.quantity,
@@ -117,11 +128,11 @@ export default function CartMenu({ onUpdate }: ChildProps) {
               </p>
             </div>
             <div className=" flex items-center justify-between">
-              <p className=" text-gray-600 text-sm">Tax (7.5%)</p>
+              <p className=" text-gray-600 text-sm">Tax ({tax}%)</p>
               <p className="  text-sm font-semibold">
                 ₦
                 {cart.length > 0
-                  ? formatPrice((7.5 / 100) * subtotalPrice)
+                  ? formatPrice((tax / 100) * subtotalPrice)
                   : formatPrice(0)}
               </p>
             </div>
@@ -132,7 +143,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
               <p className=" text-lg font-semibold">
                 ₦
                 {cart.length > 0
-                  ? formatPrice(subtotalPrice + (7.5 / 100) * subtotalPrice)
+                  ? formatPrice(subtotalPrice + (tax / 100) * subtotalPrice)
                   : formatPrice(0)}
               </p>
             </div>

@@ -11,8 +11,12 @@ import { PrimaryButton } from "./Button";
 import Container from "@/components/Container";
 import { useAppSelector } from "@/redux/hooks";
 import CartMenu from "./CartMenu";
+import { Category } from "@/types/products";
 
-export default function Navbar() {
+interface MyComponentsProps {
+  categories: Category[];
+}
+export default function Navbar({ categories }: MyComponentsProps) {
   const [cartOpen, setCartOpen] = useState(false);
   const cart = useAppSelector((state) => state.cart);
   const closeCart = () => {
@@ -31,7 +35,7 @@ export default function Navbar() {
     <>
       <header className=" ">
         <Container className=" fixed top-0 left-0 right-0 w-full bg-white z-50 shadow-lg">
-          <nav className=" px-5 lg:px-12 xl:px-24 py-4 flex justify-between items-center">
+          <nav className=" px-5 lg:px-12 xl:px-24 py-4 flex justify-between">
             <div className=" flex items-center gap-x-3 md:gap-x-10 lg:gap-x-12">
               <button className=" md:hidden">
                 <Image src={menu} alt=" menu icon" className=" w-10" />
@@ -44,25 +48,49 @@ export default function Navbar() {
                 </h1>
               </Link>
 
-              <ul className=" hidden  md:flex items-center gap-x-7">
-                <li>
+              <ul className=" hidden  md:flex items-center gap-x-7 h-full">
+                {/* <li>
                   <Link href={"/"} className=" text-sm hover:text-primary-50">
                     Home
                   </Link>
+                </li> */}
+                <li>
+                  <Link
+                    href={"/shop"}
+                    className=" text-sm hover:text-primary-50"
+                  >
+                    Shop
+                  </Link>
+                </li>
+
+                {/* <li></li> */}
+                <li className="relative group h-full ">
+                  <Link
+                    href={""}
+                    className=" flex items-center h-full text-sm hover:text-primary-50"
+                  >
+                    Categories +
+                  </Link>
+
+                  <div className="fixed left-0 top-[63px] pt-5 bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 grid grid-cols-3 w-screen">
+                    {categories &&
+                      categories.map((category) => (
+                        <Link
+                          href={{
+                            pathname: "/categories",
+                            query: { category: category.name },
+                          }}
+                          key={category.createdAt}
+                          className=" border-r border-r-gold block px-4 py-2 hover:text-gold hover:bg-primary-100 whitespace-nowrap"
+                        >
+                          {category.name}
+                        </Link>
+                      ))}
+                  </div>
                 </li>
                 <li>
                   <Link href={"/"} className=" text-sm hover:text-primary-50">
                     About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href={"/"} className=" text-sm hover:text-primary-50">
-                    Shop
-                  </Link>
-                </li>
-                <li>
-                  <Link href={"/"} className=" text-sm hover:text-primary-50">
-                    Categories +
                   </Link>
                 </li>
                 <li>
@@ -79,7 +107,10 @@ export default function Navbar() {
               <Link href={"/"}>
                 <Image src={search} alt="search icon" className=" w-7" />
               </Link>
-              <button onClick={() => setCartOpen(!cartOpen)} className=" relative">
+              <button
+                onClick={() => setCartOpen(!cartOpen)}
+                className=" relative"
+              >
                 <Image src={bag} alt="bag icon" className=" w-7" />
                 {cart.length > 0 && (
                   <span className=" absolute -top-[3px] -right-[5px] p-1 rounded-full text-white bg-accent text-[10px] w-[18px] h-[18px] leading-none text-center py-1 ">
@@ -98,7 +129,7 @@ export default function Navbar() {
           </nav>
         </Container>
       </header>
-      {cartOpen && <CartMenu onUpdate={closeCart } />}
+      {cartOpen && <CartMenu onUpdate={closeCart} />}
     </>
   );
 }

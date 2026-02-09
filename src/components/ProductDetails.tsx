@@ -22,7 +22,7 @@ export default function ProductDetails({ product }: MyComponentProps) {
   const dispatch = useDispatch();
   const [qty, setQty] = useState(1);
   const handleIncrement = () =>
-    setQty((prev) => (qty < product.stock ? prev + 1 : prev));
+    setQty((prev) => prev + 1);
   const handleDecrement = () => setQty((prev) => (prev > 1 ? prev - 1 : 1));
   return (
     <section>
@@ -60,7 +60,7 @@ export default function ProductDetails({ product }: MyComponentProps) {
                 {product.description}
               </p>
             </div>
-            <div className=" mt-5">
+            {/* <div className=" mt-5">
               <p className=" font-medium">
                 {product.stock > 0 ? (
                   <CircleCheckBig className=" text-green-600 inline" />
@@ -72,7 +72,7 @@ export default function ProductDetails({ product }: MyComponentProps) {
                   {product.stock}
                 </span>
               </p>
-            </div>
+            </div> */}
             <div className="flex items-center mt-5">
               <button
                 onClick={handleDecrement}

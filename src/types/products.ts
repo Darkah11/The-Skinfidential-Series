@@ -4,11 +4,12 @@ export interface Product {
   description: string;
   categories: string[];
   tags: string[];
-  stock: number;
+  stock?: number;
   image?: File;
   createdAt?: string;
   imageUrl?: string;
   costPrice: number;
+  imagePublicId?: string;
 }
 export type ProductWithId = Product & {
   id: string;

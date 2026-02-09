@@ -6,11 +6,16 @@ import { useDispatch } from "react-redux";
 import { updateBilling } from "@/redux/slices/cartSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { PrimaryButton } from "./Button";
+import { RotatingCircle } from "./Loader";
 
 export default function CheckoutDetails() {
   const dispatch = useDispatch();
   const billing = useAppSelector((state) => state.billing);
+  const total = useAppSelector((state) => state.total);
+  const cart = useAppSelector((state) => state.cart);
+  const deliveryOption = useAppSelector((state) => state.deliveryOption);
   const [formData, setFormData] = useState(billing);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<formErrors>({});
   type formErrors = {
     last_name?: string;
@@ -30,10 +35,115 @@ export default function CheckoutDetails() {
     console.log(formData);
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // const startPayment = async () => {
+  //   const res = await fetch("/api/paystack/initiate", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       email: "harrisegue9@gmail.com",
+  //       amount: total,
+  //       metadata: {
+  //         cart,
+  //         deliveryMethod: deliveryOption.name,
+  //         deliveryPrice: deliveryOption.price,
+  //         billing,
+  //         userId: "htq6ucniu2u2bv",
+  //       },
+  //     }),
+  //   });
+
+  //   const data = await res.json();
+  //   window.location.href = data.data.authorization_url;
+  // };
+
+  const startPayment = async () => {
+    // 1. Persist cart snapshot
+    const checkoutRes = await fetch("/api/checkout/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cart, // redux cart
+        billing,
+        deliveryMethod: deliveryOption.name,
+        deliveryPrice: deliveryOption.price,
+        userId: "htq6ucniu2u2bv",
+        // userId: user.uid,
+      }),
+    });
+
+    const { checkoutId } = await checkoutRes.json();
+
+    const res = await fetch("/api/paystack/initiate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        // email: user.email,
+        email: "harrisegue9@gmail.com",
+        amount: total,
+        metadata: {
+          // userId: user.uid,
+          userId: "htq6ucniu2u2bv",
+          checkoutId,
+        },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      // Redirect browser to Paystack checkout
+      window.location.href = data.data.authorization_url;
+    } else {
+      console.error("Payment initialization failed:", data);
+    }
+  };
+
+  // const startPayment = async () => {
+  //   // Generate checkout ID client-side
+  //   const checkoutId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+  //   // Initialize payment first (no waiting)
+  //   const paymentPromise = fetch("/api/paystack/initiate", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       email: "harrisegue9@gmail.com",
+  //       amount: total,
+  //       metadata: { userId: "htq6ucniu2u2bv", checkoutId },
+  //     }),
+  //   });
+
+  //   // Simultaneously save to Firestore (don't await)
+  //   const savePromise = fetch("/api/checkout/create", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       checkoutId, // Use the same ID
+  //       cart,
+  //       billing,
+  //       deliveryMethod: deliveryOption.name,
+  //       deliveryPrice: deliveryOption.price,
+  //       userId: "htq6ucniu2u2bv",
+  //       expiresAt: Date.now() + 30 * 60 * 1000, // 30 min TTL
+  //     }),
+  //   });
+
+  //   // Wait for payment initialization (primary concern)
+  //   const res = await paymentPromise;
+  //   const data = await res.json();
+
+  //   if (data.status) {
+  //     // Redirect immediately (don't wait for Firestore)
+  //     window.location.href = data.data.authorization_url;
+
+  //     // Let the save complete in background
+  //     savePromise.catch((err) => console.error("Background save failed:", err));
+  //   }
+  // };
+
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newErrors: formErrors = {};
-
     if (!formData.last_name.trim()) {
       newErrors.last_name = "Last Name is required.";
     }
@@ -58,13 +168,17 @@ export default function CheckoutDetails() {
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone is required.";
     }
-
     setErrors(newErrors);
-    console.log(errors);
-
     if (Object.keys(newErrors).length === 0) {
-      dispatch(updateBilling(formData));
-      console.log(formData);
+      setLoading(true);
+      try {
+        dispatch(updateBilling(formData));
+        await startPayment();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
   return (
@@ -278,7 +392,13 @@ export default function CheckoutDetails() {
             </div>
           </div>
           <div className=" mt-10">
-            <PrimaryButton text="Pay Now" handleClick={(e) => handleSubmit(e)} style=" bg-primary-100 w-full py-7 rounded-md" />
+            <PrimaryButton
+              loading={loading}
+              loader={loading ? <RotatingCircle /> : null}
+              text="Pay Now"
+              handleClick={(e) => handleSubmit(e)}
+              style=" bg-primary-100 w-full py-7 rounded-md"
+            />
           </div>
         </div>
       </form>

@@ -3,10 +3,12 @@ import CheckoutDetails from "@/components/CheckoutDetails";
 import OrderSummary from "@/components/OrderSummary";
 import Container from "@/components/Container";
 import DeliveryMethod from "@/components/DeliveryMethod";
-import { getDeliveryOptions } from "@/utils/firebase";
+import { getDeliveryOptions, getGeneralSettings } from "@/utils/firebase";
 
 export default async function CheckoutPage() {
   const deliveryOptions = await getDeliveryOptions();
+  const settings = await getGeneralSettings();
+  const tax = settings?.tax.percentage;
   return (
     <>
       <section>
@@ -19,7 +21,7 @@ export default async function CheckoutPage() {
               <h3 className=" text-2xl font-semibold hidden lg:block text-gray-600">
                 YOUR ORDER
               </h3>
-              <OrderSummary />
+              <OrderSummary tax={tax} />
             </div>
             <div className=" lg:py-12 lg:border-r border-gold pt-5 pb-10 lg:mt-0 lg:order-1 lg:w-[60%] lg:pr-12">
               <h2 className="hidden lg:block text-4xl font-bold text-primary-100">

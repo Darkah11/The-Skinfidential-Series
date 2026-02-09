@@ -4,12 +4,20 @@ import { formatPrice } from "@/utils/formatters";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import dropdown from "../../public/dropdown.svg";
+import { updateTotal } from "@/redux/slices/cartSlice";
+import { useDispatch } from "react-redux";
 
-export default function OrderSummary() {
+interface MyComponentProps {
+  tax: number | undefined;
+}
+
+export default function OrderSummary({ tax }: MyComponentProps) {
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [subtotalPrice, setSubtotalPrice] = useState(0);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const cart = useAppSelector((state) => state.cart);
+  const total = useAppSelector((state) => state.total);
   const deliveryOption = useAppSelector((state) => state.deliveryOption);
 
   const toggleAccordion = () => {
@@ -22,6 +30,14 @@ export default function OrderSummary() {
     );
     setSubtotalPrice(total);
   }, [cart]);
+  useEffect(() => {
+    const safeTax: number = tax ?? 0;
+    dispatch(
+      updateTotal(
+        subtotalPrice + (safeTax / 100) * subtotalPrice + deliveryOption.price,
+      ),
+    );
+  }, [subtotalPrice, deliveryOption, cart]);
 
   return (
     <>
@@ -32,7 +48,9 @@ export default function OrderSummary() {
           aria-expanded={isOpen}
         >
           <div className=" flex items-center gap-x-1">
-            <span className=" text-gray-600 text-sm md:text-base">Show order summary</span>
+            <span className=" text-gray-600 text-sm md:text-base">
+              Show order summary
+            </span>
             <Image
               src={dropdown}
               alt="dropdown icon"
@@ -42,7 +60,7 @@ export default function OrderSummary() {
             />
           </div>
           <span className=" text-sm font-semibold text-primary-100">
-            ₦{formatPrice(subtotalPrice)}
+            ₦{formatPrice(total)}
           </span>
         </button>
         <div
@@ -100,14 +118,16 @@ export default function OrderSummary() {
               </div>
               <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
                 <p className=" font-semibold text-gray-600">DELIVERY:</p>
-                <p className="text-sm font-semibold">₦{formatPrice(deliveryOption.price)}</p>
+                <p className="text-sm font-semibold">
+                  ₦{formatPrice(deliveryOption.price)}
+                </p>
               </div>
               <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
-                <p className=" font-semibold text-gray-600">TAX(7.5%):</p>
+                <p className=" font-semibold text-gray-600">TAX({tax ?? 0}%):</p>
                 <p className="text-sm font-semibold">
                   ₦
                   {cart.length > 0
-                    ? formatPrice((7.5 / 100) * subtotalPrice)
+                    ? formatPrice(((tax ?? 0) / 100) * subtotalPrice)
                     : formatPrice(0)}
                 </p>
               </div>
@@ -115,10 +135,7 @@ export default function OrderSummary() {
             <div className=" py-7 border-b border-gold text-xs flex items-center text-primary-100 justify-between">
               <p className=" font-semibold text-gray-600">TOTAL:</p>
               <p className="  text-base font-bold">
-                ₦
-                {cart.length > 0
-                  ? formatPrice(subtotalPrice + ((7.5 / 100) * subtotalPrice) + deliveryOption.price)
-                  : formatPrice(0)}
+                ₦{cart.length > 0 ? formatPrice(total) : formatPrice(0)}
               </p>
             </div>
           </div>
@@ -172,14 +189,16 @@ export default function OrderSummary() {
           </div>
           <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
             <p className=" font-semibold text-gray-600">DELIVERY:</p>
-            <p className="text-sm font-semibold">₦{formatPrice(deliveryOption.price)}</p>
+            <p className="text-sm font-semibold">
+              ₦{formatPrice(deliveryOption.price)}
+            </p>
           </div>
           <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
-            <p className=" font-semibold text-gray-600">TAX(7.5%):</p>
+            <p className=" font-semibold text-gray-600">TAX({tax ?? 0}%):</p>
             <p className="text-sm font-semibold">
               ₦
               {cart.length > 0
-                ? formatPrice((7.5 / 100) * subtotalPrice)
+                ? formatPrice(((tax ?? 0) / 100) * subtotalPrice)
                 : formatPrice(0)}
             </p>
           </div>
@@ -189,7 +208,8 @@ export default function OrderSummary() {
           <p className="  text-base font-bold">
             ₦
             {cart.length > 0
-              ? formatPrice(subtotalPrice + ((7.5 / 100) * subtotalPrice) + deliveryOption.price)
+              ? // ? formatPrice(subtotalPrice + ((7.5 / 100) * subtotalPrice) + deliveryOption.price)
+                formatPrice(total)
               : formatPrice(0)}
           </p>
         </div>

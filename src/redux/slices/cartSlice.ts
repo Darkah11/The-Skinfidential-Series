@@ -1,25 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ProductWithQuantity } from "@/types/products";
 import { DeliveryWithId } from "@/types/delivery";
+import { Billing } from "@/types/billing";
 
-interface Billing {
-  first_name: string;
-  last_name: string;
-  email: string;
-  address_1: string;
-  company?: string;
-  country: string;
-  state: string;
-  phone: string;
-  city: string;
-}
 interface CartState {
   cart: ProductWithQuantity[];
   billing: Billing;
   deliveryOption: Omit<DeliveryWithId, "id">;
+  total: number;
 }
 const initialState: CartState = {
   cart: [],
+  total: 0,
   deliveryOption: {
     name: "",
     isActive: true,
@@ -63,9 +55,7 @@ const cartSlice = createSlice({
         (item) => item.id === action.payload,
       );
       if (itemToIncrement) {
-        if (itemToIncrement.quantity < itemToIncrement.stock) {
-          itemToIncrement.quantity++;
-        }
+        itemToIncrement.quantity++;
         itemToIncrement.subtotal =
           itemToIncrement.price * itemToIncrement.quantity;
         // itemToIncrement.total = itemToIncrement.price * itemToIncrement.quantity
@@ -89,6 +79,9 @@ const cartSlice = createSlice({
     updateDeliveryOption: (state, action) => {
       state.deliveryOption = action.payload;
     },
+    updateTotal: (state, action) => {
+      state.total = action.payload;
+    },
   },
 });
 // export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, updateBilling } = cartSlice.actions;
@@ -100,5 +93,6 @@ export const {
   incrementQuantity,
   decrementQuantity,
   updateDeliveryOption,
+  updateTotal,
 } = cartSlice.actions;
 export default cartSlice.reducer;

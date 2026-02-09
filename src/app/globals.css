@@ -4,6 +4,11 @@
 @tailwind utilities;
 
 
+:root {
+  --primary-100: 49, 2, 70;
+  --gold: 244, 231, 163;
+}
+
 
 h1 {
     font-family: 'Cormorant SC', sans-serif;
@@ -79,4 +84,21 @@ body {
 
 .accordion-text {
   padding: 15px 0;
+}
+
+
+/* table styling */
+.table-container {
+  box-shadow: 0 5px 10px rgb(219, 216, 216);
+}
+.pagination{
+  box-shadow: 0 5px 10px rgb(219, 216, 216);
+}
+.table-row:nth-child(even) {
+  background-color: rgb(var(--gold));
+  color: rgb(var(--primary-100));
+}
+.product-row:nth-child(even) {
+  background-color: rgb(var(--gold));
+  color: rgb(var(--primary-100));
 }

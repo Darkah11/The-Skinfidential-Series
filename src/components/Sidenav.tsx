@@ -43,6 +43,12 @@ const navLinks = [
     icon: <MdOutlineDashboard />,
     activeIcon: <MdDashboard />,
   },
+  {
+    name: "Settings",
+    href: "/admin/settings",
+    icon: <MdOutlineDashboard />,
+    activeIcon: <MdDashboard />,
+  },
 ];
 
 export default function SideNav() {
@@ -50,7 +56,7 @@ export default function SideNav() {
 
   return (
     <>
-      <div className="flex h-full justify-between flex-row md:flex-col px-3 py-4 md:px-2 bg-primary-100">
+      <div className="hidden h-full lg:flex lg:flex-col px-3 py-4 lg:px-2 bg-primary-100">
         <Link className=" flex items-center gap-2" href="/">
           <Image src={logo} alt="tss logo" className=" w-10" />
           <h1 className=" block text-white leading-none text-xs font-bold">
@@ -71,13 +77,15 @@ export default function SideNav() {
                 className={`
                 flex h-[48px] grow items-center justify-center gap-2 rounded-md  p-3 text-sm font-medium  md:flex-none md:justify-start md:p-2 md:px-3
                 ${
-                  pathname === link.href
+                  pathname.includes(link.href)
                     ? "bg-gold text-primary-100 hover:text-white"
                     : " text-white hover:text-gold"
                 }
               `}
               >
-                <p className=" text-lg">{pathname === link.href ? link.activeIcon : link.icon}</p>
+                <p className=" text-lg">
+                  {pathname.includes(link.href) ? link.activeIcon : link.icon}
+                </p>
 
                 <p className="hidden md:block">{link.name}</p>
               </Link>
@@ -90,6 +98,9 @@ export default function SideNav() {
           </button>
         </div>
       </div>
+      <button className=" lg:hidden absolute top-2.5 left-5">
+        <Image src={menu} alt=" menu icon" className=" w-10" />
+      </button>
     </>
   );
 }

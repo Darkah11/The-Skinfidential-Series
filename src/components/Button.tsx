@@ -1,19 +1,30 @@
 // import { BundleBuilder } from "firebase-admin/firestore";
 // import { text } from "stream/consumers"
 
+import { LucideIcon,  } from "lucide-react";
+
 interface ButtonProp {
   text?: string;
   style?: string;
   handleClick?: React.MouseEventHandler<HTMLButtonElement>;
+  loading?: boolean;
+  loader?: React.ReactNode;
 }
 
-export const PrimaryButton = ({ text, style, handleClick }: ButtonProp) => {
+export const PrimaryButton = ({
+  text,
+  style,
+  handleClick,
+  loading,
+  loader,
+}: ButtonProp) => {
   return (
     <button
+      disabled={loading}
       onClick={handleClick}
       className={` ${style} text-sm font-semibold text-white px-5 h-[40px] flex justify-center items-center`}
     >
-      {text}
+      {loader ? loader : text}
     </button>
   );
 };

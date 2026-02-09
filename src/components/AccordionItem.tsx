@@ -36,9 +36,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         onClick={toggleAccordion}
         aria-expanded={active}
       >
-        <div className=" w-[18px] h-[18px] rounded-full border-2 border-gray-600 flex justify-center items-center">
+        <div className=" w-[18px] h-[18px] rounded-full border-2 border-accent flex justify-center items-center">
           {active && (
-            <div className=" w-[10px] h-[10px] rounded-full bg-gray-600" />
+            <div className=" w-[10px] h-[10px] rounded-full bg-accent" />
           )}
         </div>
         <div className="flex justify-between flex-1 items-center">
