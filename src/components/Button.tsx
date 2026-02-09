@@ -38,7 +38,7 @@ export const GoldButton = ({ text, style }: ButtonProp) => {
 export const OutlineButton = ({ text, style }: ButtonProp) => {
   return (
     <button
-      className={` ${style} text-sm px-5 h-[40px] bg-transparent border font-medium border-primary-100 text-primary-100`}
+      className={` ${style} text-xs md:text-sm px-3 md:px-5 md:h-[40px] py-2  bg-transparent border font-medium border-primary-100 text-primary-100`}
     >
       {text}
     </button>

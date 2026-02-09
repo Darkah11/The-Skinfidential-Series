@@ -185,7 +185,7 @@ export default async function Home() {
         <Container className=" relative  px-5 lg:px-12 xl:px-24 py-16 text-primary-100">
           <div>
             <div className=" flex justify-between items-center gap-2">
-              <h2 className=" text-3xl font-semibold">LATEST PRODUCTS</h2>
+              <h2 className=" text-xl md:text-3xl font-semibold">LATEST PRODUCTS</h2>
               <span className=" flex-1 w-full h-[2px] bg-gold" />
               <OutlineButton text="Explore" style=" tracking-wide" />
             </div>
