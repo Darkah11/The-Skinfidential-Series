@@ -12,7 +12,7 @@ type FAQ = {
 const faqs: FAQ[] = [
   {
     id: "01",
-    question: "What size should I order for clothing?",
+    question: "How do I place an order?",
     answer:
       "We recommend checking our size guide on each product page to find your perfect fit.",
   },
@@ -23,8 +23,8 @@ const faqs: FAQ[] = [
   },
   {
     id: "03",
-    question: "Do you offer international shipping options?",
-    answer: "Yes, we ship internationally to most countries worldwide.",
+    question: "Do you offer coupons for purchases?",
+    answer: "Yes, we offer digital gift cards you can send to loved ones.",
   },
   {
     id: "04",
@@ -38,19 +38,9 @@ const faqs: FAQ[] = [
   },
   {
     id: "06",
-    question: "Are the products on sale final sale?",
+    question: "Where’s your location? ",
     answer:
       "Sale items are final and not eligible for returns unless defective.",
-  },
-  {
-    id: "07",
-    question: "Do you offer gift cards for purchases?",
-    answer: "Yes, we offer digital gift cards you can send to loved ones.",
-  },
-  {
-    id: "08",
-    question: "How do I care for my garments?",
-    answer: "Always follow the washing instructions on the garment label.",
   },
 ];
 

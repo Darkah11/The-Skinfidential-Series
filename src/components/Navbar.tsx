@@ -123,7 +123,7 @@ export default function Navbar({ categories }: MyComponentsProps) {
               </Link>
               <PrimaryButton
                 text="Contact"
-                style=" bg-primary-100 hidden md:block"
+                style=" bg-accent hidden md:block"
               />
             </div>
           </nav>

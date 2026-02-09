@@ -9,11 +9,8 @@ export default function Footer() {
     <footer className=" bg-primary-100 text-white">
       <Container className=" relative  px-5 lg:px-12 xl:px-24 py-10">
         <div className="">
-          {/* Top grid */}
           <div className="flex flex-col md:flex-row gap-10 lg:gap-24">
-            {/* Brand column */}
-            <div className="md:col-span-2 space-y-4">
-              {/* Logo */}
+            <div className="md:col-span-2 space-y-4 md:w-[40%]">
               <Link href={""} className=" flex items-center gap-2">
                 <Image src={logo} alt="tss logo" className=" w-16" />
                 <h1 className=" leading-none text-base font-bold">
@@ -22,9 +19,8 @@ export default function Footer() {
                 </h1>
               </Link>
 
-              <p className="text-sm max-w-sm text-gray-300">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Voluptates, natus. Tenetur accusamus nesciunt cum molestiae?
+              <p className=" max-w-sm text-gold">
+                glow hard or glow home!
               </p>
             </div>
 
@@ -75,7 +71,7 @@ export default function Footer() {
                 </ul>
               </div>
               <div className="">
-                <h4 className="font-semibold mb-4 text-lg">Company</h4>
+                <h4 className="font-semibold mb-4 text-lg">Media</h4>
                 <ul className="space-y-3 text-sm text-gray-300 ">
                   <li>
                     <Link href="#" className="hover:text-gold">
