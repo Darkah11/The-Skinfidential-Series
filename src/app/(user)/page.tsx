@@ -15,6 +15,10 @@ import consult from "../../../public/consult.png";
 import consultUs from "../../../public/consult-us.jpg";
 import TestimonialSection from "@/components/TestimonialSection";
 import Faq from "@/components/Faq";
+import Link from "next/link";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function Home() {
   const products = await getProducts();
@@ -132,7 +136,9 @@ export default async function Home() {
                 doesn&apos;t? We don&apos;t stock it!
               </p>
               <div className=" mt-7 flex gap-x-3 justify-start">
-                <PrimaryButton text={"Shop"} style=" bg-accent w-[120px]" />
+                <Link href={"/shop"}>
+                  <PrimaryButton text={"Shop"} style=" bg-accent w-[120px]" />
+                </Link>
                 <OutlineButton
                   text={"Learn More"}
                   style=" border-primary-100 w-[120px] "
@@ -185,7 +191,9 @@ export default async function Home() {
         <Container className=" relative  px-5 lg:px-12 xl:px-24 py-16 text-primary-100">
           <div>
             <div className=" flex justify-between items-center gap-2">
-              <h2 className=" text-xl md:text-3xl font-semibold">LATEST PRODUCTS</h2>
+              <h2 className=" text-xl md:text-3xl font-semibold">
+                LATEST PRODUCTS
+              </h2>
               <span className=" flex-1 w-full h-[2px] bg-gold" />
               <OutlineButton text="Explore" style=" tracking-wide" />
             </div>

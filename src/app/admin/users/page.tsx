@@ -3,6 +3,9 @@ import UsersTable from "@/components/UsersTable";
 import { getAllUsers } from "@/utils/users";
 import React from "react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function UsersPage() {
   const { users } = await getAllUsers();
   return (

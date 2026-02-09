@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import Container from "@/components/Container";
 import ProductsList from "@/components/ProductsList";
 import { getProductsByCategory } from "@/utils/firebase";
@@ -7,6 +5,9 @@ import Image from "next/image";
 import React from "react";
 import categoryBg from ".././../../../public/category-bg.jpg";
 import Link from "next/link";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function CategoryPage({
   searchParams,

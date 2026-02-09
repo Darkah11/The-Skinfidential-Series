@@ -3,6 +3,9 @@ import CategoriesTable from "@/components/CategoriesTable";
 import { getCategories } from "@/utils/firebase";
 import React from "react";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AdminCategories() {
   const categories = await getCategories();
   return (

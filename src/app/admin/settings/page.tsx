@@ -3,6 +3,9 @@ import SettingsTabs from "@/components/SettingsTabs";
 import { getDeliveryOptions, getGeneralSettings } from "@/utils/firebase";
 import React from "react";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function SettingsPage() {
   const settings = await getGeneralSettings();
   const deliveryOptions = await getDeliveryOptions();

@@ -6,6 +6,9 @@ import Image from "next/image";
 import shopBg from ".././../../../public/shop-bg.jpg";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Shop() {
   const products = await getProducts();
   return (
