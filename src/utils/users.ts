@@ -4,14 +4,14 @@ import { getAdminAuth } from "@/config/firebase-admin";
 import { User } from "@/types/user";
 
 export async function getAllUsers() {
-    const adminAuth = getAdminAuth();
+  const adminAuth = getAdminAuth();
   try {
     const users: User[] = [];
     let pageToken: string | undefined;
 
     do {
       const listUsersResult = await adminAuth.listUsers(1000, pageToken);
-      
+
       listUsersResult.users.forEach((userRecord) => {
         users.push({
           uid: userRecord.uid,
@@ -31,8 +31,10 @@ export async function getAllUsers() {
     } while (pageToken);
 
     return { success: true, users, count: users.length };
-  } catch (error: any) {
-    console.error('Error listing users:', error);
-    return { success: false, error: error.message, users: [] };
+  } catch (error: unknown) {
+    console.error("Error listing users:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    return { success: false, error: errorMessage, users: [] };
   }
 }

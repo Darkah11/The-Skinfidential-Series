@@ -1,9 +1,6 @@
 "use client";
 import { useState } from "react";
 import { Search } from "lucide-react";
-import {
-  deleteCategory,
-} from "@/utils/firebase";
 import { User } from "@/types/user";
 
 interface MyComponentProps {
