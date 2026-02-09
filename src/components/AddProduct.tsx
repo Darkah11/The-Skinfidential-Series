@@ -203,7 +203,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     return () => {
       URL.revokeObjectURL(objectUrl);
     };
-  }, [file, previewUrl]);
+  }, [file]);
 
   useEffect(() => {
     if (product && pathname.includes(editPath)) {
