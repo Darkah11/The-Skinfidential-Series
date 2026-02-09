@@ -4,7 +4,7 @@ import Image from "next/image";
 import { CategoryWithId, Product, ProductWithId } from "@/types/products";
 import Select, { MultiValue } from "react-select";
 import { addProduct, editProduct } from "@/utils/firebase";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface MyComponentProps {
   categories: CategoryWithId[];
@@ -26,6 +26,7 @@ type formErrors = {
 
 export default function AddProduct({ categories, product }: MyComponentProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const editPath = "/admin/products/edit-product";
   const [category, setCategory] = useState<MultiValue<CategoryOption>>([]);
   const [tag, setTag] = useState<MultiValue<CategoryOption>>([]);
@@ -138,6 +139,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
       setCategory([]);
       setFile(null);
       setPreviewUrl(null);
+      router.refresh();
     }
     setLoading(false);
   };
@@ -171,7 +173,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
           product.imageUrl || "",
           product.imagePublicId,
         );
-        console.log(editedProduct);
+        router.refresh();
       }
     }
     setLoading(false);
