@@ -1,7 +1,7 @@
 export interface Tax {
   percentage: number;
   enabled: boolean;
-  updatedAt?: Date;
+  updatedAt?: string;
 }
 export interface GeneralSettings {
   tax: Tax;

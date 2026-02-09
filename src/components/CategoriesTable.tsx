@@ -1,15 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { CategoryWithId, ProductWithId } from "@/types/products";
+import { CategoryWithId } from "@/types/products";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
-import Image from "next/image";
-import { formatDate, formatPrice } from "@/utils/formatters";
-import { PrimaryButton } from "./Button";
+import { formatDate } from "@/utils/formatters";
 import {
   deleteCategory,
-  deleteProduct,
   getProductsByCategory,
 } from "@/utils/firebase";
 
@@ -18,7 +14,6 @@ interface MyComponentProps {
 }
 
 export default function CategoriesTable({ categories }: MyComponentProps) {
-  const router = useRouter();
 
   //   const handleDelete = async (id) => {
   //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
@@ -29,7 +24,7 @@ export default function CategoriesTable({ categories }: MyComponentProps) {
   //     }
   //   };
   const [counts, setCounts] = useState<Record<string, number>>({});
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const lastIndex = currentPage * rowsPerPage;

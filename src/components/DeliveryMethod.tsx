@@ -25,7 +25,7 @@ const DeliveryMethod = ({ deliveryOptions }: MyComponentProps) => {
 
   useEffect(() => {
     dispatch(updateDeliveryOption(deliveryOptions[openItem]));
-  }, [openItem]);
+  }, [openItem, deliveryOptions]);
 
   const handleToggle = (index: number) => {
     setOpenItem(index);

@@ -1,4 +1,4 @@
-import { GeneralSettings, Tax } from "@/types/settings";
+import { GeneralSettings } from "@/types/settings";
 import React, { useState } from "react";
 import { PrimaryButton } from "./Button";
 import { updateSettings } from "@/utils/firebase";

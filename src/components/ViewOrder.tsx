@@ -57,6 +57,10 @@ export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
     fetchOrder();
   }, [isOpen, orderId]);
 
+  if (error) {
+    return <p>{error}</p>
+  }
+
   // const handleCreateBoard = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   //   e.preventDefault();
   //   if (boardName === "") {

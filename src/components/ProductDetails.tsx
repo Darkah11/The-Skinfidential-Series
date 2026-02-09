@@ -2,7 +2,7 @@
 import Container from "@/components/Container";
 import { ProductWithId } from "@/types/products";
 import { formatPrice } from "@/utils/formatters";
-import { Ban, CircleCheckBig, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useDispatch } from "react-redux";

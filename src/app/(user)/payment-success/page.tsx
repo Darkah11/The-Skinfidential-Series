@@ -1,7 +1,6 @@
 "use client";
 
 import { clearCart } from "@/redux/slices/cartSlice";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

@@ -1,7 +1,5 @@
 import AdminHeader from "@/components/AdminHeader";
-import OrdersTable from "@/components/OrdersTable";
 import UsersTable from "@/components/UsersTable";
-import { getOrders, getProducts } from "@/utils/firebase";
 import { getAllUsers } from "@/utils/users";
 import React from "react";
 

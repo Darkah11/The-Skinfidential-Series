@@ -1,16 +1,8 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { CategoryWithId, ProductWithId } from "@/types/products";
-import { Pencil, Plus, Search, Trash2 } from "lucide-react";
-import Image from "next/image";
-import { formatDate, formatPrice } from "@/utils/formatters";
-import { PrimaryButton } from "./Button";
+import { useState } from "react";
+import { Search } from "lucide-react";
 import {
   deleteCategory,
-  deleteProduct,
-  getProductsByCategory,
 } from "@/utils/firebase";
 import { User } from "@/types/user";
 
@@ -19,10 +11,9 @@ interface MyComponentProps {
 }
 
 export default function UsersTable({users}: MyComponentProps) {
-  const router = useRouter();
 
-  const [counts, setCounts] = useState<Record<string, number>>({});
-  const [search, setSearch] = useState("");
+  // const [counts, setCounts] = useState<Record<string, number>>({});
+  const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const lastIndex = currentPage * rowsPerPage;
@@ -42,15 +33,9 @@ export default function UsersTable({users}: MyComponentProps) {
       setCurrentPage(currentPage + 1);
     }
   }
-  const handleDelete = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    id: string,
-  ) => {
-    await deleteCategory(id);
-  };
-  const filtered = users.filter((p) =>
-    p.displayName.toLowerCase().includes(search.toLowerCase()),
-  );
+  // const filtered = users.filter((p) =>
+  //   p.displayName && p.displayName.toLowerCase().includes(search.toLowerCase()),
+  // );
   function handlePage(id: number) {
     setCurrentPage(id);
   }

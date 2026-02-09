@@ -1,7 +1,6 @@
 import AdminHeader from "@/components/AdminHeader";
 import OrdersTable from "@/components/OrdersTable";
-import ProductsTable from "@/components/ProductsTable";
-import { getOrders, getProducts } from "@/utils/firebase";
+import { getOrders } from "@/utils/firebase";
 import React from "react";
 
 export default async function OrdersPage() {

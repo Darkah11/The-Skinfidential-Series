@@ -1,10 +1,6 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { formatDate, formatPrice } from "@/utils/formatters";
-import { deleteProduct } from "@/utils/firebase";
 import { OrderWithId } from "@/types/order";
 import ViewOrder from "./ViewOrder";
 
@@ -13,7 +9,6 @@ interface MyComponentProps {
 }
 
 export default function OrdersTable({ orders }: MyComponentProps) {
-  const router = useRouter();
 
   //   const handleDelete = async (id) => {
   //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
@@ -25,7 +20,7 @@ export default function OrdersTable({ orders }: MyComponentProps) {
   //   };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>("");
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const lastIndex = currentPage * rowsPerPage;

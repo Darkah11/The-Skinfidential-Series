@@ -7,45 +7,12 @@ import { Search, Plus, Pencil, Trash2 } from "lucide-react";
 import { ProductWithId } from "@/types/products";
 import Image from "next/image";
 
-// Mock data (replace with real API data)
-const initialProducts = [
-  {
-    id: 1,
-    name: "Apple Watch",
-    price: 39,
-    createdAt: "14 March 2025, 10:30am",
-  },
-  {
-    id: 2,
-    name: "Morden Chair",
-    price: 99,
-    createdAt: "18 March 2025, 10:30am",
-  },
-  {
-    id: 3,
-    name: "Reebok Shoes",
-    price: 49,
-    createdAt: "21 March 2025, 10:30am",
-  },
-  {
-    id: 4,
-    name: "Cosco Volleyball",
-    price: 49,
-    createdAt: "25 March 2025, 10:30am",
-  },
-  {
-    id: 5,
-    name: "Royal Purse",
-    price: 389,
-    createdAt: "29 March 2025, 10:30am",
-  },
-];
 
 interface MyComponentProps {
   products: ProductWithId[];
 }
 export default function AdminProductsPage({ products }: MyComponentProps) {
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
 
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),

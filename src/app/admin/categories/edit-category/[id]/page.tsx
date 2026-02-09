@@ -1,5 +1,4 @@
 import AddCategories from "@/components/AddCategories";
-import AddProduct from "@/components/AddProduct";
 import AdminHeader from "@/components/AdminHeader";
 import { getCategoryById } from "@/utils/firebase";
 import React from "react";

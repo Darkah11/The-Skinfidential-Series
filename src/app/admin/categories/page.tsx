@@ -1,4 +1,3 @@
-import AddCategories from "@/components/AddCategories";
 import AdminHeader from "@/components/AdminHeader";
 import CategoriesTable from "@/components/CategoriesTable";
 import { getCategories } from "@/utils/firebase";

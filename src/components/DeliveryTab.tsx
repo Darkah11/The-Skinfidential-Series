@@ -17,7 +17,7 @@ export default function DeliveryTab({ deliveryOptions }: MyComponentProps) {
   const handleChange = (
     index: number,
     field: keyof DeliveryWithId,
-    value: any,
+    value: string | number | boolean,
   ) => {
     const updated = [...formData];
     updated[index] = { ...updated[index], [field]: value };
@@ -76,6 +76,8 @@ export default function DeliveryTab({ deliveryOptions }: MyComponentProps) {
       await updateDeliveryOptions(formData);
       alert("Delivery options updated successfully!");
     } catch (error) {
+      console.error(error);
+      
       alert("Failed to update delivery options");
     } finally {
       setLoading(false);

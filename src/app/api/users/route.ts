@@ -1,11 +1,13 @@
 // app/api/users/route.ts
 import { getAdminAuth } from "@/config/firebase-admin";
-import { NextRequest, NextResponse } from "next/server";
+import { User } from "@/types/user";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+// export async function GET(request: NextRequest) {
+export async function GET() {
   const adminAuth = getAdminAuth();
   try {
-    const users: any[] = [];
+    const users: User[] = [];
     let pageToken: string | undefined;
 
     // List all users (handles pagination automatically)
@@ -36,10 +38,14 @@ export async function GET(request: NextRequest) {
       users,
       count: users.length,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error listing users:", error);
+
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: errorMessage },
       { status: 500 },
     );
   }

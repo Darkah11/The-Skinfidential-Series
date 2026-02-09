@@ -406,7 +406,7 @@ export const getGeneralSettings = async (): Promise<GeneralSettings | null> => {
 // lib/settings.ts
 export const updateSettings = async (settings: Partial<GeneralSettings>) => {
   try {
-    const updates: any = {};
+    const updates: Partial<GeneralSettings> = {};
 
     // Add timestamps to each section that's being updated
     if (settings.tax) {

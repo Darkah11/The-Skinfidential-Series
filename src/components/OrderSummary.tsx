@@ -37,7 +37,7 @@ export default function OrderSummary({ tax }: MyComponentProps) {
         subtotalPrice + (safeTax / 100) * subtotalPrice + deliveryOption.price,
       ),
     );
-  }, [subtotalPrice, deliveryOption, cart]);
+  }, [subtotalPrice, deliveryOption, cart, tax]);
 
   return (
     <>

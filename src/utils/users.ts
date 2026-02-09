@@ -1,11 +1,12 @@
 // lib/users.ts
 
 import { getAdminAuth } from "@/config/firebase-admin";
+import { User } from "@/types/user";
 
 export async function getAllUsers() {
     const adminAuth = getAdminAuth();
   try {
-    const users: any[] = [];
+    const users: User[] = [];
     let pageToken: string | undefined;
 
     do {

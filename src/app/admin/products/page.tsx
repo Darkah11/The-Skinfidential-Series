@@ -1,5 +1,4 @@
 import AdminHeader from "@/components/AdminHeader";
-import AdminProductsPage from "@/components/AdminProductPage";
 import ProductsTable from "@/components/ProductsTable";
 import { getProducts } from "@/utils/firebase";
 import React from "react";
