@@ -3,6 +3,9 @@ import ProductsTable from "@/components/ProductsTable";
 import { getProducts } from "@/utils/firebase";
 import React from "react";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function ProductPage() {
   const products = await getProducts();
   return (

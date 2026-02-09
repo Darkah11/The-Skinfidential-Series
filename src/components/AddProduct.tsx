@@ -139,7 +139,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
       setCategory([]);
       setFile(null);
       setPreviewUrl(null);
-      router.refresh();
+      router.push('/admin/products');
     }
     setLoading(false);
   };
@@ -173,7 +173,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
           product.imageUrl || "",
           product.imagePublicId,
         );
-        router.refresh();
+        router.push('/admin/products');
       }
     }
     setLoading(false);

@@ -6,13 +6,14 @@ import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { formatDate, formatPrice } from "@/utils/formatters";
 import { deleteProduct } from "@/utils/firebase";
+import { useRouter } from "next/navigation";
 
 interface MyComponentProps {
   products: ProductWithId[];
 }
 
 export default function ProductsTable({ products }: MyComponentProps) {
-
+  const router = useRouter();
   //   const handleDelete = async (id) => {
   //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
   //       method: "DELETE",
@@ -47,6 +48,7 @@ export default function ProductsTable({ products }: MyComponentProps) {
     imagePublicId?: string,
   ) => {
     await deleteProduct(id, imagePublicId);
+    router.refresh();
   };
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
