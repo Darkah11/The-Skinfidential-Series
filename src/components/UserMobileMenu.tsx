@@ -2,9 +2,9 @@
 import { Category } from "@/types/products";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../public/logo.png";
-import { X } from "lucide-react";
+import { ChevronDownIcon, X } from "lucide-react";
 
 interface MyComponentProps {
   isOpen: boolean;
@@ -25,6 +25,7 @@ export default function UserMobileMenu({
   onClose,
   categories,
 }: MyComponentProps) {
+  const [openCategories, setOpenCategories] = useState(false);
   return (
     <div
       className={` z-50 fixed top-0 left-0 h-screen w-full transition-all duration-300 md:hidden ${
@@ -73,23 +74,45 @@ export default function UserMobileMenu({
             ))}
           </div>
 
-          {/* Mobile categories */}
+        
           <div>
-            <p className="font-semibold mt-3 px-3">Categories</p>
-            <div className="ml-3 flex flex-col ">
-              {categories.map((item) => (
-                <Link
-                  onClick={onClose}
-                  key={item.name}
-                  href={{
-                    pathname: "/categories",
-                    query: { category: item.name },
-                  }}
-                  className="text-gray-600 p-2"
-                >
-                  {item.name}
-                </Link>
-              ))}
+            {/* Dropdown button */}
+            <button
+              onClick={() => setOpenCategories((prev) => !prev)}
+              className="flex items-center justify-between w-full px-3 py-2 mt-3 font-medium"
+            >
+              Categories
+              <ChevronDownIcon
+                className={`w-5 h-5 transition-transform duration-300 ${
+                  openCategories ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Dropdown content */}
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                openCategories ? " opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="ml-3 flex flex-col">
+                {categories.map((item) => (
+                  <Link
+                    key={item.name}
+                    onClick={() => {
+                      onClose();
+                      setOpenCategories(false);
+                    }}
+                    href={{
+                      pathname: "/categories",
+                      query: { category: item.name },
+                    }}
+                    className="text-gray-600 p-2 hover:text-black"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>
