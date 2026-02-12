@@ -1,6 +1,4 @@
-// app/ui/dashboard/sidenav.tsx
-
-"use client"; // This is a Client Component, which uses hooks like usePathname
+"use client"; 
 
 import Image from "next/image";
 import { MdOutlineDashboard, MdDashboard, MdLogout } from "react-icons/md";
@@ -8,10 +6,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import menu from "../../public/icons/menu.svg";
 import logo from "../../public/logo.png";
-// Import your icons if you have them (e.g., from 'lucide-react')
-// Example: import { Home, FileText, Users } from 'lucide-react';
+import AdminMobileMenu from "./AdminMobileMenu";
+import { useEffect, useState } from "react";
 
-// Using the mock links defined above
 const navLinks = [
   {
     name: "Dashboard",
@@ -53,6 +50,9 @@ const navLinks = [
 
 export default function SideNav() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
+ 
+  
 
   return (
     <>
@@ -64,9 +64,6 @@ export default function SideNav() {
             Skinfidential <br /> Series
           </h1>
         </Link>
-        <button className=" md:hidden">
-          <Image src={menu} alt=" menu icon" className=" w-10" />
-        </button>
         <div className="hidden mt-10 md:flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
           {navLinks.map((link) => {
             // const LinkIcon = link.icon;
@@ -98,9 +95,13 @@ export default function SideNav() {
           </button>
         </div>
       </div>
-      <button className=" lg:hidden absolute top-2.5 left-5">
+      <button onClick={() => setMobileMenuOpen(true)} className=" lg:hidden absolute top-2.5 left-5">
         <Image src={menu} alt=" menu icon" className=" w-10" />
       </button>
+      <AdminMobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+      />
     </>
   );
 }

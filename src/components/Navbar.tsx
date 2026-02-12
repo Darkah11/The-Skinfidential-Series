@@ -12,12 +12,14 @@ import Container from "@/components/Container";
 import { useAppSelector } from "@/redux/hooks";
 import CartMenu from "./CartMenu";
 import { Category } from "@/types/products";
+import UserMobileMenu from "./UserMobileMenu";
 
 interface MyComponentsProps {
   categories: Category[];
 }
 export default function Navbar({ categories }: MyComponentsProps) {
   const [cartOpen, setCartOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cart = useAppSelector((state) => state.cart);
   const closeCart = () => {
     setCartOpen(false);
@@ -25,19 +27,25 @@ export default function Navbar({ categories }: MyComponentsProps) {
   useEffect(() => {
     if (typeof document !== "undefined") {
       if (cartOpen) {
+        document.body.classList.remove("no-scroll-menu");
         document.body.classList.add("no-scroll");
+      } else if (mobileMenuOpen) {
+        document.body.classList.add("no-scroll-menu");
       } else {
         document.body.classList.remove("no-scroll");
       }
     }
-  }, [cartOpen]);
+  }, [cartOpen, mobileMenuOpen]);
   return (
     <>
-      <header className=" ">
+      <header className="">
         <Container className=" fixed top-0 left-0 right-0 w-full bg-white z-50 shadow-lg">
           <nav className=" px-5 lg:px-12 xl:px-24 py-4 flex justify-between">
             <div className=" flex items-center gap-x-3 md:gap-x-10 lg:gap-x-12">
-              <button className=" md:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className=" md:hidden"
+              >
                 <Image src={menu} alt=" menu icon" className=" w-10" />
               </button>
               <Link href={"/"} className=" flex items-center gap-2">
@@ -130,6 +138,11 @@ export default function Navbar({ categories }: MyComponentsProps) {
         </Container>
       </header>
       {cartOpen && <CartMenu onUpdate={closeCart} />}
+      <UserMobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        categories={categories}
+      />
     </>
   );
 }

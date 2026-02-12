@@ -26,6 +26,15 @@ body {
 .no-scroll {
   overflow: hidden;
 }
+.no-scroll-menu {
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .no-scroll-menu {
+  overflow: auto;
+}
+}
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
       display: none;
