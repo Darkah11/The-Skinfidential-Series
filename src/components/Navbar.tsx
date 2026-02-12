@@ -33,6 +33,7 @@ export default function Navbar({ categories }: MyComponentsProps) {
         document.body.classList.add("no-scroll-menu");
       } else {
         document.body.classList.remove("no-scroll");
+        document.body.classList.remove("no-scroll-menu");
       }
     }
   }, [cartOpen, mobileMenuOpen]);
