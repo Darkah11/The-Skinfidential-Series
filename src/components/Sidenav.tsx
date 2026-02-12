@@ -50,7 +50,7 @@ const navLinks = [
 
 export default function SideNav() {
   const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
  
   
 
