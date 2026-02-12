@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import menu from "../../public/icons/menu.svg";
 import logo from "../../public/logo.png";
 import AdminMobileMenu from "./AdminMobileMenu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const navLinks = [
   {
