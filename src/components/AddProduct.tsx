@@ -5,6 +5,7 @@ import { CategoryWithId, Product, ProductWithId } from "@/types/products";
 import Select, { MultiValue } from "react-select";
 import { addProduct, editProduct } from "@/utils/firebase";
 import { usePathname, useRouter } from "next/navigation";
+import { CircleMinus } from "lucide-react";
 
 interface MyComponentProps {
   categories: CategoryWithId[];
@@ -22,6 +23,7 @@ type formErrors = {
   categories?: string;
   tags?: string;
   description?: string;
+  variants?: string;
 };
 
 export default function AddProduct({ categories, product }: MyComponentProps) {
@@ -39,6 +41,13 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     description: "",
     categories: [],
     tags: [],
+    inStock: true,
+    hasVariants: false,
+    discount: {
+      type: "percentage",
+      value: 0,
+      isActive: false,
+    },
   });
 
   const formattedCategories: CategoryOption[] = categories
@@ -98,6 +107,28 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     console.log(formData);
   };
 
+  const addVariant = () => {
+    setFormData((prev) => ({
+      ...prev,
+      variants: [
+        ...(prev.variants ?? []),
+        {
+          id: crypto.randomUUID(),
+          name: "",
+          price: 0,
+          costPrice: 0,
+          inStock: true,
+        },
+      ],
+    }));
+  };
+  const deleteVariant = (variantId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      variants: prev.variants?.filter((v) => v.id !== variantId),
+    }));
+  };
+
   const handleAddProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -119,6 +150,19 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     if (formData.categories.length === 0) {
       newErrors.categories = "Add at least one category.";
     }
+    if (formData.hasVariants) {
+      if (!formData.variants || formData.variants.length === 0) {
+        newErrors.variants = "Add at least one variant.";
+      } else {
+        const hasEmptyName = formData.variants.some(
+          (variant) => variant.name.trim() === "",
+        );
+
+        if (hasEmptyName) {
+          newErrors.variants = "All variants must have a name.";
+        }
+      }
+    }
 
     setErrors(newErrors);
     console.log(errors);
@@ -133,13 +177,20 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
         description: "",
         categories: [],
         tags: [],
-        stock: 0,
         image: undefined,
+        hasVariants: false,
+        inStock: true,
+        discount: {
+          type: "percentage",
+          value: 0,
+          isActive: false,
+        },
+        variants: [],
       });
       setCategory([]);
       setFile(null);
       setPreviewUrl(null);
-      router.push('/admin/products');
+      router.push("/admin/products");
     }
     setLoading(false);
   };
@@ -164,6 +215,19 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     if (formData.categories.length === 0) {
       newErrors.categories = "Add at least one category.";
     }
+    if (formData.hasVariants) {
+      if (!formData.variants || formData.variants.length === 0) {
+        newErrors.variants = "Add at least one variant.";
+      } else {
+        const hasEmptyName = formData.variants.some(
+          (variant) => variant.name.trim() === "",
+        );
+
+        if (hasEmptyName) {
+          newErrors.variants = "All variants must have a name.";
+        }
+      }
+    }
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       if (product) {
@@ -173,7 +237,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
           product.imageUrl || "",
           product.imagePublicId,
         );
-        router.push('/admin/products');
+        router.push("/admin/products");
       }
     }
     setLoading(false);
@@ -216,6 +280,10 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
         description: product.description,
         categories: product.categories,
         tags: product.tags,
+        hasVariants: product.hasVariants,
+        inStock: product.inStock,
+        discount: product.discount,
+        variants: product.variants,
       });
       setCategory(
         product.categories.map((cat) => ({
@@ -386,25 +454,6 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
             )}
           </div> */}
           <div className=" mb-5">
-            {/* <label
-              htmlFor="tags"
-              className=" text-gray-700 text-[11px] font-semibold  uppercase"
-            >
-              Tags <span className=" text-red-700">*</span>
-            </label> */}
-            {/* <select
-              value={formData.tags}
-              id="tags"
-              onChange={handleChange}
-              name="categories"
-            >
-              <option value="">Select Tags</option>
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select> */}
             <div className=" mb-5">
               <label
                 htmlFor="categories"
@@ -448,6 +497,243 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               />
             </div>
           </div>
+          <div className="mb-5">
+            <label className="text-gray-700 text-[11px] font-semibold uppercase">
+              In Stock
+            </label>
+
+            <select
+              value={formData.inStock ? "yes" : "no"}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  inStock: e.target.value === "yes",
+                }))
+              }
+              className="outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300"
+            >
+              <option value="yes">In Stock</option>
+              <option value="no">Out of Stock</option>
+            </select>
+          </div>
+          <div className="mb-5 border p-4 rounded-sm">
+            <label className="text-gray-700 text-[11px] font-semibold uppercase">
+              Discount
+            </label>
+
+            {/* Enable discount */}
+            <div className="flex items-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                checked={formData.discount.isActive}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    discount: { ...prev.discount, isActive: e.target.checked },
+                  }))
+                }
+              />
+              <span className="text-sm">Enable Discount</span>
+            </div>
+
+            {formData.discount.isActive && (
+              <>
+                {/* Discount type */}
+                <select
+                  className="outline-none block w-full py-[10px] px-3 mt-[10px] border rounded-sm border-gray-300"
+                  value={formData.discount.type}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      discount: {
+                        ...prev.discount,
+                        type: e.target.value as "percentage" | "fixed",
+                      },
+                    }))
+                  }
+                >
+                  <option value="percentage">Percentage (%)</option>
+                  <option value="fixed">Fixed Amount</option>
+                </select>
+
+                {/* Discount value */}
+                <input
+                  type="number"
+                  placeholder="Discount value"
+                  value={formData.discount.value}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      discount: {
+                        ...prev.discount,
+                        value: Number(e.target.value),
+                      },
+                    }))
+                  }
+                  className="outline-none block w-full py-[10px] px-3 mt-[10px] border rounded-sm border-gray-300"
+                />
+              </>
+            )}
+          </div>
+          <div className="mb-5">
+            <label className="text-gray-700 text-[11px] font-semibold uppercase">
+              Has Variants
+            </label>
+
+            <div className="flex gap-4 mt-2">
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="hasVariants"
+                  checked={formData.hasVariants === true}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, hasVariants: true }))
+                  }
+                />
+                Yes
+              </label>
+
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="radio"
+                  name="hasVariants"
+                  checked={formData.hasVariants === false}
+                  onChange={() =>
+                    setFormData((prev) => ({ ...prev, hasVariants: false }))
+                  }
+                />
+                No
+              </label>
+            </div>
+          </div>
+          {formData.hasVariants && (
+            <div className="mb-5 border p-4 rounded-sm">
+              <div className="flex justify-between items-center">
+                <label className="text-gray-700 text-[11px] font-semibold uppercase">
+                  Variants
+                </label>
+
+                <button
+                  type="button"
+                  onClick={addVariant}
+                  className="text-sm bg-primary-100 text-white px-3 py-1 rounded"
+                >
+                  Add Variant
+                </button>
+              </div>
+
+              {formData.variants?.map((variant, index) => (
+                <div key={variant.id} className="mt-4 border p-3 rounded-sm">
+                  <div className=" flex justify-between items-center">
+                    <p className="text-xs font-semibold mb-2">
+                      Variant #{index + 1}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => deleteVariant(variant.id)}
+                      className="text-xs text-red-500 hover:text-red-700"
+                    >
+                      <CircleMinus className=" text-red-600" />
+                    </button>
+                  </div>
+                  <div className=" space-y-4 mt-4">
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className=" text-gray-700 text-[11px] font-semibold  uppercase"
+                      >
+                        Variant Name<span className=" text-red-700">*</span>
+                      </label>
+                      <input
+                        placeholder="Variant name (e.g Black - L)"
+                        value={variant.name}
+                        onChange={(e) => {
+                          const updated = [...formData.variants!];
+                          updated[index].name = e.target.value;
+                          setFormData((prev) => ({
+                            ...prev,
+                            variants: updated,
+                          }));
+                        }}
+                        className="outline-none block w-full py-[8px] px-3 border rounded-sm border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className=" text-gray-700 text-[11px] font-semibold  uppercase"
+                      >
+                        Price<span className=" text-red-700">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="Price"
+                        value={variant.price}
+                        onChange={(e) => {
+                          const updated = [...formData.variants!];
+                          updated[index].price = Number(e.target.value);
+                          setFormData((prev) => ({
+                            ...prev,
+                            variants: updated,
+                          }));
+                        }}
+                        className="outline-none block w-full py-[8px] px-3 border rounded-sm border-gray-300"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className=" text-gray-700 text-[11px] font-semibold  uppercase"
+                      >
+                        Cost Price<span className=" text-red-700">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="Cost Price"
+                        value={variant.costPrice}
+                        onChange={(e) => {
+                          const updated = [...formData.variants!];
+                          updated[index].costPrice = Number(e.target.value);
+                          setFormData((prev) => ({
+                            ...prev,
+                            variants: updated,
+                          }));
+                        }}
+                        className="outline-none block w-full py-[8px] px-3 border rounded-sm border-gray-300"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className=" text-gray-700 text-[11px] font-semibold  uppercase"
+                      >
+                        In Stock?<span className=" text-red-700">*</span>
+                      </label>
+                      <select
+                        value={variant.inStock ? "yes" : "no"}
+                        onChange={(e) => {
+                          const updated = [...formData.variants!];
+                          updated[index].inStock = e.target.value === "yes";
+                          setFormData((prev) => ({
+                            ...prev,
+                            variants: updated,
+                          }));
+                        }}
+                        className="outline-none block w-full py-[8px] px-3 border rounded-sm border-gray-300"
+                      >
+                        <option value="yes">In Stock</option>
+                        <option value="no">Out of Stock</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {errors.variants && (
+                <p className=" mt-2 text-red-500 text-xs">{errors.variants}</p>
+              )}
+            </div>
+          )}
         </div>
 
         <button

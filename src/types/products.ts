@@ -1,15 +1,37 @@
+export interface ProductDiscount {
+  type: "percentage" | "fixed";
+  value: number;
+  startDate?: string;
+  endDate?: string;
+  isActive: boolean;
+}
+
+
+export interface ProductVariant {
+  id: string;
+  name: string;  
+  sku?: string;
+  price: number;
+  costPrice: number;
+  inStock: boolean;
+}
+
 export interface Product {
   name: string;
   price: number;
   description: string;
   categories: string[];
   tags: string[];
-  stock?: number;
   image?: File;
   createdAt?: string;
   imageUrl?: string;
   costPrice: number;
   imagePublicId?: string;
+
+  discount: ProductDiscount;
+  hasVariants: boolean;
+  variants?: ProductVariant[];
+  inStock: boolean;
 }
 export type ProductWithId = Product & {
   id: string;
@@ -18,6 +40,14 @@ export type ProductWithId = Product & {
 export type ProductWithQuantity = ProductWithId & {
   quantity: number;
   subtotal: number;
+  variantId?: string;
+  originalPrice?: number;
+  selectedVariant?: {
+    id: string;
+    name: string;
+    attributes: { [key: string]: string };
+    sku?: string;
+  };
 };
 
 export interface Category {

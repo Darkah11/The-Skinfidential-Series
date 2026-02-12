@@ -35,24 +35,41 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // addToCart: (state, action) => {
+    //   const newItem = action.payload;
+    //   const existingItem = state.cart.find((item) => item.id === newItem.id);
+    //   if (!existingItem) {
+    //     state.cart.push({ ...action.payload });
+    //   }
+    // },
     addToCart: (state, action) => {
-      const newItem = action.payload;
-      const existingItem = state.cart.find((item) => item.id === newItem.id);
+      const newItem: ProductWithQuantity = action.payload;
+
+      const existingItem = state.cart.find(
+        (item) =>
+          item.id === newItem.id && item.variantId === newItem.variantId,
+      );
       if (!existingItem) {
-        state.cart.push({ ...action.payload });
+        state.cart.push({ ...newItem });
       }
     },
+
     clearCart: (state) => {
       state.cart = [];
-      // state.totalQuantity = 0;
-      // state.totalAmount = 0;
+      state.total = 0;
     },
     removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item.id !== action.payload);
+      const { id, variantId } = action.payload;
+
+      state.cart = state.cart.filter(
+        (item) => !(item.id === id && item.variantId === variantId),
+      );
     },
     incrementQuantity: (state, action) => {
+      const { id, variantId } = action.payload;
+
       const itemToIncrement = state.cart.find(
-        (item) => item.id === action.payload,
+        (item) => item.id === id && item.variantId === variantId,
       );
       if (itemToIncrement) {
         itemToIncrement.quantity++;
@@ -62,8 +79,10 @@ const cartSlice = createSlice({
       }
     },
     decrementQuantity: (state, action) => {
+      const { id, variantId } = action.payload;
+
       const itemToDecrement = state.cart.find(
-        (item) => item.id === action.payload,
+        (item) => item.id === id && item.variantId === variantId,
       );
       if (itemToDecrement && itemToDecrement.quantity > 1) {
         itemToDecrement.quantity--;

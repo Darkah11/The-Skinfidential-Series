@@ -48,7 +48,7 @@ export const AddToCartBtn = ({ style, handleClick }: ButtonProp) => {
   return (
     <button
       onClick={handleClick}
-      className={` ${style} text-white text-sm font-medium py-5 w-full px-5 rounded-full bg-primary-100 `}
+      className={` ${style} text-white text-sm font-medium py-5 w-full px-5 rounded-full bg-accent `}
     >
       Add To Cart
     </button>

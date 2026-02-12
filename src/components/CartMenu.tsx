@@ -86,10 +86,22 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                 </div>
                 <div className=" flex-1 flex flex-col gap-y-3">
                   <div className=" flex justify-between">
-                    <p className=" text-sm font-medium capitalize text-black">
-                      {item.name}
+                    <p className=" text-sm font-medium capitalize text-gray-800">
+                      {item.name}{" "}
+                      {item.hasVariants &&
+                        item.variants &&
+                        `(${item.selectedVariant?.name})`}
                     </p>
-                    <button onClick={() => dispatch(removeFromCart(item.id))}>
+                    <button
+                      onClick={() =>
+                        dispatch(
+                          removeFromCart({
+                            id: item.id,
+                            variantId: item.variantId,
+                          }),
+                        )
+                      }
+                    >
                       <Trash2 className=" w-5 text-accent" />{" "}
                     </button>
                   </div>
@@ -99,7 +111,14 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                     </p>
                     <div className=" flex items-center">
                       <button
-                        onClick={() => dispatch(decrementQuantity(item.id))}
+                        onClick={() =>
+                          dispatch(
+                            decrementQuantity({
+                              id: item.id,
+                              variantId: item.variantId,
+                            }),
+                          )
+                        }
                         className=" w-[20px] h-[20px] border border-gray-300 flex justify-center items-center"
                       >
                         <Minus className=" w-3" />
@@ -108,7 +127,14 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => dispatch(incrementQuantity(item.id))}
+                        onClick={() =>
+                          dispatch(
+                            incrementQuantity({
+                              id: item.id,
+                              variantId: item.variantId,
+                            }),
+                          )
+                        }
                         className=" w-[20px] h-[20px] border border-gray-300 flex justify-center items-center"
                       >
                         <Plus className=" w-3" />

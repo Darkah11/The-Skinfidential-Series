@@ -70,12 +70,15 @@ export const addProduct = async (body: Product) => {
       description: body.description,
       slug: slugify(body.name),
       price: Number(body.price),
-      stock: Number(body.stock),
+      inStock: body.inStock,
       categories: body.categories,
       tags: body.tags,
       imageUrl: imageUrl,
       createdAt: new Date().toISOString(),
       imagePublicId: cloudinaryData.public_id,
+      discount: body.discount,
+      hasVariants: body.hasVariants,
+      variants: body.variants,
     };
 
     // 2️⃣ Save product details + image URL to Firestore
@@ -284,12 +287,15 @@ export const editProduct = async (
       description: body.description,
       slug: slugify(body.name),
       price: Number(body.price),
-      stock: Number(body.stock),
+      inStock: body.inStock,
       categories: body.categories,
       tags: body.tags,
       imageUrl,
       imagePublicId,
       updatedAt: new Date().toISOString(),
+      discount: body.discount,
+      hasVariants: body.hasVariants,
+      variants: body.variants,
     };
 
     // 3️⃣ Update Firestore document

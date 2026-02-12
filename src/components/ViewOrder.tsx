@@ -58,7 +58,7 @@ export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
   }, [isOpen, orderId]);
 
   if (error) {
-    return <p>{error}</p>
+    return <p>{error}</p>;
   }
 
   // const handleCreateBoard = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -110,7 +110,11 @@ export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
                     handleClick={(e) => handleUpdateOrder(e, "cancelled")}
                   />
                 )}
-                {order.status === 'cancelled' && <p className=" text-red-600 text-sm">This order has been cancelled </p>}
+                {order.status === "cancelled" && (
+                  <p className=" text-red-600 text-sm">
+                    This order has been cancelled{" "}
+                  </p>
+                )}
               </div>
             </div>
             <div className=" border-b py-5">
@@ -132,7 +136,10 @@ export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
                     </div>
                     <div className="">
                       <p className=" capitalize text-primary-100 text-sm font-semibold">
-                        {item.name}
+                        {item.name}{" "}
+                        {item.hasVariants &&
+                          item.variants &&
+                          `(${item.selectedVariant?.name})`}
                       </p>
                       <p className=" text-sm text-gray-600  mt-2">
                         ₦{formatPrice(item.price)} X {item.quantity} ={" "}

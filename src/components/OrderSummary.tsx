@@ -88,7 +88,10 @@ export default function OrderSummary({ tax }: MyComponentProps) {
                   </div>
                   <div className="">
                     <p className=" text-gray-600 capitalize text-sm font-semibold">
-                      {item.name}
+                      {item.name}{" "}
+                      {item.hasVariants &&
+                        item.variants &&
+                        `(${item.selectedVariant?.name})`}
                     </p>
                     <p className=" text-sm text-primary-100  font-semibold mt-2">
                       ₦{formatPrice(item.price * item.quantity)}
@@ -123,7 +126,9 @@ export default function OrderSummary({ tax }: MyComponentProps) {
                 </p>
               </div>
               <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
-                <p className=" font-semibold text-gray-600">TAX({tax ?? 0}%):</p>
+                <p className=" font-semibold text-gray-600">
+                  TAX({tax ?? 0}%):
+                </p>
                 <p className="text-sm font-semibold">
                   ₦
                   {cart.length > 0
@@ -159,7 +164,10 @@ export default function OrderSummary({ tax }: MyComponentProps) {
               </div>
               <div>
                 <p className=" text-gray-600 capitalize text-sm font-semibold">
-                  {item.name}
+                  {item.name}{" "}
+                  {item.hasVariants &&
+                    item.variants &&
+                    `(${item.selectedVariant?.name})`}
                 </p>
                 <p className=" text-sm text-primary-100 mt-2 font-semibold">
                   ₦{formatPrice(item.price * item.quantity)}
