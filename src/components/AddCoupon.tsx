@@ -98,7 +98,7 @@ export default function AddCoupon() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleAddCoupon = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) return;
@@ -126,8 +126,12 @@ export default function AddCoupon() {
         validFrom: "",
         validUntil: "",
       });
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -160,7 +164,7 @@ export default function AddCoupon() {
   }, [couponCode]);
 
   return (
-    <form onSubmit={handleAddCoupon} className="max-w-2xl py-6 space-y-6">
+    <form onSubmit={handleSubmit} className="max-w-2xl py-6 space-y-6">
       <div className="mb-6 flex items-center gap-x-5">
         <h2 className="text-2xl font-bold text-primary-100">
           {couponCode ? "Edit Coupon" : "Add New Coupon"}

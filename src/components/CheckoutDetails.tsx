@@ -11,7 +11,6 @@ import { Billing } from "@/types/billing";
 
 export default function CheckoutDetails() {
   const dispatch = useDispatch();
-  const billing = useAppSelector((state) => state.billing);
   const coupon = useAppSelector((state) => state.coupon);
   const total = useAppSelector((state) => state.total);
   const cart = useAppSelector((state) => state.cart);

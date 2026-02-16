@@ -8,7 +8,13 @@ export async function POST(req: NextRequest) {
     const result = await validateCoupon(body);
 
     return NextResponse.json(result);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 500 },
+    );
   }
 }

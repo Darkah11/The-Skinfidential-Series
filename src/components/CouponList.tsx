@@ -45,7 +45,7 @@ export default function CouponList() {
                     <button onClick={() => handleEditCoupon(coupon.code)}>
                       <Pencil className="h-4 w-4" />
                     </button>
-                    <button onClick={(e) => handleDelete(coupon.id)}>
+                    <button onClick={() => handleDelete(coupon.id)}>
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </button>
                   </div>

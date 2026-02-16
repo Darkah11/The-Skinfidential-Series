@@ -59,8 +59,12 @@ export default function OrderSummary({ tax }: MyComponentProps) {
 
       setCoupon(data.coupon);
       setLoading(false);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("Something went wrong");
+      }
       setLoading(false);
     }
   };

@@ -45,22 +45,22 @@ export async function validateCoupon(
   }
 }
 
-function calculateDiscount(coupon: Coupon, cartTotal: number) {
-  if (coupon.minOrderAmount && cartTotal < coupon.minOrderAmount)
-    throw new Error("Minimum order amount not reached");
+// function calculateDiscount(coupon: Coupon, cartTotal: number) {
+//   if (coupon.minOrderAmount && cartTotal < coupon.minOrderAmount)
+//     throw new Error("Minimum order amount not reached");
 
-  let discount = 0;
+//   let discount = 0;
 
-  if (coupon.type === "percentage") {
-    discount = cartTotal * (coupon.value / 100);
-  }
+//   if (coupon.type === "percentage") {
+//     discount = cartTotal * (coupon.value / 100);
+//   }
 
-  if (coupon.type === "fixed") {
-    discount = coupon.value;
-  }
+//   if (coupon.type === "fixed") {
+//     discount = coupon.value;
+//   }
 
-  return Math.min(discount, cartTotal);
-}
+//   return Math.min(discount, cartTotal);
+// }
 
 export async function applyCouponToOrder(couponId: string) {
   const db = getAdminDb();

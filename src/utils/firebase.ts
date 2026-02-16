@@ -562,7 +562,11 @@ export async function addCoupon(body: Coupon) {
     await addDoc(collection(db, "coupons"), couponDataToSave);
 
     alert("✅ coupon added successfully!");
-  } catch (err: any) {
-    return { error: err.message };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return error.message;
+    } else {
+      return "Something went wrong";
+    }
   }
 }

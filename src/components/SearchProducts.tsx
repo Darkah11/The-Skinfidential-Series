@@ -19,7 +19,6 @@ export default function SearchProduct({ onUpdate }: ChildProps) {
   const [value, setValue] = useState("");
 //   const [result, setResult] = useState<ProductWithId[]>([]);
   const [products, setProducts] = useState<ProductWithId[]>([]);
-  const debouncedQuery = useDebounce(value, 500);
 
 //   const handleChange = async (searchValue: string) => {
 //     setLoading(true);
