@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 // import search from "@/public/search.svg";
-import useDebounce from "./useDebounce";
 import { RotatingCircle } from "./Loader";
 import Link from "next/link";
 import { ProductWithId } from "@/types/products";
