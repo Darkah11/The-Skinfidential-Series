@@ -7,14 +7,26 @@ import { updateBilling } from "@/redux/slices/cartSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { PrimaryButton } from "./Button";
 import { RotatingCircle } from "./Loader";
+import { Billing } from "@/types/billing";
 
 export default function CheckoutDetails() {
   const dispatch = useDispatch();
   const billing = useAppSelector((state) => state.billing);
+  const coupon = useAppSelector((state) => state.coupon);
   const total = useAppSelector((state) => state.total);
   const cart = useAppSelector((state) => state.cart);
   const deliveryOption = useAppSelector((state) => state.deliveryOption);
-  const [formData, setFormData] = useState(billing);
+  const [formData, setFormData] = useState<Billing>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    address_1: "",
+    company: "",
+    country: "",
+    state: "",
+    phone: "",
+    city: "",
+  });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<formErrors>({});
   type formErrors = {
@@ -63,10 +75,11 @@ export default function CheckoutDetails() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         cart, // redux cart
-        billing,
+        billing: formData,
         deliveryMethod: deliveryOption.name,
         deliveryPrice: deliveryOption.price,
         userId: "htq6ucniu2u2bv",
+        coupon: coupon.isActive ? coupon : null,
         // userId: user.uid,
       }),
     });
@@ -170,9 +183,9 @@ export default function CheckoutDetails() {
     }
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
+      dispatch(updateBilling(formData));
       setLoading(true);
       try {
-        dispatch(updateBilling(formData));
         await startPayment();
       } catch (error) {
         console.error(error);

@@ -340,7 +340,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
             </label>
             <input
               onChange={handleChange}
-              value={formData.price}
+              value={formData.price || ""}
               type="number"
               name="price"
               id="price"
@@ -361,7 +361,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
             </label>
             <input
               onChange={handleChange}
-              value={formData.costPrice}
+              value={formData.costPrice || ''}
               type="number"
               name="costPrice"
               id="cost_price"
@@ -668,7 +668,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
                       <input
                         type="number"
                         placeholder="Price"
-                        value={variant.price}
+                        value={variant.price || ''}
                         onChange={(e) => {
                           const updated = [...formData.variants!];
                           updated[index].price = Number(e.target.value);
@@ -691,7 +691,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
                       <input
                         type="number"
                         placeholder="Cost Price"
-                        value={variant.costPrice}
+                        value={variant.costPrice || ''}
                         onChange={(e) => {
                           const updated = [...formData.variants!];
                           updated[index].costPrice = Number(e.target.value);

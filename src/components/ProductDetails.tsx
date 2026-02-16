@@ -233,14 +233,14 @@ export default function ProductDetails({ product }: MyComponentProps) {
   return (
     <section>
       <Container className="relative px-5 lg:px-12 xl:px-24 py-16">
-        <div className="flex flex-col md:flex-row gap-x-10 md:items-center">
-          <div className="md:w-1/2 relative">
+        <div className="flex flex-col md:flex-row gap-x-10 md:items-center md:justify-between">
+          <div className=" md:w-1/2 w-fit relative max-w-[500px]">
             <Image
               src={`${product.imageUrl}`}
               width={300}
               height={500}
               alt="product image"
-              className="w-full aspect-[3/4] max-w-[450px]"
+              className="w-full aspect-[3/4] "
             />
             {hasDiscount && (
               <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full font-semibold">

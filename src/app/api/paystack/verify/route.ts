@@ -54,6 +54,7 @@
 import { getAdminDb } from "@/config/firebase-admin";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { applyCouponToOrder } from "@/utils/Validator";
 
 function generateOrderNumber() {
   return `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
@@ -125,6 +126,7 @@ export async function GET(req: NextRequest) {
     if (!existingOrderSnap.empty) {
       return NextResponse.json({ success: true });
     }
+
     const orderId = crypto.randomUUID();
     await db
       .collection("orders")
@@ -142,11 +144,14 @@ export async function GET(req: NextRequest) {
           billing: checkout.billing,
           deliveryMethod: checkout.deliveryMethod,
           deliveryPrice: checkout.deliveryPrice,
+          couponUsed: checkout.coupon && checkout.coupon.isActive,
+          coupon: checkout.coupon ? checkout.coupon : null,
           status: "paid",
           createdAt: new Date().toISOString(),
         },
         { merge: true },
       );
+    if (checkout.coupon) await applyCouponToOrder(checkout.coupon.id);
 
     return NextResponse.json({ success: true });
   } catch (err) {

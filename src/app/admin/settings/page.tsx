@@ -1,9 +1,12 @@
 import AdminHeader from "@/components/AdminHeader";
 import SettingsTabs from "@/components/SettingsTabs";
-import { getDeliveryOptions, getGeneralSettings } from "@/utils/firebase";
+import {
+  getDeliveryOptions,
+  getGeneralSettings,
+} from "@/utils/firebase";
 import React from "react";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function SettingsPage() {

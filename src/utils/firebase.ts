@@ -15,6 +15,7 @@ import {
   // doc,
   // getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   setDoc,
@@ -29,6 +30,7 @@ import {
 import { DeliveryWithId } from "@/types/delivery";
 import { order, OrderWithId } from "@/types/order";
 import { GeneralSettings } from "@/types/settings";
+import { Coupon } from "@/types/coupon";
 // import { redirect } from "next/navigation";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { log } from "console";
@@ -92,6 +94,7 @@ export const addProduct = async (body: Product) => {
     console.log("all done");
   }
 };
+
 export const addCategory = async (body: Category) => {
   try {
     // setLoading(true);
@@ -138,6 +141,7 @@ export async function getProducts() {
     return [];
   }
 }
+
 export async function getOrders() {
   try {
     const snapshot = await getDocs(collection(db, "orders"));
@@ -152,6 +156,38 @@ export async function getOrders() {
     console.error("Error fetching orders:", error);
     return [];
   }
+}
+export async function getCoupons() {
+  try {
+    const snapshot = await getDocs(collection(db, "coupons"));
+
+    const coupons = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as Coupon),
+    }));
+
+    return coupons;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return [];
+  }
+}
+
+export async function getCouponByCode(code: string) {
+  const couponRef = collection(db, "coupons");
+
+  const q = query(couponRef, where("code", "==", code.toUpperCase()), limit(1));
+  const snap = await getDocs(q);
+  // const snap = await db
+  //   .collection("coupons")
+  //   .where("code", "==", code.toUpperCase())
+  //   .limit(1)
+  //   .get();
+
+  if (snap.empty) throw new Error("Invalid coupon code");
+
+  const doc = snap.docs[0];
+  return { id: doc.id, ...(doc.data() as Coupon) };
 }
 
 export async function getProductsByCategory(category?: string) {
@@ -206,6 +242,7 @@ export async function getProductById(
     ...(snapshot.data() as Omit<ProductWithId, "id">),
   };
 }
+
 export async function getCategoryById(
   id: string,
 ): Promise<CategoryWithId | null> {
@@ -310,6 +347,34 @@ export const editProduct = async (
     console.log("editProduct finished");
   }
 };
+export const editCoupon = async (id: string, body: Coupon) => {
+  try {
+    const couponData = {
+      code: body.code,
+      type: body.type,
+      value: body.value,
+      isActive: body.isActive,
+      usedCount: body.usedCount,
+      minOrderAmount: body.usageLimitTotal,
+      usageLimitTotal: body.usageLimitTotal,
+      validFrom: body.validFrom,
+      validUntil: body.validUntil,
+      updatedAt: new Date().toISOString(),
+    };
+
+    // 3️⃣ Update Firestore document
+    const couponRef = doc(db, "coupons", id);
+    await updateDoc(couponRef, couponData);
+
+    alert("✅ Coupon updated successfully!");
+  } catch (err) {
+    console.error("Edit coupon error:", err);
+    alert("Error updating coupon");
+  } finally {
+    console.log("editCoupon finished");
+  }
+};
+
 export const editCategory = async (id: string, body: Category) => {
   try {
     const updatedCategoryData = {
@@ -329,6 +394,7 @@ export const editCategory = async (id: string, body: Category) => {
     console.log("editCategory finished");
   }
 };
+
 export const updateOrder = async (id: string, status: string) => {
   try {
     const updatedOrderData = {
@@ -371,6 +437,7 @@ export const deleteProduct = async (id: string, imagePublicId?: string) => {
     alert("Error deleting product");
   }
 };
+
 export const deleteCategory = async (id: string) => {
   try {
     if (!confirm("Are you sure you want to delete this category?")) return;
@@ -384,8 +451,20 @@ export const deleteCategory = async (id: string) => {
     alert("Error deleting category");
   }
 };
+export const deleteCoupon = async (id: string) => {
+  try {
+    if (!confirm("Are you sure you want to delete this coupon?")) return;
 
-// Get tax settings
+    const couponRef = doc(db, "coupons", id);
+    await deleteDoc(couponRef);
+
+    alert("✅ coupon deleted successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Error deleting coupon");
+  }
+};
+
 export const getGeneralSettings = async (): Promise<GeneralSettings | null> => {
   try {
     const settingsDoc = await getDoc(doc(db, "settings", "general"));
@@ -409,7 +488,6 @@ export const getGeneralSettings = async (): Promise<GeneralSettings | null> => {
   }
 };
 
-// lib/settings.ts
 export const updateSettings = async (settings: Partial<GeneralSettings>) => {
   try {
     const updates: Partial<GeneralSettings> = {};
@@ -431,21 +509,60 @@ export const updateSettings = async (settings: Partial<GeneralSettings>) => {
   }
 };
 
-export const updateDeliveryOptions = async (options: DeliveryWithId[]): Promise<void> => {
+export const updateDeliveryOptions = async (
+  options: DeliveryWithId[],
+): Promise<void> => {
   try {
-    const updatePromises = options.map(option => 
-      updateDoc(doc(db, 'deliveryOptions', option.id), {
+    const updatePromises = options.map((option) =>
+      updateDoc(doc(db, "deliveryOptions", option.id), {
         name: option.name,
         price: option.price,
         isActive: option.isActive,
         description: option.description,
-        order: option.order
-      })
+        order: option.order,
+      }),
     );
 
     await Promise.all(updatePromises);
   } catch (error) {
-    console.error('Error updating delivery options:', error);
+    console.error("Error updating delivery options:", error);
     throw error;
   }
 };
+
+export async function addCoupon(body: Coupon) {
+  try {
+    // prevent duplicate coupon codes
+
+    const existingRef = collection(db, "coupons");
+
+    const q = query(
+      existingRef,
+      where("code", "==", body.code.toUpperCase()),
+      limit(1),
+    );
+    const existingSnap = await getDocs(q);
+
+    if (!existingSnap.empty) throw new Error("Coupon code already exists");
+
+    // 3️⃣ create coupon document
+    const couponDataToSave = {
+      code: body.code.toUpperCase(),
+      type: body.type,
+      value: body.value,
+      isActive: true,
+      usedCount: 0,
+      minOrderAmount: body.minOrderAmount ?? null,
+      usageLimitTotal: body.usageLimitTotal ?? null,
+      validFrom: new Date(body.validFrom).toISOString(),
+      validUntil: new Date(body.validUntil).toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+
+    await addDoc(collection(db, "coupons"), couponDataToSave);
+
+    alert("✅ coupon added successfully!");
+  } catch (err: any) {
+    return { error: err.message };
+  }
+}

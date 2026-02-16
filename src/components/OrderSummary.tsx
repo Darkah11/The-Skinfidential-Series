@@ -4,8 +4,9 @@ import { formatPrice } from "@/utils/formatters";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import dropdown from "../../public/dropdown.svg";
-import { updateTotal } from "@/redux/slices/cartSlice";
+import { updateCoupon, updateTotal } from "@/redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
+import { Coupon } from "@/types/coupon";
 
 interface MyComponentProps {
   tax: number | undefined;
@@ -14,7 +15,11 @@ interface MyComponentProps {
 export default function OrderSummary({ tax }: MyComponentProps) {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [subtotalPrice, setSubtotalPrice] = useState(0);
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState<Coupon | null>(null);
+  const [error, setError] = useState<string>("");
   const contentRef = useRef<HTMLDivElement | null>(null);
   const cart = useAppSelector((state) => state.cart);
   const total = useAppSelector((state) => state.total);
@@ -23,6 +28,55 @@ export default function OrderSummary({ tax }: MyComponentProps) {
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
+  const applyCoupon = async () => {
+    if (couponInput.length < 5) {
+      setError("Coupon code must be at least 5 characters");
+      return null;
+    }
+
+    setError("");
+    setCoupon(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/coupon/validate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code: couponInput,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Invalid coupon");
+        setLoading(false);
+        return null;
+      }
+
+      setCoupon(data.coupon);
+      setLoading(false);
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+  function calculateDiscount(coupon: Coupon, cartTotal: number) {
+    let discount = 0;
+
+    if (coupon.type === "percentage") {
+      discount = cartTotal * (coupon.value / 100);
+    }
+
+    if (coupon.type === "fixed") {
+      discount = coupon.value;
+    }
+
+    return Math.min(discount, cartTotal);
+  }
   useEffect(() => {
     const total = cart.reduce(
       (sum, product) => sum + Number(product.price) * product.quantity,
@@ -32,12 +86,27 @@ export default function OrderSummary({ tax }: MyComponentProps) {
   }, [cart]);
   useEffect(() => {
     const safeTax: number = tax ?? 0;
-    dispatch(
-      updateTotal(
-        subtotalPrice + (safeTax / 100) * subtotalPrice + deliveryOption.price,
-      ),
-    );
-  }, [subtotalPrice, deliveryOption, cart, tax]);
+    const total =
+      subtotalPrice + (safeTax / 100) * subtotalPrice + deliveryOption.price;
+
+    if (coupon && coupon.minOrderAmount && total < coupon.minOrderAmount) {
+      setError(`Minimum total amount is ₦${coupon.minOrderAmount}`);
+      setCoupon(null);
+      dispatch(updateTotal(total)); // Don't apply discount
+      return;
+    }
+
+    const discountedTotal = coupon
+      ? total - calculateDiscount(coupon, total)
+      : total;
+    dispatch(updateTotal(discountedTotal));
+  }, [subtotalPrice, deliveryOption, cart, tax, coupon]);
+
+  useEffect(() => {
+    if (coupon) {
+      dispatch(updateCoupon(coupon));
+    }
+  }, [coupon]);
 
   return (
     <>
@@ -103,14 +172,20 @@ export default function OrderSummary({ tax }: MyComponentProps) {
             <div className=" py-4 border-b border-gold">
               <div className={`flex items-center justify-between gap-x-5`}>
                 <input
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value)}
                   placeholder="Coupon code"
                   type="text"
                   className=" px-3 bg-white h-10 border bg-transparent outline-none flex-1"
                 />
-                <button className=" h-10 font-semibold text-[13px] bg-gray-300 px-7">
-                  APPLY
+                <button
+                  onClick={applyCoupon}
+                  className=" h-10 font-semibold text-[13px] bg-accent text-white px-7"
+                >
+                  {loading ? "Loading..." : "APPLY"}
                 </button>
               </div>
+              {error && <p style={{ color: "red" }}>{error}</p>}
             </div>
             <div className=" py-4 border-b border-gold">
               <div className=" text-xs flex items-center text-primary-100 justify-between">
@@ -134,6 +209,22 @@ export default function OrderSummary({ tax }: MyComponentProps) {
                   {cart.length > 0
                     ? formatPrice(((tax ?? 0) / 100) * subtotalPrice)
                     : formatPrice(0)}
+                </p>
+              </div>
+              <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
+                <p className=" font-semibold text-gray-600">COUPON:</p>
+                <p className="text-sm font-semibold">
+                  -₦
+                  {coupon
+                    ? formatPrice(
+                        calculateDiscount(
+                          coupon,
+                          ((tax ?? 0) / 100) * subtotalPrice +
+                            subtotalPrice +
+                            deliveryOption.price,
+                        ),
+                      )
+                    : 0}
                 </p>
               </div>
             </div>
@@ -179,14 +270,20 @@ export default function OrderSummary({ tax }: MyComponentProps) {
         <div className=" py-4 border-b border-gold">
           <div className={`flex items-center justify-between gap-x-5`}>
             <input
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value)}
               placeholder="Coupon code"
               type="text"
               className=" px-3 bg-white h-10 border bg-transparent outline-none flex-1"
             />
-            <button className=" h-10 font-semibold text-[13px] bg-accent text-white px-7">
-              APPLY
+            <button
+              onClick={applyCoupon}
+              className=" h-10 font-semibold text-[13px] bg-accent text-white px-7"
+            >
+              {loading ? "Loading..." : "APPLY"}
             </button>
           </div>
+          {error && <p className=" text-red-600 text-sm">{error}</p>}
         </div>
         <div className=" py-4 border-b border-gold">
           <div className=" text-xs flex items-center text-primary-100 justify-between">
@@ -208,6 +305,22 @@ export default function OrderSummary({ tax }: MyComponentProps) {
               {cart.length > 0
                 ? formatPrice(((tax ?? 0) / 100) * subtotalPrice)
                 : formatPrice(0)}
+            </p>
+          </div>
+          <div className=" text-xs flex items-center text-primary-100 justify-between mt-4">
+            <p className=" font-semibold text-gray-600">COUPON:</p>
+            <p className="text-sm font-semibold">
+              -₦
+              {coupon
+                ? formatPrice(
+                    calculateDiscount(
+                      coupon,
+                      ((tax ?? 0) / 100) * subtotalPrice +
+                        subtotalPrice +
+                        deliveryOption.price,
+                    ),
+                  )
+                : 0}
             </p>
           </div>
         </div>

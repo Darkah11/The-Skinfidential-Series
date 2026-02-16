@@ -2,16 +2,27 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ProductWithQuantity } from "@/types/products";
 import { DeliveryWithId } from "@/types/delivery";
 import { Billing } from "@/types/billing";
+import { Coupon } from "@/types/coupon";
 
 interface CartState {
   cart: ProductWithQuantity[];
   billing: Billing;
   deliveryOption: Omit<DeliveryWithId, "id">;
   total: number;
+  coupon: Coupon;
 }
 const initialState: CartState = {
   cart: [],
   total: 0,
+  coupon: {
+    code: "",
+    type: "percentage",
+    value: 0,
+    isActive: false,
+    usedCount: 0,
+    validFrom: "",
+    validUntil: "",
+  },
   deliveryOption: {
     name: "",
     isActive: true,
@@ -57,6 +68,33 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       state.cart = [];
       state.total = 0;
+      state.coupon = {
+        code: "",
+        type: "percentage",
+        value: 0,
+        isActive: false,
+        usedCount: 0,
+        validFrom: "",
+        validUntil: "",
+      };
+      state.billing = {
+        first_name: "",
+        last_name: "",
+        email: "",
+        address_1: "",
+        company: "",
+        country: "",
+        state: "",
+        phone: "",
+        city: "",
+      };
+      state.deliveryOption = {
+        name: "",
+        isActive: true,
+        description: "",
+        price: 0,
+        order: 0,
+      };
     },
     removeFromCart: (state, action) => {
       const { id, variantId } = action.payload;
@@ -101,6 +139,9 @@ const cartSlice = createSlice({
     updateTotal: (state, action) => {
       state.total = action.payload;
     },
+    updateCoupon: (state, action) => {
+      state.coupon = action.payload;
+    },
   },
 });
 // export const { addToCart, removeFromCart, incrementQuantity, decrementQuantity, updateBilling } = cartSlice.actions;
@@ -113,5 +154,6 @@ export const {
   decrementQuantity,
   updateDeliveryOption,
   updateTotal,
+  updateCoupon,
 } = cartSlice.actions;
 export default cartSlice.reducer;

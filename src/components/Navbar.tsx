@@ -13,16 +13,21 @@ import { useAppSelector } from "@/redux/hooks";
 import CartMenu from "./CartMenu";
 import { Category } from "@/types/products";
 import UserMobileMenu from "./UserMobileMenu";
+import SearchProduct from "./SearchProducts";
 
 interface MyComponentsProps {
   categories: Category[];
 }
 export default function Navbar({ categories }: MyComponentsProps) {
   const [cartOpen, setCartOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cart = useAppSelector((state) => state.cart);
   const closeCart = () => {
     setCartOpen(false);
+  };
+  const closeSearch = () => {
+    setSearchOpen(false);
   };
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -113,9 +118,9 @@ export default function Navbar({ categories }: MyComponentsProps) {
               </ul>
             </div>
             <div className=" flex items-center gap-[10px]">
-              <Link href={"/"}>
+              <button onClick={() => setSearchOpen(!searchOpen)}>
                 <Image src={search} alt="search icon" className=" w-7" />
-              </Link>
+              </button>
               <button
                 onClick={() => setCartOpen(!cartOpen)}
                 className=" relative"
@@ -139,6 +144,7 @@ export default function Navbar({ categories }: MyComponentsProps) {
         </Container>
       </header>
       {cartOpen && <CartMenu onUpdate={closeCart} />}
+      {searchOpen && <SearchProduct onUpdate={closeSearch} />}
       <UserMobileMenu
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}

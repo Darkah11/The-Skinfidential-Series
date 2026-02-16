@@ -4,7 +4,7 @@ import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { cart, billing, deliveryMethod, deliveryPrice, userId } = body;
+  const { cart, billing, deliveryMethod, deliveryPrice, userId, coupon } = body;
   const db = getAdminDb();
 
   const checkoutId = crypto.randomUUID();
@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
     billing,
     deliveryMethod,
     deliveryPrice,
+    coupon,
     status: "pending_payment",
     createdAt: new Date().toISOString(),
   });

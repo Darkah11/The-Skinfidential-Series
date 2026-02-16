@@ -45,13 +45,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { getAdminDb } from "@/config/firebase-admin";
+import { applyCouponToOrder } from "@/utils/Validator";
 
 function generateOrderNumber() {
   return `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
@@ -115,24 +116,29 @@ export async function POST(req: NextRequest) {
 
     if (existingOrderSnap.empty) {
       const orderId = crypto.randomUUID();
-      await db.collection("orders").doc(orderId).set({
-        orderId,
-        orderNumber: generateOrderNumber(),
-        paymentAttemptId,
-        paystackReference: payment.reference,
-        userId: checkout.userId,
-        email: payment.customer.email,
-        amount: payment.amount / 100,
-        cart: checkout.cart,
-        billing: checkout.billing,
-        deliveryMethod: checkout.deliveryMethod,
-        deliveryPrice: checkout.deliveryPrice,
-        status: "paid",
-        createdAt: new Date().toISOString(),
-      });
+      await db
+        .collection("orders")
+        .doc(orderId)
+        .set({
+          orderId,
+          orderNumber: generateOrderNumber(),
+          paymentAttemptId,
+          paystackReference: payment.reference,
+          userId: checkout.userId,
+          email: payment.customer.email,
+          amount: payment.amount / 100,
+          cart: checkout.cart,
+          billing: checkout.billing,
+          deliveryMethod: checkout.deliveryMethod,
+          deliveryPrice: checkout.deliveryPrice,
+          couponUsed: checkout.coupon && checkout.coupon.isActive,
+          coupon: checkout.coupon ? checkout.coupon : null,
+          status: "paid",
+          createdAt: new Date().toISOString(),
+        });
+      if (checkout.coupon) await applyCouponToOrder(checkout.coupon.id);
     }
   }
 
   return NextResponse.json({ received: true });
 }
-

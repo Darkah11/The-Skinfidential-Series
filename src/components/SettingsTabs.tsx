@@ -6,8 +6,9 @@ import TaxAndDiscountTab from "./TaxAndDiscountTab";
 import { GeneralSettings } from "@/types/settings";
 import DeliveryTab from "./DeliveryTab";
 import { DeliveryWithId } from "@/types/delivery";
+import CouponTab from "./CouponTab";
 
-const tabs = ["Tax & Discount", "Delivery", "Account"];
+const tabs = ["Tax & Discount", "Coupon", "Delivery", "Account"];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -18,7 +19,10 @@ interface MyComponentProps {
   deliveryOptions: DeliveryWithId[];
 }
 
-export default function SettingsTabs({ settings, deliveryOptions }: MyComponentProps) {
+export default function SettingsTabs({
+  settings,
+  deliveryOptions,
+}: MyComponentProps) {
   return (
     <div className="w-full h-full flex flex-col">
       <TabGroup as="div" className="flex flex-col flex-1 min-h-0">
@@ -55,6 +59,10 @@ export default function SettingsTabs({ settings, deliveryOptions }: MyComponentP
         <TabPanels className="mt-6 flex-1 min-h-0">
           <TabPanel className=" h-full">
             <TaxAndDiscountTab settings={settings} />
+          </TabPanel>
+
+          <TabPanel className=" h-full">
+            <CouponTab />
           </TabPanel>
 
           <TabPanel>
