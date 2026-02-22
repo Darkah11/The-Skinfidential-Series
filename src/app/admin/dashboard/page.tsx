@@ -63,27 +63,27 @@ export default async function Dashboard() {
         <div className=" mt-5">
           <h3 className=" text-gray-600 font-semibold text-2xl">Analytics</h3>
           <div className=" mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-3">
-            <div className=" bg-gold/20 px-5 py-5 border border-gold">
+            <div className=" bg-gold/20 px-3 md:px-5 py-5 border border-gold">
               <h3 className=" text-gray-600 text-xl font-semibold">
                 Total Sales
               </h3>
-              <p className=" text-primary-100 text-xl font-bold mt-2">
+              <p className=" text-primary-100 text-lg md:text-xl font-bold mt-2">
                 ₦{formatPrice(totalSales)}
               </p>
             </div>
-            <div className=" bg-gold/20 px-5 py-5 border border-gold">
+            <div className=" bg-gold/20 px-3 md:px-5 py-5 border border-gold">
               <h3 className=" text-gray-600 text-xl font-semibold">
                 Gross Profit
               </h3>
-              <p className=" text-primary-100 text-xl font-bold mt-2">
+              <p className=" text-primary-100 text-lg md:text-xl font-bold mt-2">
                 ₦{formatPrice(grossProfit)}
               </p>
             </div>
-            <div className=" bg-gold/20 px-5 py-5 border border-gold">
-              <h3 className=" text-gray-600 text-xl font-semibold">
+            <div className=" bg-gold/20 px-3 md:px-5 py-5 border border-gold">
+              <h3 className=" text-gray-600 text-lg md:text-xl font-semibold">
                 Website Visits
               </h3>
-              <p className=" text-primary-100 text-xl font-bold mt-2">120</p>
+              <p className=" text-primary-100 text-lg md:text-xl font-bold mt-2">120</p>
             </div>
           </div>
         </div>

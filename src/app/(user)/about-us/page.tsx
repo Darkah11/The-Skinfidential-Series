@@ -14,7 +14,11 @@ export default function AboutUs() {
             About TheSkinfidentialSeries
           </h2>
           <p className=" text-[15px] text-gray-600 mt-3 leading-relaxed">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde alias quibusdam consectetur nesciunt obcaecati tempore, amet dolore! Eos sit, velit libero impedit mollitia quo eligendi minus culpa veniam aliquam, pariatur exercitationem incidunt! Doloribus, quam officiis.
+            At TheSkinfidentialSeries, we are passionate about helping you
+            achieve healthy, radiance, and be confident in your skin. We
+            specialize in offering a carefully curated selection of foreign and
+            Nigerian skincare products from reputable, trusted, and
+            result-driven brands.
           </p>
         </div>
       </Container>
@@ -23,12 +27,23 @@ export default function AboutUs() {
           <div className=" bg-white text-left p-[50px] md:w-1/2 flex flex-col justify-center items-start">
             <h4 className=" text-[22px] md:text-[32px] font-bold">Our Story</h4>
             <p className=" text-gray-600 mt-5 text-[15px] md:text-base">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore itaque praesentium, est in optio alias sit voluptate, cum eius non velit aliquid iure ipsum fuga distinctio vitae nesciunt placeat possimus?
-              <br /> <br /> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatem incidunt ad magni nisi at in?
+              We saw a growing need for trusted guidance in an industry filled
+              with confusion, counterfeits, and overwhelming choices, and
+              TheSkinfidentialSeries stepped in to become that trusted voice.
+              Our journey began with one simple belief: everyone deserves
+              skincare that truly works for their unique skin type, tone, and
+              lifestyle.
+              <br /> <br />Skincare is not
+              a one-size-fits-all experience, and at TheSkinfidentialSeries, we
+              treat it as a confidential journey between you and your skin.
             </p>
           </div>
           <div className=" md:w-1/2">
-            <Image src={story} alt="about grid image one" className=" h-full w-full object-cover" />
+            <Image
+              src={story}
+              alt="about grid image one"
+              className=" h-full w-full object-cover"
+            />
           </div>
         </div>
         <div className=" md:flex md:flex-row-reverse">
@@ -37,11 +52,18 @@ export default function AboutUs() {
               Our Mission
             </h4>
             <p className=" text-gray-600 mt-5 text-[15px] md:text-base">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam repudiandae beatae unde accusamus quas ratione optio ab accusantium architecto dignissimos ad eos velit, molestiae neque nesciunt, tempora minus maxime ullam nulla atque minima magnam voluptates blanditiis illum. Blanditiis, dolores hic.
+              Creating possibilities for people to glow regardless of their skin
+              worries, help them stay unique even when they don't have much to
+              splurge on skincare. To HELP, to EXPAND, and to RENDER every
+              little effort and knowledge they need about skincare.
             </p>
           </div>
           <div className=" md:w-1/2">
-            <Image src={mission} alt="about grid image two" className=" h-full w-full object-cover" />
+            <Image
+              src={mission}
+              alt="about grid image two"
+              className=" h-full w-full object-cover"
+            />
           </div>
         </div>
         <div className=" md:flex md:flex-row">
@@ -50,11 +72,17 @@ export default function AboutUs() {
               Our Vision
             </h4>
             <p className=" text-gray-600 mt-5 text-[15px] md:text-base">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi cum dolores sequi laborum ducimus ipsam, enim fugit porro veritatis dolor. Quam vel error iure, nesciunt accusantium temporibus praesentium. Inventore nulla commodi nam dolorem alias dolores quod ea cupiditate illum officiis.
+              The online 1% stop-shop destination to global customers, who trust
+              us to provide them top-notch, original, authentic, and affordable
+              yet quality products from reputable companies.
             </p>
           </div>
           <div className=" md:w-1/2">
-            <Image src={vision} alt="about grid image three" className=" h-full w-full object-cover" />
+            <Image
+              src={vision}
+              alt="about grid image three"
+              className=" h-full w-full object-cover"
+            />
           </div>
         </div>
       </Container>
