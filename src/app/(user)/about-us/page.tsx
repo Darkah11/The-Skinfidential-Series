@@ -53,7 +53,7 @@ export default function AboutUs() {
             </h4>
             <p className=" text-gray-600 mt-5 text-[15px] md:text-base">
               Creating possibilities for people to glow regardless of their skin
-              worries, help them stay unique even when they don't have much to
+              worries, help them stay unique even when they don&apos;t have much to
               splurge on skincare. To HELP, to EXPAND, and to RENDER every
               little effort and knowledge they need about skincare.
             </p>
