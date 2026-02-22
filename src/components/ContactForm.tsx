@@ -74,6 +74,7 @@ export default function ContactPage() {
         }, 3000);
       }
     } catch (error) {
+      console.log(error);
       setStatus("Network error. Please try again.");
       setTimeout(() => {
         setStatus("");
