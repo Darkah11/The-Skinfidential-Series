@@ -6,10 +6,9 @@ export interface ProductDiscount {
   isActive: boolean;
 }
 
-
 export interface ProductVariant {
   id: string;
-  name: string;  
+  name: string;
   sku?: string;
   price: number;
   costPrice: number;

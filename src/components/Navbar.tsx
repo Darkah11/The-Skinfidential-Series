@@ -103,7 +103,7 @@ export default function Navbar({ categories }: MyComponentsProps) {
                   </div>
                 </li>
                 <li>
-                  <Link href={"/"} className=" text-sm hover:text-primary-50">
+                  <Link href={"/about-us"} className=" text-sm hover:text-primary-50">
                     About Us
                   </Link>
                 </li>
@@ -136,7 +136,7 @@ export default function Navbar({ categories }: MyComponentsProps) {
                 <Image src={user} alt="user icon" className=" w-7" />
               </Link>
               <PrimaryButton
-                text="Contact"
+                text="Contact Us"
                 style=" bg-accent hidden md:block"
               />
             </div>

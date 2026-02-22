@@ -94,19 +94,21 @@ export default function ProductsTable({ products }: MyComponentProps) {
       <div className=" hidden lg:block mt-10">
         <table className=" w-full bg-white table-container rounded-t-xl">
           <thead className=" bg-gold text-primary-100 ">
-            <th className=" border-r text-left p-4 rounded-tl-xl font-semibold">
-              Product
-            </th>
-            <th className=" border-r text-left p-4 font-semibold">
-              Categories
-            </th>
-            <th className=" border-r text-left p-4 font-semibold">Price</th>
-            <th className=" border-r text-left p-4 font-semibold">
-              Created At
-            </th>
-            <th className=" text-left p-4 rounded-tr-xl font-semibold">
-              Action
-            </th>
+            <tr>
+              <th className=" border-r text-left p-4 rounded-tl-xl font-semibold">
+                Product
+              </th>
+              <th className=" border-r text-left p-4 font-semibold">
+                Categories
+              </th>
+              <th className=" border-r text-left p-4 font-semibold">Price</th>
+              <th className=" border-r text-left p-4 font-semibold">
+                Created At
+              </th>
+              <th className=" text-left p-4 rounded-tr-xl font-semibold">
+                Action
+              </th>
+            </tr>
           </thead>
           <tbody className="">
             {rows.map((item) => (

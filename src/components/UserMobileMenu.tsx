@@ -17,7 +17,7 @@ const navLinks = [
   { name: "Shop", href: "/shop" },
   { name: "About Us", href: "/about-us" },
   { name: "Admin", href: "/admin/dashboard" },
-  { name: "Contact", href: "/contact" },
+  { name: "Contact Us", href: "/contact-us" },
 ];
 
 export default function UserMobileMenu({

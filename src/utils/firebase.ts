@@ -80,7 +80,7 @@ export const addProduct = async (body: Product) => {
       imagePublicId: cloudinaryData.public_id,
       discount: body.discount,
       hasVariants: body.hasVariants,
-      variants: body.variants,
+      variants: body.variants ?? null,
     };
 
     // 2️⃣ Save product details + image URL to Firestore
@@ -332,7 +332,7 @@ export const editProduct = async (
       updatedAt: new Date().toISOString(),
       discount: body.discount,
       hasVariants: body.hasVariants,
-      variants: body.variants,
+      variants: body.variants ?? null,
     };
 
     // 3️⃣ Update Firestore document
