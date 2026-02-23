@@ -24,6 +24,7 @@ type formErrors = {
   tags?: string;
   description?: string;
   variants?: string;
+  stock?: string;
 };
 
 export default function AddProduct({ categories, product }: MyComponentProps) {
@@ -41,7 +42,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     description: "",
     categories: [],
     tags: [],
-    inStock: true,
+    stock: 0,
     hasVariants: false,
     discount: {
       type: "percentage",
@@ -117,7 +118,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
           name: "",
           price: 0,
           costPrice: 0,
-          inStock: true,
+          stock: 0,
         },
       ],
     }));
@@ -143,6 +144,9 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     }
     if (formData.costPrice == 0) {
       newErrors.costPrice = "Cost price is required.";
+    }
+    if (formData.stock == 0) {
+      newErrors.stock = "Stock is required.";
     }
     if (!formData.image) {
       newErrors.image = "Image is required.";
@@ -179,7 +183,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
         tags: [],
         image: undefined,
         hasVariants: false,
-        inStock: true,
+        stock: 0,
         discount: {
           type: "percentage",
           value: 0,
@@ -214,6 +218,9 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     }
     if (formData.categories.length === 0) {
       newErrors.categories = "Add at least one category.";
+    }
+    if (!formData.stock || formData.stock == 0) {
+      newErrors.stock = "Stock is required.";
     }
     if (formData.hasVariants) {
       if (!formData.variants || formData.variants.length === 0) {
@@ -281,7 +288,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
         categories: product.categories,
         tags: product.tags,
         hasVariants: product.hasVariants,
-        inStock: product.inStock,
+        stock: product.stock,
         discount: product.discount,
         variants: product.variants,
       });
@@ -309,7 +316,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
             {pathname.includes(editPath) ? "Edit Product" : "Add Product"}
           </h3>
         </div>
-        <div className=" mt-5">
+        <div className=" mt-5 space-y-5">
           <div>
             <label
               htmlFor="name"
@@ -331,56 +338,59 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               <p className=" mt-2 text-red-500 text-xs">{errors.name}</p>
             )}
           </div>
-          <div className=" mb-5 lg:w-1/2">
-            <label
-              htmlFor="price"
-              className=" text-gray-700 text-[11px] font-semibold  uppercase"
-            >
-              Price <span className=" text-red-700">*</span>
-            </label>
-            <input
-              onChange={handleChange}
-              value={formData.price || ""}
-              type="number"
-              name="price"
-              id="price"
-              className={` hide-number-arrows outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300 ${
-                errors.price && formData.price == 0 ? " border-red-500" : ""
-              }`}
-            />
-            {errors.price && (
-              <p className=" mt-2 text-red-500 text-xs">{errors.price}</p>
-            )}
-          </div>
-          <div className=" mb-5 lg:w-1/2">
-            <label
-              htmlFor="cost_price"
-              className=" text-gray-700 text-[11px] font-semibold  uppercase"
-            >
-              Cost Price <span className=" text-red-700">*</span>
-            </label>
-            <input
-              onChange={handleChange}
-              value={formData.costPrice || ''}
-              type="number"
-              name="costPrice"
-              id="cost_price"
-              className={` hide-number-arrows outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300 ${
-                errors.costPrice && formData.costPrice == 0
-                  ? " border-red-500"
-                  : ""
-              }`}
-            />
-            {errors.costPrice && (
-              <p className=" mt-2 text-red-500 text-xs">{errors.costPrice}</p>
-            )}
+          <div className=" lg:flex lg:justify-between gap-x-5">
+            <div className="lg:w-1/2">
+              <label
+                htmlFor="price"
+                className=" text-gray-700 text-[11px] font-semibold  uppercase"
+              >
+                Price <span className=" text-red-700">*</span>
+              </label>
+              <input
+                onChange={handleChange}
+                value={formData.price || ""}
+                type="number"
+                name="price"
+                id="price"
+                className={` hide-number-arrows outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300 ${
+                  errors.price && formData.price == 0 ? " border-red-500" : ""
+                }`}
+              />
+              {errors.price && (
+                <p className=" mt-2 text-red-500 text-xs">{errors.price}</p>
+              )}
+            </div>
+
+            <div className=" lg:w-1/2">
+              <label
+                htmlFor="cost_price"
+                className=" text-gray-700 text-[11px] font-semibold  uppercase"
+              >
+                Cost Price <span className=" text-red-700">*</span>
+              </label>
+              <input
+                onChange={handleChange}
+                value={formData.costPrice || ""}
+                type="number"
+                name="costPrice"
+                id="cost_price"
+                className={` hide-number-arrows outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300 ${
+                  errors.costPrice && formData.costPrice == 0
+                    ? " border-red-500"
+                    : ""
+                }`}
+              />
+              {errors.costPrice && (
+                <p className=" mt-2 text-red-500 text-xs">{errors.costPrice}</p>
+              )}
+            </div>
           </div>
           {formData.costPrice > 0 && (
             <p className=" text-sm my-2 text-green-600">
               Profit is {formData.price - formData.costPrice}
             </p>
           )}
-          <div className=" mb-5 lg:w-1/2">
+          <div className=" lg:w-1/2">
             <label
               htmlFor="description"
               className=" text-gray-700 text-[11px] font-semibold  uppercase"
@@ -397,7 +407,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               className=" outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300"
             />
           </div>
-          <div className="mb-4">
+          <div className="">
             <label className="block text-gray-700">Product Image:</label>
             <input
               type="file"
@@ -453,7 +463,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               <p className=" mt-2 text-red-500 text-xs">{errors.categories}</p>
             )}
           </div> */}
-          <div className=" mb-5">
+          <div className="">
             <div className=" mb-5">
               <label
                 htmlFor="categories"
@@ -497,7 +507,28 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               />
             </div>
           </div>
-          <div className="mb-5">
+          <div className="">
+            <label
+              htmlFor="stock"
+              className=" text-gray-700 text-[11px] font-semibold  uppercase"
+            >
+              Stock <span className=" text-red-700">*</span>
+            </label>
+            <input
+              onChange={handleChange}
+              value={formData.stock || ""}
+              type="number"
+              name="stock"
+              id="stock"
+              className={` hide-number-arrows outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300 ${
+                errors.stock && formData.stock == 0 ? " border-red-500" : ""
+              }`}
+            />
+            {errors.stock && (
+              <p className=" mt-2 text-red-500 text-xs">{errors.stock}</p>
+            )}
+          </div>
+          {/* <div className="mb-5">
             <label className="text-gray-700 text-[11px] font-semibold uppercase">
               In Stock
             </label>
@@ -515,8 +546,8 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               <option value="yes">In Stock</option>
               <option value="no">Out of Stock</option>
             </select>
-          </div>
-          <div className="mb-5 border p-4 rounded-sm">
+          </div> */}
+          <div className="border p-4 rounded-sm">
             <label className="text-gray-700 text-[11px] font-semibold uppercase">
               Discount
             </label>
@@ -575,7 +606,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               </>
             )}
           </div>
-          <div className="mb-5">
+          <div className="">
             <label className="text-gray-700 text-[11px] font-semibold uppercase">
               Has Variants
             </label>
@@ -668,7 +699,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
                       <input
                         type="number"
                         placeholder="Price"
-                        value={variant.price || ''}
+                        value={variant.price || ""}
                         onChange={(e) => {
                           const updated = [...formData.variants!];
                           updated[index].price = Number(e.target.value);
@@ -691,7 +722,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
                       <input
                         type="number"
                         placeholder="Cost Price"
-                        value={variant.costPrice || ''}
+                        value={variant.costPrice || ""}
                         onChange={(e) => {
                           const updated = [...formData.variants!];
                           updated[index].costPrice = Number(e.target.value);
@@ -705,26 +736,25 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
                     </div>
                     <div>
                       <label
-                        htmlFor="name"
+                        htmlFor="stock"
                         className=" text-gray-700 text-[11px] font-semibold  uppercase"
                       >
-                        In Stock?<span className=" text-red-700">*</span>
+                        Stock<span className=" text-red-700">*</span>
                       </label>
-                      <select
-                        value={variant.inStock ? "yes" : "no"}
+                      <input
+                        type="number"
+                        placeholder="Stock"
+                        value={variant.stock || ""}
                         onChange={(e) => {
                           const updated = [...formData.variants!];
-                          updated[index].inStock = e.target.value === "yes";
+                          updated[index].stock = Number(e.target.value);
                           setFormData((prev) => ({
                             ...prev,
                             variants: updated,
                           }));
                         }}
                         className="outline-none block w-full py-[8px] px-3 border rounded-sm border-gray-300"
-                      >
-                        <option value="yes">In Stock</option>
-                        <option value="no">Out of Stock</option>
-                      </select>
+                      />
                     </div>
                   </div>
                 </div>

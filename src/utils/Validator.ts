@@ -30,18 +30,16 @@ export async function validateCoupon(
 
     const coupon = await getCouponByCode(code);
 
-    // Any error thrown below will jump to catch → return null
     validateCouponStatus(coupon);
-    validateUsageLimits(coupon);
+    await validateUsageLimits(coupon);
 
     return {
       coupon,
     };
-  } catch (error) {
-    // optional: log for debugging
-    console.log("Coupon validation failed:", error);
-
-    return null;
+  } catch (error: unknown) {
+    throw new Error(
+      error instanceof Error ? error.message : "An unknown error occurred",
+    );
   }
 }
 

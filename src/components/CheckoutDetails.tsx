@@ -84,29 +84,30 @@ export default function CheckoutDetails() {
     });
 
     const { checkoutId } = await checkoutRes.json();
+    if (checkoutId) {
+      const res = await fetch("/api/paystack/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          // email: user.email,
+          email: "harrisegue9@gmail.com",
+          amount: total,
+          metadata: {
+            // userId: user.uid,
+            userId: "htq6ucniu2u2bv",
+            checkoutId,
+          },
+        }),
+      });
 
-    const res = await fetch("/api/paystack/initiate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        // email: user.email,
-        email: "harrisegue9@gmail.com",
-        amount: total,
-        metadata: {
-          // userId: user.uid,
-          userId: "htq6ucniu2u2bv",
-          checkoutId,
-        },
-      }),
-    });
+      const data = await res.json();
 
-    const data = await res.json();
-
-    if (data.status) {
-      // Redirect browser to Paystack checkout
-      window.location.href = data.data.authorization_url;
-    } else {
-      console.error("Payment initialization failed:", data);
+      if (data.status) {
+        // Redirect browser to Paystack checkout
+        window.location.href = data.data.authorization_url;
+      } else {
+        console.error("Payment initialization failed:", data);
+      }
     }
   };
 

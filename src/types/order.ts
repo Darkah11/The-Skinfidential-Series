@@ -11,7 +11,6 @@ export interface order {
   email: string;
   orderId: string;
   orderNumber: string;
-  paymentAttemptId: string;
   paystackReference: string;
   status: 'paid' | 'cancelled' | 'completed';
   userId: string;

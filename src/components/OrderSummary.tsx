@@ -61,9 +61,9 @@ export default function OrderSummary({ tax }: MyComponentProps) {
       setLoading(false);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        alert(error.message);
+        setError(error.message);
       } else {
-        alert("Something went wrong");
+        setError("Something went wrong");
       }
       setLoading(false);
     }
@@ -146,7 +146,10 @@ export default function OrderSummary({ tax }: MyComponentProps) {
           <div className="accordion-text ">
             <div className="flex flex-col gap-y-5 border-b pb-4 border-gold">
               {cart.map((item) => (
-                <div key={item.id} className=" flex items-center gap-x-5">
+                <div
+                  key={item.productId}
+                  className=" flex items-center gap-x-5"
+                >
                   <div className="relative">
                     <Image
                       src={`${item.imageUrl}`}
@@ -162,9 +165,7 @@ export default function OrderSummary({ tax }: MyComponentProps) {
                   <div className="">
                     <p className=" text-gray-600 capitalize text-sm font-semibold">
                       {item.name}{" "}
-                      {item.hasVariants &&
-                        item.variants &&
-                        `(${item.selectedVariant?.name})`}
+                      {item.variantName && `(${item.variantName})`}
                     </p>
                     <p className=" text-sm text-primary-100  font-semibold mt-2">
                       ₦{formatPrice(item.price * item.quantity)}
@@ -244,7 +245,7 @@ export default function OrderSummary({ tax }: MyComponentProps) {
       <div className="accordion-text hidden lg:block">
         <div className="flex flex-col gap-y-5 border-b pb-4 border-gold">
           {cart.map((item) => (
-            <div key={item.id} className=" flex items-center gap-x-5">
+            <div key={item.productId} className=" flex items-center gap-x-5">
               <div className=" relative">
                 <Image
                   src={`${item.imageUrl}`}
@@ -259,10 +260,7 @@ export default function OrderSummary({ tax }: MyComponentProps) {
               </div>
               <div>
                 <p className=" text-gray-600 capitalize text-sm font-semibold">
-                  {item.name}{" "}
-                  {item.hasVariants &&
-                    item.variants &&
-                    `(${item.selectedVariant?.name})`}
+                  {item.name} {item.variantName && `(${item.variantName})`}
                 </p>
                 <p className=" text-sm text-primary-100 mt-2 font-semibold">
                   ₦{formatPrice(item.price * item.quantity)}

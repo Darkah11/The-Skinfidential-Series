@@ -72,7 +72,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
           {cart &&
             cart.map((item) => (
               <div
-                key={item.id}
+                key={item.productId}
                 className=" flex items-center gap-x-3 py-3 border-b border-gold"
               >
                 <div>
@@ -88,15 +88,13 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                   <div className=" flex justify-between">
                     <p className=" text-sm font-medium capitalize text-gray-800">
                       {item.name}{" "}
-                      {item.hasVariants &&
-                        item.variants &&
-                        `(${item.selectedVariant?.name})`}
+                      {item.variantName && `(${item.variantName})`}
                     </p>
                     <button
                       onClick={() =>
                         dispatch(
                           removeFromCart({
-                            id: item.id,
+                            id: item.productId,
                             variantId: item.variantId,
                           }),
                         )
@@ -114,7 +112,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                         onClick={() =>
                           dispatch(
                             decrementQuantity({
-                              id: item.id,
+                              id: item.productId,
                               variantId: item.variantId,
                             }),
                           )
@@ -130,7 +128,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                         onClick={() =>
                           dispatch(
                             incrementQuantity({
-                              id: item.id,
+                              id: item.productId,
                               variantId: item.variantId,
                             }),
                           )

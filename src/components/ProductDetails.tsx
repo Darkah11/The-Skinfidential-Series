@@ -180,7 +180,9 @@ export default function ProductDetails({ product }: MyComponentProps) {
 
   // Get current price based on variant or base product
   const currentPrice = selectedVariant ? selectedVariant.price : product.price;
-  const currentInStock = selectedVariant ? selectedVariant.inStock : product.inStock;
+  const currentInStock = selectedVariant
+    ? selectedVariant.stock > 0
+    : product.stock > 0;
   const currentCostPrice = selectedVariant
     ? selectedVariant.costPrice
     : product.costPrice;
@@ -201,7 +203,18 @@ export default function ProductDetails({ product }: MyComponentProps) {
         ? Math.round((product.discount.value / currentPrice) * 100)
         : 0;
 
-  const handleIncrement = () => setQty((prev) => prev + 1);
+  // const handleIncrement = () =>
+  //   setQty((prev) =>
+  //     selectedVariant
+  //       ? prev >= selectedVariant.stock && prev + 1
+  //       : prev >= product.stock && prev + 1,
+  //   );
+  const handleIncrement = () => {
+    setQty((prev) => {
+      const maxStock = selectedVariant ? selectedVariant.stock : product.stock;
+      return prev < maxStock ? prev + 1 : prev;
+    });
+  };
   const handleDecrement = () => setQty((prev) => (prev > 1 ? prev - 1 : 1));
 
   // const variantAttributes =
@@ -393,21 +406,17 @@ export default function ProductDetails({ product }: MyComponentProps) {
                   if (currentInStock) {
                     dispatch(
                       addToCart({
-                        ...product,
-                        costPrice: currentCostPrice,
-                        price: discountedPrice, // Use discounted price
-                        originalPrice: currentPrice, // Keep original price for reference
-                        selectedVariant: selectedVariant
-                          ? {
-                              id: selectedVariant.id,
-                              name: selectedVariant.name,
-                              // attributes: selectedVariant.attributes,
-                              // sku: selectedVariant.sku,
-                            }
-                          : undefined,
+                        productId: product.id,
+                        name: product.name,
+                        imageUrl: product.imageUrl,
+
+                        price: discountedPrice,
+                        originalPrice: currentPrice,
                         quantity: qty,
                         subtotal: discountedPrice * qty,
-                        variantId: selectedVariant?.id ?? "default",
+
+                        variantId: selectedVariant?.id ?? null,
+                        variantName: selectedVariant?.name ?? null,
                       }),
                     );
                   }

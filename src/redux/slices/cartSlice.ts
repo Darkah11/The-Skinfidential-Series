@@ -3,9 +3,10 @@ import { ProductWithQuantity } from "@/types/products";
 import { DeliveryWithId } from "@/types/delivery";
 import { Billing } from "@/types/billing";
 import { Coupon } from "@/types/coupon";
+import { Cart } from "@/types/cart";
 
 interface CartState {
-  cart: ProductWithQuantity[];
+  cart: Cart[];
   billing: Billing;
   deliveryOption: Omit<DeliveryWithId, "id">;
   total: number;
@@ -54,11 +55,11 @@ const cartSlice = createSlice({
     //   }
     // },
     addToCart: (state, action) => {
-      const newItem: ProductWithQuantity = action.payload;
+      const newItem: Cart = action.payload;
 
       const existingItem = state.cart.find(
         (item) =>
-          item.id === newItem.id && item.variantId === newItem.variantId,
+          item.productId === newItem.productId && item.variantId === newItem.variantId,
       );
       if (!existingItem) {
         state.cart.push({ ...newItem });
@@ -100,14 +101,14 @@ const cartSlice = createSlice({
       const { id, variantId } = action.payload;
 
       state.cart = state.cart.filter(
-        (item) => !(item.id === id && item.variantId === variantId),
+        (item) => !(item.productId === id && item.variantId === variantId),
       );
     },
     incrementQuantity: (state, action) => {
       const { id, variantId } = action.payload;
 
       const itemToIncrement = state.cart.find(
-        (item) => item.id === id && item.variantId === variantId,
+        (item) => item.productId === id && item.variantId === variantId,
       );
       if (itemToIncrement) {
         itemToIncrement.quantity++;
@@ -120,7 +121,7 @@ const cartSlice = createSlice({
       const { id, variantId } = action.payload;
 
       const itemToDecrement = state.cart.find(
-        (item) => item.id === id && item.variantId === variantId,
+        (item) => item.productId === id && item.variantId === variantId,
       );
       if (itemToDecrement && itemToDecrement.quantity > 1) {
         itemToDecrement.quantity--;

@@ -20,7 +20,7 @@ export default function ProductCard({ product }: MyComponentProps) {
             width={300}
             height={500}
             alt="product image"
-            className=" w-full aspect-[3/4] group-hover:w-[150%]"
+            className=" w-full aspect-[3/4] group-hover:w-[150%] object-cover"
           />
         </div>
         <div className=" relative  flex flex-col flex-grow justify-between px-3 py-5  bg-white">

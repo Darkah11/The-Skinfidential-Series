@@ -12,7 +12,7 @@ export interface ProductVariant {
   sku?: string;
   price: number;
   costPrice: number;
-  inStock: boolean;
+  stock: number;
 }
 
 export interface Product {
@@ -30,7 +30,7 @@ export interface Product {
   discount: ProductDiscount;
   hasVariants: boolean;
   variants?: ProductVariant[];
-  inStock: boolean;
+  stock: number;
 }
 export type ProductWithId = Product & {
   id: string;
