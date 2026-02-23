@@ -71,12 +71,20 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
   // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+
+    let processedValue: string | number = value;
+
+    if (type === "number") {
+      processedValue = value === "" ? 0 : Number(value);
+    }
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: processedValue,
     }));
+    console.log(formData);
+    
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -773,7 +781,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               : handleAddProduct(e)
           }
           type="submit"
-          className=" px-3 py-2 bg-primary-100 flex items-center gap-2"
+          className=" mt-10 px-3 py-2 bg-primary-100 flex items-center gap-2"
         >
           <span className=" text-xs text-center font-medium text-white">
             {loading

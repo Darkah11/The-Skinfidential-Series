@@ -72,7 +72,7 @@ export const addProduct = async (body: Product) => {
       description: body.description,
       slug: slugify(body.name),
       price: Number(body.price),
-      inStock: body.stock,
+      stock: body.stock,
       categories: body.categories,
       tags: body.tags,
       imageUrl: imageUrl,
