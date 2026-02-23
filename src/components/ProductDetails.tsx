@@ -411,6 +411,7 @@ export default function ProductDetails({ product }: MyComponentProps) {
                         imageUrl: product.imageUrl,
 
                         price: discountedPrice,
+                        costPrice: currentCostPrice,
                         originalPrice: currentPrice,
                         quantity: qty,
                         subtotal: discountedPrice * qty,

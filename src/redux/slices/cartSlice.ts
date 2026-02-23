@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ProductWithQuantity } from "@/types/products";
 import { DeliveryWithId } from "@/types/delivery";
 import { Billing } from "@/types/billing";
 import { Coupon } from "@/types/coupon";

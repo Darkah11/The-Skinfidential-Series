@@ -90,6 +90,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { getAdminDb } from "@/config/firebase-admin";
 import { applyCouponToOrder } from "@/utils/Validator";
+import { ProductVariant } from "@/types/products";
 
 function generateOrderNumber() {
   return `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
@@ -148,7 +149,8 @@ export async function POST(req: NextRequest) {
     const existingOrder = await transaction.get(orderRef);
     if (existingOrder.exists) return;
 
-    const productSnapshots: Record<string, any> = {};
+    const productSnapshots: Record<string, FirebaseFirestore.DocumentSnapshot> =
+      {};
 
     for (const item of checkout.cart) {
       const productRef = db.collection("products").doc(item.productId);
@@ -167,17 +169,16 @@ export async function POST(req: NextRequest) {
       const productRef = db.collection("products").doc(item.productId);
       const productData = productSnapshots[item.productId].data();
 
-      if (productData.hasVariants) {
-        const variants = productData.variants || [];
-        const variantIndex = variants.findIndex(
-          (v: any) => v.id === item.variantId,
-        );
+      if (productData && productData.hasVariants) {
+        const variants: ProductVariant[] = productData.variants ?? [];
+
+        const variantIndex = variants.findIndex((v) => v.id === item.variantId);
 
         if (variantIndex === -1) {
           throw new Error("Variant not found");
         }
 
-        const variant = variants[variantIndex];
+        // const variant = variants[variantIndex];
 
         // if (variant.stock < item.quantity) {
         //   throw new Error("Insufficient variant stock");
@@ -187,7 +188,7 @@ export async function POST(req: NextRequest) {
 
         transaction.update(productRef, { variants });
       } else {
-        const currentStock = productData.stock ?? 0;
+        const currentStock = productData?.stock ?? 0;
 
         // if (currentStock < item.quantity) {
         //   throw new Error("Insufficient stock");

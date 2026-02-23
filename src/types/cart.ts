@@ -7,6 +7,7 @@ export interface Cart {
   originalPrice: number;
   quantity: number;
   subtotal: number;
+  costPrice: number;
 
   variantId?: number;
   variantName?: string;

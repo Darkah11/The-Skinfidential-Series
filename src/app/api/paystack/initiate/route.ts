@@ -104,14 +104,11 @@
 
 
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminDb } from "@/config/firebase-admin";
-import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { email, amount, metadata } = body;
-    const db = getAdminDb();
 
 
     // 2. Initialize Paystack transaction
