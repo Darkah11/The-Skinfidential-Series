@@ -3,7 +3,6 @@
 import { getAdminAuth } from "@/config/firebase-admin";
 import { User } from "@/types/user";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export async function getAllUsers() {
   const adminAuth = getAdminAuth();

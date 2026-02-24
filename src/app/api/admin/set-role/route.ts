@@ -16,9 +16,9 @@ export async function POST(req: Request) {
 
     const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
 
-    // if (decoded.role !== "admin") {
-    //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    // }
+    if (decoded.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const userRecord = await adminAuth.getUser(uid);
 
@@ -32,8 +32,8 @@ export async function POST(req: Request) {
       typeof error === "object" &&
       error !== null &&
       "errorInfo" in error &&
-      typeof (error as any).errorInfo === "object" &&
-      (error as any).errorInfo.code === "auth/user-not-found"
+      typeof (error as Record<string, unknown>).errorInfo === "object" &&
+      (error as Record<string, Record<string, unknown>>).errorInfo.code === "auth/user-not-found"
     ) {
       return NextResponse.json(
         { error: "User does not exist" },
