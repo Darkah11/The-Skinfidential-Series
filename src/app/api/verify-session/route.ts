@@ -8,7 +8,7 @@
 //     if (!sessionCookie) {
 //       return NextResponse.json({ authenticated: false }, { status: 401 });
 //     }
-    
+
 //     // Verify the session cookie with the Firebase Admin SDK
 //     await adminAuth.verifySessionCookie(sessionCookie, true);
 
@@ -19,10 +19,9 @@
 //   }
 // }
 
-
 // app/api/auth/verify-session/route.ts
-import { NextResponse } from 'next/server';
-import { getAdminAuth } from '@/config/firebase-admin'; // lazy init
+import { NextResponse } from "next/server";
+import { getAdminAuth } from "@/config/firebase-admin"; // lazy init
 
 export async function POST(req: Request) {
   try {
@@ -30,16 +29,16 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => null);
     if (!body) {
       return NextResponse.json(
-        { authenticated: false, error: 'Missing request body' },
-        { status: 400 }
+        { authenticated: false, error: "Missing request body" },
+        { status: 400 },
       );
     }
 
     const { sessionCookie } = body;
     if (!sessionCookie) {
       return NextResponse.json(
-        { authenticated: false, error: 'No session cookie provided' },
-        { status: 401 }
+        { authenticated: false, error: "No session cookie provided" },
+        { status: 401 },
       );
     }
 
@@ -47,11 +46,14 @@ export async function POST(req: Request) {
     const adminAuth = getAdminAuth();
 
     // Verify the session cookie with Firebase Admin SDK
-    await adminAuth.verifySessionCookie(sessionCookie, true);
+    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
 
-    return NextResponse.json({ authenticated: true }, { status: 200 });
+    return NextResponse.json(
+      { authenticated: true, role: decoded.role || "user" },
+      { status: 200 },
+    );
   } catch (error) {
-    console.error('Session verification failed:', error);
+    console.error("Session verification failed:", error);
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }
 }

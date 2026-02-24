@@ -2,11 +2,12 @@ import { UserInfo } from "firebase-admin/auth";
 
 export interface User {
   uid: string;
+  role?: string;
   email?: string;
   displayName?: string;
   photoURL?: string;
-  emailVerified: boolean;
-  disabled: boolean;
+  emailVerified?: boolean;
+  disabled?: boolean;
   metadata?: {
     creationTime?: string;
     lastSignInTime?: string;

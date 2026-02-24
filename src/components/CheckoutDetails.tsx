@@ -8,8 +8,13 @@ import { useAppSelector } from "@/redux/hooks";
 import { PrimaryButton } from "./Button";
 import { RotatingCircle } from "./Loader";
 import { Billing } from "@/types/billing";
+import { User } from "@/types/user";
 
-export default function CheckoutDetails() {
+interface MyComponentsProps {
+  user: User | null;
+}
+
+export default function CheckoutDetails({user}: MyComponentsProps) {
   const dispatch = useDispatch();
   const coupon = useAppSelector((state) => state.coupon);
   const total = useAppSelector((state) => state.total);
@@ -77,9 +82,8 @@ export default function CheckoutDetails() {
         billing: formData,
         deliveryMethod: deliveryOption.name,
         deliveryPrice: deliveryOption.price,
-        userId: "htq6ucniu2u2bv",
         coupon: coupon.isActive ? coupon : null,
-        // userId: user.uid,
+        userId: user?.uid,
       }),
     });
 
@@ -89,12 +93,10 @@ export default function CheckoutDetails() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // email: user.email,
-          email: "harrisegue9@gmail.com",
+          email: user?.email,
           amount: total,
           metadata: {
-            // userId: user.uid,
-            userId: "htq6ucniu2u2bv",
+            userId: user?.uid,
             checkoutId,
           },
         }),

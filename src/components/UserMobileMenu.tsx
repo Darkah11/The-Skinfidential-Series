@@ -5,18 +5,20 @@ import Link from "next/link";
 import React, { useState } from "react";
 import logo from "../../public/logo.png";
 import { ChevronDownIcon, X } from "lucide-react";
+import { User } from "@/types/user";
 
 interface MyComponentProps {
   isOpen: boolean;
   onClose: () => void;
   categories: Category[];
+  user: User | null
 }
 
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Shop", href: "/shop" },
   { name: "About Us", href: "/about-us" },
-  { name: "Admin", href: "/admin/dashboard" },
+  // { name: "Admin", href: "/admin/dashboard" },
   { name: "Contact Us", href: "/contact-us" },
 ];
 
@@ -24,6 +26,7 @@ export default function UserMobileMenu({
   isOpen,
   onClose,
   categories,
+  user
 }: MyComponentProps) {
   const [openCategories, setOpenCategories] = useState(false);
   return (
@@ -72,9 +75,17 @@ export default function UserMobileMenu({
                 {link.name}
               </Link>
             ))}
+            {user && user.role === "admin" && (
+              <Link
+                onClick={onClose}
+                href={"/admin/dashboard"}
+                className="text-black p-3 hover:text-gold border-b border-gold/50"
+              >
+                Admin
+              </Link>
+            )}
           </div>
 
-        
           <div>
             {/* Dropdown button */}
             <button

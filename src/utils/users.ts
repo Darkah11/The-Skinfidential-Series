@@ -2,6 +2,8 @@
 
 import { getAdminAuth } from "@/config/firebase-admin";
 import { User } from "@/types/user";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function getAllUsers() {
   const adminAuth = getAdminAuth();
@@ -36,5 +38,21 @@ export async function getAllUsers() {
     const errorMessage =
       error instanceof Error ? error.message : "An unknown error occurred";
     return { success: false, error: errorMessage, users: [] };
+  }
+}
+
+// getSessionUser
+export async function getSessionUser() {
+  const sessionCookie = cookies().get("__session")?.value;
+  if (!sessionCookie) return null;
+
+  try {
+    const decoded: User = await getAdminAuth().verifySessionCookie(
+      sessionCookie,
+      true,
+    );
+    return decoded ; // has uid, email, role, etc.
+  } catch {
+    return null;
   }
 }

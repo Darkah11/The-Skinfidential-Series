@@ -9,17 +9,20 @@ import Link from "next/link";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/navigation";
-
+import { RotatingCircle } from "./Loader";
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const idToken = await res.user.getIdToken();
@@ -29,7 +32,6 @@ export default function SignUpForm() {
         displayName: username,
       });
       console.log(user);
-      
 
       await fetch("../app/api/session", {
         method: "POST",
@@ -40,9 +42,17 @@ export default function SignUpForm() {
       router.push("/");
       setEmail("");
       setPassword("");
+      setLoading(false);
       router.push("/");
     } catch (e) {
       console.error(e);
+      setError("Sign Up Failed");
+      setLoading(false);
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
     }
   };
 
@@ -58,6 +68,7 @@ export default function SignUpForm() {
         <p className="mt-2 text-gray-500 text-sm">
           Enter details to create your account.
         </p>
+        <p className=" text-red-600 text-sm mt-3">{error && error}</p>
       </div>
 
       <form onSubmit={handleSignUp} className="mt-8">
@@ -133,7 +144,7 @@ export default function SignUpForm() {
             type="submit"
             className="w-full rounded-md bg-primary-100 py-2 font-semibold text-white shadow-sm hover:bg-primary-50 outline-none"
           >
-            Sign Up
+            {loading ? <RotatingCircle /> : "Sign Up"}
           </button>
           <button className=" mt-3 flex w-full items-center justify-center rounded-md bg-white py-2 font-medium text-gray-700 shadow-[1px_1px_3px_rgba(0,0,0,0.2)] hover:bg-gray-50">
             <Image src={google} alt="Google Logo" width={20} height={20} />

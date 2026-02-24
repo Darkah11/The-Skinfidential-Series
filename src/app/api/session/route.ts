@@ -87,7 +87,7 @@ export async function POST(req: Request) {
     const { idToken, rememberMe } = body;
     if (!idToken) return NextResponse.json({ success: false, error: 'Missing idToken' }, { status: 400 });
 
-    const expiresIn = rememberMe ? 60 * 60 * 24 * 30 * 1000 : 60 * 60 * 5 * 1000;
+    const expiresIn = rememberMe ? 60 * 60 * 24 * 14 * 1000 : 60 * 60 * 5 * 1000;
     const adminAuth = getAdminAuth();
     const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
 

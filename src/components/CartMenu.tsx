@@ -87,8 +87,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                 <div className=" flex-1 flex flex-col gap-y-3">
                   <div className=" flex justify-between">
                     <p className=" text-sm font-medium capitalize text-gray-800">
-                      {item.name}{" "}
-                      {item.variantName && `(${item.variantName})`}
+                      {item.name} {item.variantName && `(${item.variantName})`}
                     </p>
                     <button
                       onClick={() =>
@@ -171,10 +170,13 @@ export default function CartMenu({ onUpdate }: ChildProps) {
                   : formatPrice(0)}
               </p>
             </div>
-            <Link href={"/checkout"} onClick={() => onUpdate()}>
+            <Link
+              href={cart.length > 0 ? "/checkout" : ""}
+              onClick={() => (cart.length > 0 ? onUpdate() : null)}
+            >
               <PrimaryButton
                 text="Procced to Checkout"
-                style=" bg-primary-100 rounded-md w-full"
+                style={` ${cart.length > 0 ? "bg-accent" : "bg-accent/60"}  rounded-md w-full`}
               />
             </Link>
           </div>

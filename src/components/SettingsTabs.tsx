@@ -7,6 +7,7 @@ import { GeneralSettings } from "@/types/settings";
 import DeliveryTab from "./DeliveryTab";
 import { DeliveryWithId } from "@/types/delivery";
 import CouponTab from "./CouponTab";
+import AccountTab from "./AccountTab";
 
 const tabs = ["Tax & Discount", "Coupon", "Delivery", "Account"];
 
@@ -71,7 +72,7 @@ export default function SettingsTabs({
 
           <TabPanel>
             {/* <NotificationsTab /> */}
-            yo8
+            <AccountTab />
           </TabPanel>
         </TabPanels>
       </TabGroup>

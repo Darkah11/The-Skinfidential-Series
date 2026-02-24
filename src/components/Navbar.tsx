@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import logo from "../../public/logo.png";
 import bag from "../../public/icons/bag.svg";
-import user from "../../public/icons/user.svg";
+import userIcon from "../../public/icons/user.svg";
 import menu from "../../public/icons/menu.svg";
 import search from "../../public/icons/search.svg";
 import { PrimaryButton } from "./Button";
@@ -14,11 +14,13 @@ import CartMenu from "./CartMenu";
 import { Category } from "@/types/products";
 import UserMobileMenu from "./UserMobileMenu";
 import SearchProduct from "./SearchProducts";
+import { User } from "@/types/user";
 
 interface MyComponentsProps {
   categories: Category[];
+  user: User | null;
 }
-export default function Navbar({ categories }: MyComponentsProps) {
+export default function Navbar({ categories, user }: MyComponentsProps) {
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,12 +50,6 @@ export default function Navbar({ categories }: MyComponentsProps) {
         <Container className=" fixed top-0 left-0 right-0 w-full bg-white z-50 shadow-lg">
           <nav className=" px-5 lg:px-12 xl:px-24 py-4 flex justify-between">
             <div className=" flex items-center gap-x-3 md:gap-x-10 lg:gap-x-12">
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className=" md:hidden"
-              >
-                <Image src={menu} alt=" menu icon" className=" w-10" />
-              </button>
               <Link href={"/"} className=" flex items-center gap-2">
                 <Image src={logo} alt="tss logo" className=" w-10" />
                 <h1 className=" hidden lg:block leading-none text-xs font-bold">
@@ -61,6 +57,12 @@ export default function Navbar({ categories }: MyComponentsProps) {
                   Skinfidential <br /> Series
                 </h1>
               </Link>
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                className=" md:hidden"
+              >
+                <Image src={menu} alt=" menu icon" className=" w-10" />
+              </button>
 
               <ul className=" hidden  md:flex items-center gap-x-7 h-full">
                 {/* <li>
@@ -103,18 +105,31 @@ export default function Navbar({ categories }: MyComponentsProps) {
                   </div>
                 </li>
                 <li>
-                  <Link href={"/about-us"} className=" text-sm hover:text-primary-50">
+                  <Link
+                    href={"/about-us"}
+                    className=" text-sm hover:text-primary-50"
+                  >
                     About Us
                   </Link>
                 </li>
-                <li>
+                {!user && <li>
                   <Link
-                    href={"/admin/dashboard"}
+                    href={"/contact-us"}
                     className=" text-sm hover:text-primary-50"
                   >
-                    Admin
+                    Contact Us
                   </Link>
-                </li>
+                </li>}
+                {user && user.role === "admin" && (
+                  <li>
+                    <Link
+                      href={"/admin/dashboard"}
+                      className=" text-sm hover:text-primary-50"
+                    >
+                      Admin
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <div className=" flex items-center gap-[10px]">
@@ -132,13 +147,22 @@ export default function Navbar({ categories }: MyComponentsProps) {
                   </span>
                 )}
               </button>
-              <Link href={"/"}>
-                <Image src={user} alt="user icon" className=" w-7" />
-              </Link>
-              <PrimaryButton
+              {user ? (
+                <Link href={"/"}>
+                  <Image src={userIcon} alt="user icon" className=" w-7" />
+                </Link>
+              ) : (
+                <Link href={'/sign-in'}>
+                  <PrimaryButton
+                    text="Sign In"
+                    style=" bg-accent block h-fit md:h-auto md:py-[10px] md:rounded-full py-[6px] px-2 rounded-full"
+                  />
+                </Link>
+              )}
+              {user && <PrimaryButton
                 text="Contact Us"
-                style=" bg-accent hidden md:block"
-              />
+                style=" bg-accent hidden md:block rounded-full"
+              />}
             </div>
           </nav>
         </Container>
@@ -149,6 +173,7 @@ export default function Navbar({ categories }: MyComponentsProps) {
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         categories={categories}
+        user={user}
       />
     </>
   );

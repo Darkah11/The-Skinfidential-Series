@@ -4,11 +4,17 @@ import OrderSummary from "@/components/OrderSummary";
 import Container from "@/components/Container";
 import DeliveryMethod from "@/components/DeliveryMethod";
 import { getDeliveryOptions, getGeneralSettings } from "@/utils/firebase";
+import { getSessionUser } from "@/utils/users";
+import { redirect } from "next/navigation";
 
 export default async function CheckoutPage() {
   const deliveryOptions = await getDeliveryOptions();
   const settings = await getGeneralSettings();
   const tax = settings?.tax.percentage;
+  const user = await getSessionUser();
+
+  if (!user) redirect("/sign-in");
+
   return (
     <>
       <section>
@@ -29,7 +35,7 @@ export default async function CheckoutPage() {
               </h2>
               <div>
                 <DeliveryMethod deliveryOptions={deliveryOptions} />
-                <CheckoutDetails />
+                <CheckoutDetails user={user} />
               </div>
             </div>
           </div>
