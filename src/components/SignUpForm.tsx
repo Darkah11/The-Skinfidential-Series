@@ -10,7 +10,6 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/navigation";
 import { RotatingCircle } from "./Loader";
-import { useUser } from "@/context/UserContext";
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
@@ -20,7 +19,6 @@ export default function SignUpForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useUser();
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,13 +38,10 @@ export default function SignUpForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken, rememberMe }),
       });
-      setUser({
-        uid: user.uid,
-        email: user.email!,
-      });
       setEmail("");
       setPassword("");
       setLoading(false);
+      router.refresh();
       router.push("/");
     } catch (e) {
       console.error(e);

@@ -14,15 +14,17 @@ import CartMenu from "./CartMenu";
 import { Category } from "@/types/products";
 import UserMobileMenu from "./UserMobileMenu";
 import SearchProduct from "./SearchProducts";
-import { useUser } from "@/context/UserContext";
+import UserMenu from "./UserMenu";
+import { User } from "@/types/user";
 
 interface MyComponentsProps {
   categories: Category[];
+  user: User | null;
 }
-export default function Navbar({ categories }: MyComponentsProps) {
-  const { user } = useUser();
+export default function Navbar({ categories, user }: MyComponentsProps) {
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userMenu, setUserMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const cart = useAppSelector((state) => state.cart);
   const closeCart = () => {
@@ -30,6 +32,9 @@ export default function Navbar({ categories }: MyComponentsProps) {
   };
   const closeSearch = () => {
     setSearchOpen(false);
+  };
+  const closeUserMenu = () => {
+    setUserMenu(false);
   };
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -112,14 +117,16 @@ export default function Navbar({ categories }: MyComponentsProps) {
                     About Us
                   </Link>
                 </li>
-                {!user && <li>
-                  <Link
-                    href={"/contact-us"}
-                    className=" text-sm hover:text-primary-50"
-                  >
-                    Contact Us
-                  </Link>
-                </li>}
+                {!user && (
+                  <li>
+                    <Link
+                      href={"/contact-us"}
+                      className=" text-sm hover:text-primary-50"
+                    >
+                      Contact Us
+                    </Link>
+                  </li>
+                )}
                 {user && user.role === "admin" && (
                   <li>
                     <Link
@@ -148,27 +155,30 @@ export default function Navbar({ categories }: MyComponentsProps) {
                 )}
               </button>
               {user ? (
-                <Link href={"/"}>
+                <button onClick={() => setUserMenu(true)}>
                   <Image src={userIcon} alt="user icon" className=" w-7" />
-                </Link>
+                </button>
               ) : (
-                <Link href={'/sign-in'}>
+                <Link href={"/sign-in"}>
                   <PrimaryButton
                     text="Sign In"
                     style=" bg-accent block h-fit md:h-auto md:py-[10px] md:rounded-full py-[6px] px-2 rounded-full"
                   />
                 </Link>
               )}
-              {user && <PrimaryButton
-                text="Contact Us"
-                style=" bg-accent hidden md:block rounded-full"
-              />}
+              {user && (
+                <PrimaryButton
+                  text="Contact Us"
+                  style=" bg-accent hidden md:block rounded-full"
+                />
+              )}
             </div>
           </nav>
         </Container>
       </header>
       {cartOpen && <CartMenu onUpdate={closeCart} />}
       {searchOpen && <SearchProduct onUpdate={closeSearch} />}
+      {userMenu && <UserMenu onUpdate={closeUserMenu} user={user} />}
       <UserMobileMenu
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}

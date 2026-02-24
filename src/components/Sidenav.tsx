@@ -1,9 +1,9 @@
-"use client"; 
+"use client";
 
 import Image from "next/image";
 import { MdOutlineDashboard, MdDashboard, MdLogout } from "react-icons/md";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import menu from "../../public/icons/menu.svg";
 import logo from "../../public/logo.png";
 import AdminMobileMenu from "./AdminMobileMenu";
@@ -50,9 +50,26 @@ const navLinks = [
 
 export default function SideNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
- 
-  
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/logout", {
+        // Replace with your actual route path
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Failed to clear session:", error);
+    }
+  };
 
   return (
     <>
@@ -89,13 +106,19 @@ export default function SideNav() {
             );
           })}
           <div className="hidden h-auto w-full grow rounded-md md:block"></div>
-          <button className=" hover:text-gold text-white flex items-center gap-x-1">
+          <button
+            onClick={handleLogout}
+            className=" hover:text-gold text-red-500 flex items-center gap-x-1"
+          >
             {" "}
             <MdLogout /> <p>Log out</p>{" "}
           </button>
         </div>
       </div>
-      <button onClick={() => setMobileMenuOpen(true)} className=" lg:hidden absolute top-2.5 left-5">
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className=" lg:hidden absolute top-2.5 left-5"
+      >
         <Image src={menu} alt=" menu icon" className=" w-10" />
       </button>
       <AdminMobileMenu

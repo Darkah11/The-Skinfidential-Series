@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { MdDashboard, MdLogout, MdOutlineDashboard } from "react-icons/md";
 import logo from "../../public/logo.png";
@@ -52,6 +52,25 @@ const navLinks = [
 
 export default function AdminMobileMenu({ isOpen, onClose }: MyComponentProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const handleLogout = async () => {
+    onClose();
+    try {
+      const response = await fetch("/api/logout", {
+        // Replace with your actual route path
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Failed to clear session:", error);
+    }
+  };
   return (
     <div
       className={` z-50 fixed top-0 left-0 h-screen w-full transition-all duration-300 lg:hidden ${
@@ -71,7 +90,11 @@ export default function AdminMobileMenu({ isOpen, onClose }: MyComponentProps) {
         }`}
       >
         <div className="flex justify-between items-center">
-          <Link onClick={onClose} href={"/"} className=" flex items-center gap-2">
+          <Link
+            onClick={onClose}
+            href={"/"}
+            className=" flex items-center gap-2"
+          >
             <Image src={logo} alt="tss logo" className=" w-10" />
             <h1 className=" text-white leading-none text-xs font-bold">
               The <br />
@@ -114,7 +137,10 @@ export default function AdminMobileMenu({ isOpen, onClose }: MyComponentProps) {
             })}
           </div>
           {/* <div className="hidden h-auto w-full grow rounded-md md:block"></div> */}
-          <button className=" hover:text-gold text-white flex items-center gap-x-1">
+          <button
+            onClick={handleLogout}
+            className=" hover:text-gold text-red-500 flex items-center gap-x-1"
+          >
             {" "}
             <MdLogout /> <p>Log out</p>{" "}
           </button>

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { get } from "@vercel/edge-config";
 
 type UserRole = "user" | "admin" | null;
 
@@ -8,7 +9,7 @@ export async function middleware(req: NextRequest) {
   const url = req.nextUrl;
   let userRole: UserRole = null;
 
-  const publicPaths = ["/sign-in", "/sign-up"];
+  const publicPaths = ["/sign-in", "/sign-up", "/maintenance"];
 
   if (publicPaths.includes(url.pathname)) {
     return NextResponse.next();
@@ -42,6 +43,15 @@ export async function middleware(req: NextRequest) {
       console.error("Failed to call session verification API:", error);
       // return NextResponse.redirect(new URL('/sign-in', req.url));
     }
+  }
+
+  const maintenance = await get<boolean>("maintenance") ?? false;
+
+  if (!maintenance && req.nextUrl.pathname === "/maintenance") {
+  return NextResponse.redirect(new URL("/", req.url));
+}
+  if (maintenance && userRole !== "admin") {
+    return NextResponse.redirect(new URL("/maintenance", req.url));
   }
 
   if (url.pathname.startsWith("/admin") && userRole !== "admin") {

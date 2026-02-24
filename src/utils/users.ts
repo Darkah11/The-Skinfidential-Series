@@ -51,7 +51,7 @@ export async function getSessionUser() {
       sessionCookie,
       true,
     );
-    return decoded ; // has uid, email, role, etc.
+    return decoded; // has uid, email, role, etc.
   } catch {
     return null;
   }
