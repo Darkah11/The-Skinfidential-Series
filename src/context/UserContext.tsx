@@ -8,7 +8,6 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-import { getSessionUser } from "@/utils/users";
 import { User } from "@/types/user";
 
 type UserContextType = {
