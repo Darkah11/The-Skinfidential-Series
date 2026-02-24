@@ -129,7 +129,6 @@ export default async function Home() {
             <div className=" max-w-[500px] mx-auto md:max-w-none md:mx-0 md:flex-1">
               <h1 className="  text-5xl font-bold">The Skinfidential Series</h1>
               <p className=" mt-5 text-gray-600">
-                {/* Because great skin is everyone’s business. */}
                 TheSkinfidentialSeries brings you the hottest and finest
                 skincare products from Foreign and Nigerian reputable brands -
                 all in one place! If it works, it&apos;s here. If it

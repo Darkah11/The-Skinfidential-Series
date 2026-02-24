@@ -14,13 +14,13 @@ import CartMenu from "./CartMenu";
 import { Category } from "@/types/products";
 import UserMobileMenu from "./UserMobileMenu";
 import SearchProduct from "./SearchProducts";
-import { User } from "@/types/user";
+import { useUser } from "@/context/UserContext";
 
 interface MyComponentsProps {
   categories: Category[];
-  user: User | null;
 }
-export default function Navbar({ categories, user }: MyComponentsProps) {
+export default function Navbar({ categories }: MyComponentsProps) {
+  const { user } = useUser();
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

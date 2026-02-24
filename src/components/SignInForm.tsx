@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { useRouter } from "next/navigation";
 import { RotatingCircle } from "./Loader";
+import { useUser } from "@/context/UserContext";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ export default function SignInForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { setUser } = useUser();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,12 +34,17 @@ export default function SignInForm() {
       const idToken = await userCredential.user.getIdToken();
       console.log(idToken);
 
-      const res = await fetch("/api/session", {
+      const response = await fetch("/api/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken, rememberMe }),
       });
-      console.log(res);
+      console.log(response);
+      const res = await fetch("/api/get-user");
+      const fullUser = await res.json();
+
+      setUser(fullUser);
+
       setLoading(false);
 
       router.push("/");

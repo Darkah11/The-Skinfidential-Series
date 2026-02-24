@@ -1,4 +1,5 @@
 // lib/users.ts
+"use server"
 
 import { getAdminAuth } from "@/config/firebase-admin";
 import { User } from "@/types/user";
