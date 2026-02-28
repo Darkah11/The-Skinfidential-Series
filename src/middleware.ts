@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-// import { get } from "@vercel/edge-config";
+import { get } from "@vercel/edge-config";
 
 type UserRole = "user" | "admin" | null;
 
@@ -49,14 +49,14 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // const maintenance = (await get<boolean>("maintenance")) ?? false;
+  const maintenance = (await get<boolean>("maintenance")) ?? false;
 
-  // if (!maintenance && req.nextUrl.pathname === "/maintenance") {
-  //   return NextResponse.redirect(new URL("/", req.url));
-  // }
-  // if (maintenance && userRole !== "admin") {
-  //   return NextResponse.redirect(new URL("/maintenance", req.url));
-  // }
+  if (!maintenance && req.nextUrl.pathname === "/maintenance") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+  if (maintenance && userRole !== "admin") {
+    return NextResponse.redirect(new URL("/maintenance", req.url));
+  }
 
   if (url.pathname.startsWith("/admin") && userRole !== "admin") {
     // Redirect regular users from admin pages to the home page

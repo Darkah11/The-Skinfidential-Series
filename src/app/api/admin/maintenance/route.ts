@@ -1,6 +1,13 @@
 export async function POST(req: Request) {
   const { enabled } = await req.json()
 
+  if (!process.env.EDGE_CONFIG_ID || !process.env.VERCEL_API_TOKEN) {
+    return Response.json(
+      { error: "Edge config not configured" },
+      { status: 500 }
+    )
+  }
+
    // 🔐 Verify admin here (call your verify-session)
   // If not admin → return 401
 
