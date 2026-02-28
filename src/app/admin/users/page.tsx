@@ -8,6 +8,8 @@ export const revalidate = 0;
 
 export default async function UsersPage() {
   const { users } = await getAllUsers();
+  console.log(users);
+
   return (
     <div className=" h-full flex flex-col">
       <AdminHeader title="Users" />

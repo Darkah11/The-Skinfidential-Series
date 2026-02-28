@@ -4,7 +4,7 @@ import {
   Product,
   ProductWithId,
 } from "@/types/products";
-import { db } from "../config/firebase";
+import { db, messaging } from "../config/firebase";
 import {
   addDoc,
   collection,
@@ -18,6 +18,7 @@ import {
   limit,
   orderBy,
   query,
+  serverTimestamp,
   setDoc,
   updateDoc,
   where,
@@ -31,6 +32,7 @@ import { DeliveryWithId } from "@/types/delivery";
 import { order, OrderWithId } from "@/types/order";
 import { GeneralSettings } from "@/types/settings";
 import { Coupon } from "@/types/coupon";
+import { getToken } from "firebase/messaging";
 // import { redirect } from "next/navigation";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { log } from "console";
@@ -290,14 +292,14 @@ export const getOrdersByUserId = async (userId: string) => {
     const q = query(
       ordersRef,
       where("userId", "==", userId),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
 
     const querySnapshot = await getDocs(q);
     const orders: OrderWithId[] = [];
 
     querySnapshot.forEach((doc) => {
-      orders.push({ id: doc.id, ...doc.data() as order });
+      orders.push({ id: doc.id, ...(doc.data() as order) });
     });
 
     return orders;
@@ -592,4 +594,35 @@ export async function addCoupon(body: Coupon) {
       return "Something went wrong";
     }
   }
+}
+
+// import { getToken } from "firebase/messaging"
+// import { messaging } from "@/lib/firebase"
+// import { setDoc, doc, serverTimestamp } from "firebase/firestore"
+// import { db } from "@/lib/firebase"
+
+export async function registerAdminPush(userId: string) {
+  const permission = await Notification.requestPermission();
+
+  if (permission !== "granted") return;
+  if (!messaging) return;
+  if (!("serviceWorker" in navigator)) return;
+
+  // Step A: Register SW manually
+  const registration = await navigator.serviceWorker.register(
+    "/firebase-messaging-sw.js",
+  );
+  console.log("Service Worker registered:", registration);
+
+  const token = await getToken(messaging, {
+    vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY,
+    serviceWorkerRegistration: registration, // IMPORTANT
+  });
+
+  if (!token) return;
+
+  await setDoc(doc(db, `users/${userId}/pushTokens/${token}`), {
+    token,
+    createdAt: serverTimestamp(),
+  });
 }

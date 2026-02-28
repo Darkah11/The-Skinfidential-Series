@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import success from "../../../../public/mark.png";
 import { PrimaryButton } from "@/components/Button";
 import Link from "next/link";
+import { sendOrderNotification } from "@/utils/Notification";
 
 export default function PaymentSuccess() {
   const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ export default function PaymentSuccess() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [status, setStatus] = useState("verifying");
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   useEffect(() => {
     if (!reference) return;
@@ -25,6 +27,7 @@ export default function PaymentSuccess() {
         const data = await res.json();
 
         if (data.success) {
+          setOrderNumber(data.orderNumber);
           dispatch(clearCart());
           setStatus("success");
           // optional: redirect to order page
@@ -40,6 +43,13 @@ export default function PaymentSuccess() {
 
     verifyPayment();
   }, [reference, router]);
+  useEffect(() => {
+    if (status === "success" && orderNumber) {
+      console.log("notification sent");
+
+      sendOrderNotification(orderNumber);
+    }
+  }, [status]);
 
   return (
     <div className=" min-h-[calc(100vh-75px)] flex flex-col justify-center items-center">

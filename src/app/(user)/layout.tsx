@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { PushInitializer } from "@/components/PushInitializer";
 import { getCategories } from "@/utils/firebase";
 import { getSessionUser } from "@/utils/users";
 
@@ -14,7 +15,10 @@ export default async function UserLayout({
   return (
     <div>
       <Navbar categories={categories} user={user} />
-      <main className="pt-[80px]">{children}</main>
+      <main className="pt-[80px]">
+        <PushInitializer user={user} />
+        {children}
+      </main>
       <Footer />
     </div>
   );

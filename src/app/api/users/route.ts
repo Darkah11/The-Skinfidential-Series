@@ -3,8 +3,8 @@ import { getAdminAuth } from "@/config/firebase-admin";
 import { User } from "@/types/user";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+// export const runtime = "nodejs";
+// export const dynamic = "force-dynamic";
 
 // export async function GET(request: NextRequest) {
 export async function GET() {
@@ -21,6 +21,7 @@ export async function GET() {
         users.push({
           uid: userRecord.uid,
           email: userRecord.email,
+          xMail: userRecord.email,
           displayName: userRecord.displayName,
           photoURL: userRecord.photoURL,
           emailVerified: userRecord.emailVerified,
@@ -35,7 +36,6 @@ export async function GET() {
 
       pageToken = listUsersResult.pageToken;
     } while (pageToken);
-
     return NextResponse.json({
       success: true,
       users,

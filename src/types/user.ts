@@ -16,4 +16,5 @@ export interface User {
     lastSignIn?: string;
   };
   providerData?: UserInfo[];
+  xMail?: string;
 }

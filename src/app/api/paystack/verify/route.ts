@@ -109,6 +109,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const reference = searchParams.get("reference");
   const db = getAdminDb();
+  const orderNumber = generateOrderNumber();
 
   if (!reference) {
     return NextResponse.json({ error: "Missing reference" }, { status: 400 });
@@ -224,10 +225,9 @@ export async function GET(req: NextRequest) {
       }
 
       // 3️⃣ CREATE ORDER (FINAL WRITE)
-
       transaction.set(orderRef, {
         orderId,
-        orderNumber: generateOrderNumber(),
+        orderNumber,
         paystackReference: reference,
         userId: payment.metadata.userId,
         email: payment.customer.email,
@@ -242,7 +242,7 @@ export async function GET(req: NextRequest) {
     });
     if (checkout.coupon) await applyCouponToOrder(checkout.coupon.id);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, orderNumber: orderNumber });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Verification failed" }, { status: 500 });
