@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getAdminAuth } from "@/config/firebase-admin";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const { uid, role } = await req.json();
@@ -14,11 +17,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
+    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
 
-    // if (decoded.role !== "admin") {
-    //   return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    // }
+    if (decoded.role !== "admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     const userRecord = await adminAuth.getUser(uid);
 
@@ -33,7 +36,8 @@ export async function POST(req: Request) {
       error !== null &&
       "errorInfo" in error &&
       typeof (error as Record<string, unknown>).errorInfo === "object" &&
-      (error as Record<string, Record<string, unknown>>).errorInfo.code === "auth/user-not-found"
+      (error as Record<string, Record<string, unknown>>).errorInfo.code ===
+        "auth/user-not-found"
     ) {
       return NextResponse.json(
         { error: "User does not exist" },
