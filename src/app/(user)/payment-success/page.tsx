@@ -17,7 +17,6 @@ export default function PaymentSuccess() {
   const dispatch = useDispatch();
   const [status, setStatus] = useState("verifying");
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
-  const encodedMessage = `Hi there, I just made an order.\n Order Number: ${orderNumber}`;
 
   const sendNotification = async (orderNumber: string) => {
     await fetch("/api/sendOrderNotification", {
