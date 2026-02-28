@@ -31,7 +31,7 @@ export default function UserMobileMenu({
   const [openCategories, setOpenCategories] = useState(false);
   return (
     <div
-      className={` z-50 fixed top-0 left-0 h-screen w-full transition-all duration-300 md:hidden ${
+      className={` z-50 fixed top-0 left-0 h-[100dvh] w-full transition-all duration-300 md:hidden ${
         isOpen ? " visible" : " invisible"
       }`}
     >
@@ -43,7 +43,7 @@ export default function UserMobileMenu({
       />
 
       <aside
-        className={` flex flex-col no-scrollbar overflow-y-auto relative top-0 left-0 h-full w-72 bg-white py-6 transform transition-transform duration-300 ${
+        className={` overflow-y-auto no-scrollbar relative top-0 flex flex-col left-0 h-full w-64 px-2 bg-white py-4 transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

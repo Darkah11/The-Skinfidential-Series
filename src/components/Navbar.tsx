@@ -36,19 +36,19 @@ export default function Navbar({ categories, user }: MyComponentsProps) {
   const closeUserMenu = () => {
     setUserMenu(false);
   };
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      if (cartOpen) {
-        document.body.classList.remove("no-scroll-menu");
-        document.body.classList.add("no-scroll");
-      } else if (mobileMenuOpen) {
-        document.body.classList.add("no-scroll-menu");
-      } else {
-        document.body.classList.remove("no-scroll");
-        document.body.classList.remove("no-scroll-menu");
-      }
-    }
-  }, [cartOpen, mobileMenuOpen]);
+  // useEffect(() => {
+  //   if (typeof document !== "undefined") {
+  //     if (cartOpen) {
+  //       document.body.classList.remove("no-scroll-menu");
+  //       document.body.classList.add("no-scroll");
+  //     } else if (mobileMenuOpen) {
+  //       document.body.classList.add("no-scroll-menu");
+  //     } else {
+  //       document.body.classList.remove("no-scroll");
+  //       document.body.classList.remove("no-scroll-menu");
+  //     }
+  //   }
+  // }, [cartOpen, mobileMenuOpen]);
   return (
     <>
       <header className="">
