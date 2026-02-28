@@ -5,6 +5,10 @@ import { get } from "@vercel/edge-config";
 type UserRole = "user" | "admin" | null;
 
 export async function middleware(req: NextRequest) {
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return NextResponse.next();
+  }
+
   const sessionCookie = req.cookies.get("__session")?.value;
   const url = req.nextUrl;
   let userRole: UserRole = null;
@@ -45,11 +49,11 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  const maintenance = await get<boolean>("maintenance") ?? false;
+  const maintenance = (await get<boolean>("maintenance")) ?? false;
 
   if (!maintenance && req.nextUrl.pathname === "/maintenance") {
-  return NextResponse.redirect(new URL("/", req.url));
-}
+    return NextResponse.redirect(new URL("/", req.url));
+  }
   if (maintenance && userRole !== "admin") {
     return NextResponse.redirect(new URL("/maintenance", req.url));
   }
