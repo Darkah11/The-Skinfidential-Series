@@ -294,10 +294,10 @@ export const getOrdersByUserId = async (userId: string) => {
     );
 
     const querySnapshot = await getDocs(q);
-    const orders: any[] = [];
+    const orders: OrderWithId[] = [];
 
     querySnapshot.forEach((doc) => {
-      orders.push({ id: doc.id, ...doc.data() });
+      orders.push({ id: doc.id, ...doc.data() as order });
     });
 
     return orders;
