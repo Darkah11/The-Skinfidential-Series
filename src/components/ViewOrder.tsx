@@ -11,9 +11,15 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   orderId: string | null;
+  isUser?: boolean;
 }
 
-export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
+export default function ViewOrder({
+  isOpen,
+  onClose,
+  orderId,
+  isUser,
+}: ModalProps) {
   const [order, setOrder] = useState<OrderWithId | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,36 +92,51 @@ export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
                 <span className=" text-gray-600">Order Number:</span>{" "}
                 {order.orderNumber}
               </h2>
-              <p
-                className={` ${order.status === "cancelled" ? "text-red-600" : order.status === "completed" ? "text-green-600" : "text-blue-600"} bg-gray-200 py-1 capitalize px-3 mt-2 rounded-md w-fit text-sm`}
-              >
-                {order.status}
-              </p>
+              {isUser ? (
+                <p
+                  className={` ${order.status === "cancelled" ? "text-red-600" : order.status === "completed" ? "text-green-600" : "text-orange-600"} flex items-center gap-1 mt-2 bg-gray-200 py-1 px-3 rounded-full w-fit text-xs`}
+                >
+                  <div
+                    className={`${order.status === "cancelled" ? "bg-red-600" : order.status === "completed" ? "bg-green-600" : "bg-orange-600"} rounded-full w-[5px] h-[5px]`}
+                  />{" "}
+                  <span>
+                    {order.status === "paid" ? "in progress" : order.status}
+                  </span>
+                </p>
+              ) : (
+                <p
+                  className={` ${order.status === "cancelled" ? "text-red-600" : order.status === "completed" ? "text-green-600" : "text-blue-600"} bg-gray-200 py-1 capitalize px-3 mt-2 rounded-md w-fit text-sm`}
+                >
+                  {order.status}
+                </p>
+              )}
               <p className=" text-sm text-gray-600 mt-2">
                 {formatDate(order.createdAt)} from{" "}
                 {order.billing.last_name + " " + order.billing.first_name}
               </p>
-              <div className=" flex gap-3 mt-5">
-                {order.status === "paid" && (
-                  <PrimaryButton
-                    text="Accept"
-                    style=" bg-primary-100 w-[100px] rounded-md"
-                    handleClick={(e) => handleUpdateOrder(e, "completed")}
-                  />
-                )}
-                {order.status !== "cancelled" && (
-                  <PrimaryButton
-                    text="Cancel"
-                    style=" bg-accent w-[100px] rounded-md"
-                    handleClick={(e) => handleUpdateOrder(e, "cancelled")}
-                  />
-                )}
-                {order.status === "cancelled" && (
-                  <p className=" text-red-600 text-sm">
-                    This order has been cancelled{" "}
-                  </p>
-                )}
-              </div>
+              {!isUser && (
+                <div className=" flex gap-3 mt-5">
+                  {order.status === "paid" && (
+                    <PrimaryButton
+                      text="Accept"
+                      style=" bg-primary-100 w-[100px] rounded-md"
+                      handleClick={(e) => handleUpdateOrder(e, "completed")}
+                    />
+                  )}
+                  {order.status !== "cancelled" && (
+                    <PrimaryButton
+                      text="Cancel"
+                      style=" bg-accent w-[100px] rounded-md"
+                      handleClick={(e) => handleUpdateOrder(e, "cancelled")}
+                    />
+                  )}
+                  {order.status === "cancelled" && (
+                    <p className=" text-red-600 text-sm">
+                      This order has been cancelled{" "}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
             <div className=" border-b py-5">
               <h2 className="text-xl font-semibold">Order Items</h2>
@@ -184,23 +205,25 @@ export default function ViewOrder({ isOpen, onClose, orderId }: ModalProps) {
                 </p>
               </div>
             </div>
-            <div className=" border-b py-5">
-              <h2 className="text-xl font-semibold">Customer Details</h2>
-              <div className=" text-sm text-gray-600 font-medium flex flex-col gap-y-2 mt-3">
-                <p>
-                  Customer ID:{" "}
-                  <span className=" font-semibold text-primary-100">
-                    {order.userId}
-                  </span>
-                </p>
-                <p>
-                  Customer Email:{" "}
-                  <span className=" font-semibold text-primary-100">
-                    {order.email}
-                  </span>
-                </p>
+            {!isUser && (
+              <div className=" border-b py-5">
+                <h2 className="text-xl font-semibold">Customer Details</h2>
+                <div className=" text-sm text-gray-600 font-medium flex flex-col gap-y-2 mt-3">
+                  <p>
+                    Customer ID:{" "}
+                    <span className=" font-semibold text-primary-100">
+                      {order.userId}
+                    </span>
+                  </p>
+                  <p>
+                    Customer Email:{" "}
+                    <span className=" font-semibold text-primary-100">
+                      {order.email}
+                    </span>
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
             <div className=" py-5">
               <h2 className="text-xl font-semibold">Billing Address</h2>
               <div className=" text-sm text-gray-600 font-medium flex flex-col gap-y-3 mt-3">

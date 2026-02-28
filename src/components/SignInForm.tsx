@@ -39,8 +39,9 @@ export default function SignInForm() {
       });
       console.log(response);
       setLoading(false);
-      router.refresh();
+
       router.push("/");
+      router.refresh();
     } catch (error: unknown) {
       console.log("Login failed:", error);
       const errorMessage =

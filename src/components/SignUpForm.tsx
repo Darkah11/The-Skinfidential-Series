@@ -41,8 +41,9 @@ export default function SignUpForm() {
       setEmail("");
       setPassword("");
       setLoading(false);
+
+      router.replace("/");
       router.refresh();
-      router.push("/");
     } catch (e) {
       console.error(e);
       setError("Sign Up Failed");

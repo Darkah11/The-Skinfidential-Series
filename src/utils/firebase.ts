@@ -284,6 +284,29 @@ export async function getDeliveryOptions() {
   }));
 }
 
+export const getOrdersByUserId = async (userId: string) => {
+  try {
+    const ordersRef = collection(db, "orders");
+    const q = query(
+      ordersRef,
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
+
+    const querySnapshot = await getDocs(q);
+    const orders: any[] = [];
+
+    querySnapshot.forEach((doc) => {
+      orders.push({ id: doc.id, ...doc.data() });
+    });
+
+    return orders;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return [];
+  }
+};
+
 export const editProduct = async (
   id: string,
   body: Product,

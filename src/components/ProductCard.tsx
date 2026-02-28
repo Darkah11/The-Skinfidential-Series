@@ -13,7 +13,8 @@ export default function ProductCard({ product }: MyComponentProps) {
   // const cart = useAppSelector((state) => state.cart);
   return (
     <Link href={`/product/${product.slug}`}>
-      <div className=" flex flex-col h-full group transition-all duration-500 group shadow-lg rounded-lg overflow-hidden">
+      <div className=" relative flex flex-col h-full group transition-all duration-500 group shadow-lg rounded-lg overflow-hidden">
+        {product.stock === 0 && <p className=" absolute top-3 right-3 bg-red-600 text-xs text-white p-1 rounded-md capitalize">Out of stock</p>}
         <div>
           <Image
             src={`${product.imageUrl}`}

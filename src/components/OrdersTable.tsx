@@ -19,7 +19,7 @@ export default function OrdersTable({ orders }: MyComponentProps) {
   //     }
   //   };
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
