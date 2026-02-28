@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../public/logo.png";
 import bag from "../../public/icons/bag.svg";
 import userIcon from "../../public/icons/user.svg";
@@ -36,19 +36,19 @@ export default function Navbar({ categories, user }: MyComponentsProps) {
   const closeUserMenu = () => {
     setUserMenu(false);
   };
-  // useEffect(() => {
-  //   if (typeof document !== "undefined") {
-  //     if (cartOpen) {
-  //       document.body.classList.remove("no-scroll-menu");
-  //       document.body.classList.add("no-scroll");
-  //     } else if (mobileMenuOpen) {
-  //       document.body.classList.add("no-scroll-menu");
-  //     } else {
-  //       document.body.classList.remove("no-scroll");
-  //       document.body.classList.remove("no-scroll-menu");
-  //     }
-  //   }
-  // }, [cartOpen, mobileMenuOpen]);
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      if (cartOpen) {
+        document.body.classList.remove("no-scroll-menu");
+        document.body.classList.add("no-scroll");
+      } else if (mobileMenuOpen) {
+        document.body.classList.add("no-scroll-menu");
+      } else {
+        document.body.classList.remove("no-scroll");
+        document.body.classList.remove("no-scroll-menu");
+      }
+    }
+  }, [cartOpen, mobileMenuOpen]);
   return (
     <>
       <header className="">
