@@ -43,7 +43,7 @@ export default function UserMobileMenu({
       />
 
       <aside
-        className={` no-scrollbar overflow-y-auto relative top-0 left-0 h-full w-72 bg-white py-6 transform transition-transform duration-300 ${
+        className={` flex flex-col no-scrollbar overflow-y-auto relative top-0 left-0 h-full w-72 bg-white py-6 transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
