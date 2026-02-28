@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { get } from "@vercel/edge-config";
+// import { get } from "@vercel/edge-config";
 
 type UserRole = "user" | "admin" | null;
 
