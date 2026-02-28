@@ -98,6 +98,9 @@ import crypto from "crypto";
 import { applyCouponToOrder } from "@/utils/Validator";
 import { ProductVariant } from "@/types/products";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 function generateOrderNumber() {
   return `ORD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }

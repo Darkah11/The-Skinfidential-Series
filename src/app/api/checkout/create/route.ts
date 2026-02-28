@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/config/firebase-admin";
 import crypto from "crypto";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { cart, billing, deliveryMethod, deliveryPrice, userId, coupon } = body;

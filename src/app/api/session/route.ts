@@ -79,6 +79,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminAuth } from '@/config/firebase-admin';
 
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => null);
