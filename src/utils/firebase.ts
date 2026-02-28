@@ -146,7 +146,12 @@ export async function getProducts() {
 
 export async function getOrders() {
   try {
-    const snapshot = await getDocs(collection(db, "orders"));
+    const ordersRef = collection(db, "orders");
+    const q = query(
+      ordersRef,
+      orderBy("createdAt", "desc"),
+    );
+    const snapshot = await getDocs(q);
 
     const orders = snapshot.docs.map((doc) => ({
       id: doc.id,
@@ -159,6 +164,30 @@ export async function getOrders() {
     return [];
   }
 }
+
+export const getOrdersByUserId = async (userId: string) => {
+  try {
+    const ordersRef = collection(db, "orders");
+    const q = query(
+      ordersRef,
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc"),
+    );
+
+    const querySnapshot = await getDocs(q);
+    const orders: OrderWithId[] = [];
+
+    querySnapshot.forEach((doc) => {
+      orders.push({ id: doc.id, ...(doc.data() as order) });
+    });
+
+    return orders;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return [];
+  }
+};
+
 export async function getCoupons() {
   try {
     const snapshot = await getDocs(collection(db, "coupons"));
@@ -285,29 +314,6 @@ export async function getDeliveryOptions() {
     ...(doc.data() as Omit<DeliveryWithId, "id">),
   }));
 }
-
-export const getOrdersByUserId = async (userId: string) => {
-  try {
-    const ordersRef = collection(db, "orders");
-    const q = query(
-      ordersRef,
-      where("userId", "==", userId),
-      orderBy("createdAt", "desc"),
-    );
-
-    const querySnapshot = await getDocs(q);
-    const orders: OrderWithId[] = [];
-
-    querySnapshot.forEach((doc) => {
-      orders.push({ id: doc.id, ...(doc.data() as order) });
-    });
-
-    return orders;
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    return [];
-  }
-};
 
 export const editProduct = async (
   id: string,
@@ -596,10 +602,6 @@ export async function addCoupon(body: Coupon) {
   }
 }
 
-// import { getToken } from "firebase/messaging"
-// import { messaging } from "@/lib/firebase"
-// import { setDoc, doc, serverTimestamp } from "firebase/firestore"
-// import { db } from "@/lib/firebase"
 
 export async function registerAdminPush(userId: string) {
   const permission = await Notification.requestPermission();

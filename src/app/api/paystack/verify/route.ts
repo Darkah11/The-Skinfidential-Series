@@ -156,7 +156,12 @@ export async function GET(req: NextRequest) {
       .get();
 
     if (!existingOrderSnap.empty) {
-      return NextResponse.json({ success: true });
+      const existingOrder = existingOrderSnap.docs[0].data();
+      return NextResponse.json({
+        success: true,
+        existing: true,
+        orderNumber: existingOrder.orderNumber,
+      });
     }
 
     const orderId = crypto.randomUUID();
