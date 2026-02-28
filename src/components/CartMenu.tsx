@@ -45,14 +45,14 @@ export default function CartMenu({ onUpdate }: ChildProps) {
   }, [cart]);
 
   return (
-    <div className=" text-primary-100 fixed top-0 right-0 h-screen w-full z-50">
+    <div className=" text-primary-100 fixed top-0 right-0 h-[100dvh] w-full z-50">
       <div
         onClick={handleClose}
         className=" absolute w-full h-full top-0 right-0"
       />
 
       {/* <div className=" bg-white max-w-[300px] h-[50px] relative ml-auto right-5 top-[80px] shadow-xl"> */}
-      <div className=" bg-white max-w-[380px] md:top-[75px] md:max-h-[calc(100vh-75px)] flex flex-col justify-between ml-auto relative h-full top-0 md:border md:rounded-3xl md:border-gray-200  md:right-5 shadow-xl px-5 pt-10 overflow-y-auto">
+      <div className=" bg-white max-w-[380px] md:top-[75px] md:max-h-[calc(100dvh-75px)] flex flex-col justify-between ml-auto relative h-full top-0 md:border md:rounded-3xl md:border-gray-200  md:right-5 shadow-xl px-5 pt-10 overflow-y-auto">
         <button
           onClick={handleClose}
           className=" absolute top-3 left-3 md:hidden"
@@ -65,7 +65,7 @@ export default function CartMenu({ onUpdate }: ChildProps) {
             onClick={() => dispatch(clearCart())}
             className=" text-accent underline hover:no-underline transition-all duration-300"
           >
-            Clear Cart
+            Clear Cart.
           </button>
         </div>
         <div className=" flex flex-col flex-1 ">
