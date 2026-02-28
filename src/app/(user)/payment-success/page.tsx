@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import success from "../../../../public/mark.png";
 import { PrimaryButton } from "@/components/Button";
 import Link from "next/link";
-import { sendOrderNotification } from "@/utils/Notification";
 
 export default function PaymentSuccess() {
   const searchParams = useSearchParams();
@@ -17,6 +16,14 @@ export default function PaymentSuccess() {
   const dispatch = useDispatch();
   const [status, setStatus] = useState("verifying");
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
+
+  const sendNotification = async (id: string) => {
+    await fetch("/api/sendOrderNotification", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+      headers: { "Content-Type": "application/json" },
+    });
+  };
 
   useEffect(() => {
     if (!reference) return;
@@ -47,7 +54,7 @@ export default function PaymentSuccess() {
     if (status === "success" && orderNumber) {
       console.log("notification sent");
 
-      sendOrderNotification(orderNumber);
+      sendNotification(orderNumber);
     }
   }, [status]);
 
