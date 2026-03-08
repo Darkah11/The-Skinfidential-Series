@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import ProductCard from "./ProductCard";
 import { ProductWithId } from "@/types/products";
 
@@ -10,43 +10,42 @@ interface MyComponentProps {
 export default function ProductsList({ products }: MyComponentProps) {
   const [grid, setGrid] = useState<number>(2);
   const [orderBy, setOrderBy] = useState<string>("default");
-  const [visibleCount, setVisibleCount] = useState(20);
 
   // 1. SORT PRODUCTS
-  const sortedProducts = useMemo(() => {
-    if (!products) return [];
+  // const sortedProducts = useMemo(() => {
+  //   if (!products) return [];
 
-    const sorted = [...products];
+  //   const sorted = [...products];
 
-    switch (orderBy) {
-      case "alphabetical":
-        return sorted.sort((a, b) =>
-          (a.name || "").localeCompare(b.name || ""),
-        );
+  //   switch (orderBy) {
+  //     case "alphabetical":
+  //       return sorted.sort((a, b) =>
+  //         (a.name || "").localeCompare(b.name || ""),
+  //       );
 
-      case "latest":
-        return sorted.sort(
-          (a, b) =>
-            new Date(b.createdAt ?? 0).getTime() -
-            new Date(a.createdAt ?? 0).getTime(),
-        );
+  //     case "latest":
+  //       return sorted.sort(
+  //         (a, b) =>
+  //           new Date(b.createdAt ?? 0).getTime() -
+  //           new Date(a.createdAt ?? 0).getTime(),
+  //       );
 
-      case "price-low":
-        return sorted.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+  //     case "price-low":
+  //       return sorted.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
 
-      case "price-high":
-        return sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+  //     case "price-high":
+  //       return sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
 
-      default:
-        return sorted;
-    }
-  }, [products, orderBy]);
+  //     default:
+  //       return sorted;
+  //   }
+  // }, [products, orderBy]);
 
   // 2. ONLY SHOW WHAT'S CURRENTLY LOADED
   // const visibleProducts = sortedProducts.slice(0, visibleCount);
   // const hasMore = visibleCount < sortedProducts.length;
   const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage] = useState(10);
     const lastIndex = currentPage * rowsPerPage;
     const firstIndex = lastIndex - rowsPerPage;
     const rows = products.slice(firstIndex, lastIndex);
@@ -70,37 +69,7 @@ export default function ProductsList({ products }: MyComponentProps) {
     function handlePage(id: number) {
       setCurrentPage(id);
     }
-    function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
-      const value = e.target.value;
-      if (value == "10") {
-        setRowsPerPage(10);
-      } else if (value == "20") {
-        setRowsPerPage(20);
-      } else if (value == "30") {
-        setRowsPerPage(30);
-      } else if (value == "40") {
-        setRowsPerPage(40);
-      } else if (value == "50") {
-        setRowsPerPage(50);
-      } else {
-        setRowsPerPage(10);
-      }
-    }
 
-  // 3. INFINITE SCROLL LOGIC
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const nearBottom =
-  //       window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
-
-  //     if (nearBottom && hasMore) {
-  //       setVisibleCount((prev) => prev + 20);
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, [hasMore]);
 
   return (
     <div>
@@ -140,7 +109,6 @@ export default function ProductsList({ products }: MyComponentProps) {
               value={orderBy}
               onChange={(e) => {
                 setOrderBy(e.target.value);
-                setVisibleCount(20);
               }}
               className=" cursor-pointer lg:px-0 lg:text-center text-right bg-transparent w-[190px] box-content md:text-sm text-xs outline-none p-0 font-semibold text-gray-600"
             >

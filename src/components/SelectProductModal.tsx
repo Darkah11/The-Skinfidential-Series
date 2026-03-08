@@ -1,9 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "./Modal";
-import { getOrderById, updateOrder } from "@/utils/firebase";
-import { OrderWithId } from "@/types/order";
-import { formatDate, formatPrice } from "@/utils/formatters";
+import { formatPrice } from "@/utils/formatters";
 import Image from "next/image";
 import { PrimaryButton } from "./Button";
 import { ProductDiscount, ProductWithId } from "@/types/products";
@@ -23,9 +21,7 @@ export default function SelectProductModal({
   products,
   discount,
 }: ModalProps) {
-  const [order, setOrder] = useState<OrderWithId | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const toggleProductSelection = (productId: string) => {
     setSelectedProducts((prev) =>
@@ -88,9 +84,9 @@ export default function SelectProductModal({
   //     fetchOrder();
   //   }, [isOpen, orderId]);
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  // if (error) {
+  //   return <p>{error}</p>;
+  // }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -99,7 +95,7 @@ export default function SelectProductModal({
         <div className=" space-y-3 mt-5">
           {products &&
             products.map((item) => (
-              <div className=" flex items-center gap-2">
+              <div key={item.id} className=" flex items-center gap-2">
                 <input
                   type="checkbox"
                   checked={selectedProducts.includes(item.id)}
