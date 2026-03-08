@@ -13,12 +13,14 @@ import { PrimaryButton } from "./Button";
 import { formatPrice } from "@/utils/formatters";
 import Link from "next/link";
 import { getGeneralSettings } from "@/utils/firebase";
+import { User } from "@/types/user";
 
 interface ChildProps {
   onUpdate: () => void;
+  user: User | null;
 }
 
-export default function CartMenu({ onUpdate }: ChildProps) {
+export default function CartMenu({ onUpdate, user }: ChildProps) {
   const [subtotalPrice, setSubtotalPrice] = useState(0);
   const [tax, setTax] = useState(0);
   const cart = useAppSelector((state) => state.cart);
@@ -171,11 +173,14 @@ export default function CartMenu({ onUpdate }: ChildProps) {
               </p>
             </div>
             <Link
-              href={cart.length > 0 ? "/checkout" : ""}
+              href={!user ? "/sign-in" : cart.length > 0 ? "/checkout" : ""}
               onClick={() => (cart.length > 0 ? onUpdate() : null)}
+              style={{ pointerEvents: cart.length === 0 ? "none" : "auto" }}
+              aria-disabled={cart.length === 0}
+              tabIndex={cart.length === 0 ? -1 : undefined}
             >
               <PrimaryButton
-                text="Procced to Checkout"
+                text="Proceed to Checkout"
                 style={` ${cart.length > 0 ? "bg-accent" : "bg-accent/60"}  rounded-md w-full`}
               />
             </Link>

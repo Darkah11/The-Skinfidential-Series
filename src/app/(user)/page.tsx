@@ -138,10 +138,12 @@ export default async function Home() {
                 <Link href={"/shop"}>
                   <PrimaryButton text={"Shop"} style=" bg-accent w-[120px]" />
                 </Link>
-                <OutlineButton
-                  text={"Learn More"}
-                  style=" border-primary-100 w-[120px] "
-                />
+                <Link href={"/about-us"}>
+                  <OutlineButton
+                    text={"Learn More"}
+                    style=" border-primary-100 w-[120px] h-full"
+                  />
+                </Link>
               </div>
               <div className=" mt-10 flex gap-x-5">
                 <div>
@@ -194,7 +196,9 @@ export default async function Home() {
                 LATEST PRODUCTS
               </h2>
               <span className=" flex-1 w-full h-[2px] bg-gold" />
-              <OutlineButton text="Explore" style=" tracking-wide" />
+              <Link href={"/shop"}>
+                <OutlineButton text="Explore" style=" tracking-wide" />
+              </Link>
             </div>
 
             <ProductsCarousel products={products} />
@@ -250,10 +254,12 @@ export default async function Home() {
                   moisturize, and brighten your skin and leaving you confidently
                   glowing.
                 </p>
-                <OutlineButton
-                  text="Explore"
-                  style=" w-fit mx-auto border-white text-white mt-3 "
-                />
+                <Link href={"/categories?category=Body+Creams+%26+Lotions"}>
+                  <OutlineButton
+                    text="Explore"
+                    style=" w-fit mx-auto border-white text-white mt-3 "
+                  />
+                </Link>
               </div>
               <Image
                 src={lotions}
@@ -270,10 +276,12 @@ export default async function Home() {
                   Cleanse and refresh your skin while keeping your glow intact.
                   Turn every shower into a smooth time with your skin…
                 </p>
-                <OutlineButton
-                  text="Explore"
-                  style=" w-fit mx-auto border-white text-white mt-3 "
-                />
+                <Link href={"/categories?category=Soaps+and+Wash"}>
+                  <OutlineButton
+                    text="Explore"
+                    style=" w-fit mx-auto border-white text-white mt-3 "
+                  />
+                </Link>
               </div>
               <Image
                 src={soaps}
@@ -291,10 +299,14 @@ export default async function Home() {
                   difference—Tools that help you get the most out of your
                   skincare.
                 </p>
-                <OutlineButton
-                  text="Explore"
-                  style=" w-fit mx-auto border-white text-white mt-3 "
-                />
+                <Link
+                  href={"/categories?category=Skincare+Tools+and+Essentials"}
+                >
+                  <OutlineButton
+                    text="Explore"
+                    style=" w-fit mx-auto border-white text-white mt-3 "
+                  />
+                </Link>
               </div>
               <Image
                 src={skincare}
@@ -313,10 +325,12 @@ export default async function Home() {
               <p className=" text-sm text-gray-600">
                 Check out our vast categories of products
               </p>
-              <PrimaryButton
-                text="Check It Now"
-                style=" bg-accent text-white mt-5 mx-auto"
-              />
+              <Link href={"/categories"}>
+                <PrimaryButton
+                  text="Check It Now"
+                  style=" bg-accent text-white mt-5 mx-auto"
+                />
+              </Link>
             </div>
             <div className=" mt-5 md:w-1/2 md:mt-0">
               <Image src={categories} alt="hand holding a bottle" />
@@ -416,10 +430,12 @@ export default async function Home() {
                   recommendations. Our team is available to guide and assist you
                   through your journey to getting an exceptional skin.
                 </p>
-                <GoldButton
-                  text="Consult Us"
-                  style=" bg-gold mt-5 text-primary-100"
-                />
+                <Link href={"/contact-us"}>
+                  <GoldButton
+                    text="Consult Us"
+                    style=" bg-gold mt-5 text-primary-100"
+                  />
+                </Link>
               </div>
             </div>
           </div>

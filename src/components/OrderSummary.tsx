@@ -156,7 +156,7 @@ export default function OrderSummary({ tax }: MyComponentProps) {
                       width={300}
                       height={500}
                       alt="product image"
-                      className=" w-[50px] object-cover aspect-[3/4]"
+                      className=" w-[50px] object-cover aspect-[4/3]"
                     />
                     <p className=" bg-accent absolute -top-[7px] -right-[11px] text-[10px] text-white leading-normal w-[23px] rounded-sm font-medium text-center">
                       × {item.quantity}

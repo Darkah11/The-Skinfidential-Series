@@ -7,6 +7,7 @@ interface ButtonProp {
   handleClick?: React.MouseEventHandler<HTMLButtonElement>;
   loading?: boolean;
   loader?: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const PrimaryButton = ({
@@ -44,11 +45,12 @@ export const OutlineButton = ({ text, style }: ButtonProp) => {
     </button>
   );
 };
-export const AddToCartBtn = ({ style, handleClick }: ButtonProp) => {
+export const AddToCartBtn = ({ style, handleClick, disabled }: ButtonProp) => {
   return (
     <button
+      disabled={disabled}
       onClick={handleClick}
-      className={` ${style} text-white text-sm font-medium py-5 w-full px-5 rounded-full bg-accent `}
+      className={` ${style} text-white text-sm font-medium py-5 w-full px-5 rounded-full ${disabled ? ' bg-accent/50' : "bg-accent"} `}
     >
       Add To Cart
     </button>

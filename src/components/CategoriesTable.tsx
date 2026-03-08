@@ -4,17 +4,13 @@ import { useEffect, useState } from "react";
 import { CategoryWithId } from "@/types/products";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react";
 import { formatDate } from "@/utils/formatters";
-import {
-  deleteCategory,
-  getProductsByCategory,
-} from "@/utils/firebase";
+import { deleteCategory, getProductsByCategory } from "@/utils/firebase";
 
 interface MyComponentProps {
   categories: CategoryWithId[];
 }
 
 export default function CategoriesTable({ categories }: MyComponentProps) {
-
   //   const handleDelete = async (id) => {
   //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
   //       method: "DELETE",
@@ -109,18 +105,20 @@ export default function CategoriesTable({ categories }: MyComponentProps) {
       <div className=" hidden lg:block mt-10">
         <table className=" w-full bg-white table-container rounded-t-xl">
           <thead className=" bg-gold text-primary-100 ">
-            <th className=" border-r text-left p-4 rounded-tl-xl font-semibold">
-              Category
-            </th>
-            <th className=" border-r text-left p-4 font-semibold">
-              No of Products
-            </th>
-            <th className=" border-r text-left p-4 font-semibold">
-              Created At
-            </th>
-            <th className=" text-left p-4 rounded-tr-xl font-semibold">
-              Action
-            </th>
+            <tr>
+              <th className=" border-r text-left p-4 rounded-tl-xl font-semibold">
+                Category
+              </th>
+              <th className=" border-r text-left p-4 font-semibold">
+                No of Products
+              </th>
+              <th className=" border-r text-left p-4 font-semibold">
+                Created At
+              </th>
+              <th className=" text-left p-4 rounded-tr-xl font-semibold">
+                Action
+              </th>
+            </tr>
           </thead>
           <tbody className="">
             {rows.map((item) => (
@@ -209,7 +207,9 @@ export default function CategoriesTable({ categories }: MyComponentProps) {
             className="rounded-2xl border p-4 shadow-sm flex flex-col gap-3 product-row"
           >
             <div className=" flex-1 flex flex-col gap-2">
-              <p className=" capitalize text-sm font-semibold">{product.name}</p>
+              <p className=" capitalize text-sm font-semibold">
+                {product.name}
+              </p>
               <p className=" text-sm">
                 {counts[product.name] ?? "..."} products
               </p>

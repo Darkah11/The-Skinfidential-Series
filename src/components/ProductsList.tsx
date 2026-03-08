@@ -43,23 +43,64 @@ export default function ProductsList({ products }: MyComponentProps) {
   }, [products, orderBy]);
 
   // 2. ONLY SHOW WHAT'S CURRENTLY LOADED
-  const visibleProducts = sortedProducts.slice(0, visibleCount);
-  const hasMore = visibleCount < sortedProducts.length;
+  // const visibleProducts = sortedProducts.slice(0, visibleCount);
+  // const hasMore = visibleCount < sortedProducts.length;
+  const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const lastIndex = currentPage * rowsPerPage;
+    const firstIndex = lastIndex - rowsPerPage;
+    const rows = products.slice(firstIndex, lastIndex);
+    const nPage = Math.ceil(products.length / rowsPerPage);
+    //   const numbers = [...Array(nPage + 1).keys()].slice(1);
+    const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
+  
+    function prevPage() {
+      if (currentPage !== 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    }
+    function nextPage() {
+      if (currentPage !== nPage) {
+        setCurrentPage(currentPage + 1);
+      }
+    }
+    // const filtered = products.filter((p) =>
+    //   p.name.toLowerCase().includes(search.toLowerCase()),
+    // );
+    function handlePage(id: number) {
+      setCurrentPage(id);
+    }
+    function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
+      const value = e.target.value;
+      if (value == "10") {
+        setRowsPerPage(10);
+      } else if (value == "20") {
+        setRowsPerPage(20);
+      } else if (value == "30") {
+        setRowsPerPage(30);
+      } else if (value == "40") {
+        setRowsPerPage(40);
+      } else if (value == "50") {
+        setRowsPerPage(50);
+      } else {
+        setRowsPerPage(10);
+      }
+    }
 
   // 3. INFINITE SCROLL LOGIC
-  useEffect(() => {
-    const handleScroll = () => {
-      const nearBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const nearBottom =
+  //       window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
 
-      if (nearBottom && hasMore) {
-        setVisibleCount((prev) => prev + 20);
-      }
-    };
+  //     if (nearBottom && hasMore) {
+  //       setVisibleCount((prev) => prev + 20);
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore]);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [hasMore]);
 
   return (
     <div>
@@ -114,7 +155,7 @@ export default function ProductsList({ products }: MyComponentProps) {
       </div>
 
       {/* Products */}
-      {visibleProducts.length > 0 ? (
+      {rows.length > 0 ? (
         <>
           <div
             className={` grid ${
@@ -125,16 +166,46 @@ export default function ProductsList({ products }: MyComponentProps) {
                   : "lg:grid-cols-4"
             } grid-cols-2 gap-y-8 gap-x-3 mt-10`}
           >
-            {visibleProducts.map((product) => (
+            {rows.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
-          {hasMore && (
-            <p className="text-center py-6 text-gray-500">
-              Loading more products...
-            </p>
-          )}
+          <div className=" mt-8 flex justify-center">
+
+          <ul className=" flex gap-2">
+            <li>
+              <button
+                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
+                onClick={prevPage}
+              >
+                {"<"}
+              </button>
+            </li>
+            {numbers.map((n, i) => (
+              <li key={i}>
+                <button
+                  className={
+                    currentPage == n
+                      ? "bg-primary-100 text-white min-w-[25px] min-h-[30px] p-1 rounded-md"
+                      : "bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
+                  }
+                  onClick={() => handlePage(n)}
+                >
+                  {n}
+                </button>
+              </li>
+            ))}
+            <li>
+              <button
+                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
+                onClick={nextPage}
+              >
+                {">"}
+              </button>
+            </li>
+          </ul>
+        </div>
         </>
       ) : (
         <div className=" w-full h-40 flex items-center justify-center">

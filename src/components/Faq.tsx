@@ -13,34 +13,43 @@ const faqs: FAQ[] = [
   {
     id: "01",
     question: "How do I place an order?",
-    answer:
-      "We recommend checking our size guide on each product page to find your perfect fit.",
+    answer: `Placing your order with us is simple and seamless. 
+Browse our carefully curated skincare collections, select your desired products and add to cart, proceed to checkout, enter your shipping and payment details, review your order and then click “place order” 
+You’ll receive an order confirmation email shortly after your purchase.`,
   },
   {
     id: "02",
-    question: "How can I track my order status?",
-    answer: "Once your order ships, you'll receive a tracking link via email.",
+    question: "How can I track my order?",
+    answer: `Once your order has been shipped, you’ll receive a confirmation email with a tracking link. `,
   },
   {
     id: "03",
-    question: "Do you offer coupons for purchases?",
-    answer: "Yes, we offer digital gift cards you can send to loved ones.",
+    question: "Can I return my items I got on sales? ",
+    answer: `All skincare products purchased at sales rate are not valid for an exchange or return. This also applies to clearance items. `,
   },
   {
     id: "04",
     question: "What is your return and exchange policy?",
-    answer: "You can return or exchange items within 14 days of delivery.",
+    answer: `To initiate a return, please contact our customer service team at theskinfidentialseries@gmail.com within 7 days of receiving your order. You will be provided with instructions on how to return your item. 
+If you also wish to exchange a product, follow the same process as for returns. Exchanges are subjected to product availability. 
+Customers are responsible for the cost of returns and exchanges shipping. `,
   },
   {
     id: "05",
-    question: "How can I cancel my order?",
-    answer: "Orders can be cancelled within 24 hours of placement.",
+    question: "Eligibility for Returns/Refund? ",
+    answer: `We only offer refunds in cases where a customer pays for a product that is out of stock. In all other cases, refunds aren’t applicable. 
+We only accept returns or exchanges for products that are unused, unopened, and in their original packaging. `,
   },
   {
     id: "06",
     question: "Where’s your location? ",
-    answer:
-      "Sale items are final and not eligible for returns unless defective.",
+    answer: "Akungba-Akoko, Ondo State, Nigeria.",
+  },
+  {
+    id: "07",
+    question: "Do you ship internationally?  ",
+    answer: `Yes, we proudly offer international shipping to many countries around the world. 
+Feel free to contact our support team at theskinfidentialseries@gmail.com to help out with your order.`,
   },
 ];
 
@@ -64,7 +73,7 @@ export default function Faq() {
             >
               {/* Question Row */}
               <div
-                className={`${openIndex === index ? ' rounded-t-xl ' : 'rounded-xl'} bg-gray-50 transition-all duration-300 px-6 py-3  flex items-center justify-between gap-4`}
+                className={`${openIndex === index ? " rounded-t-xl " : "rounded-xl"} bg-gray-50 transition-all duration-300 px-6 py-3  flex items-center justify-between gap-4`}
               >
                 <div className="flex gap-4">
                   <span className="text-gray-400 font-medium">{faq.id}</span>

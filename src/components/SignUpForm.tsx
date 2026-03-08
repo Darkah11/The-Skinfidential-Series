@@ -33,11 +33,12 @@ export default function SignUpForm() {
       });
       console.log(user);
 
-      await fetch("../app/api/session", {
+      await fetch("/api/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken, rememberMe }),
       });
+
       setEmail("");
       setPassword("");
       setLoading(false);

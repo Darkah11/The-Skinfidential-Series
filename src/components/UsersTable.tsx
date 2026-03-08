@@ -1,14 +1,13 @@
 "use client";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Check, Copy, Search } from "lucide-react";
 import { User } from "@/types/user";
 
 interface MyComponentProps {
   users: User[];
 }
 
-export default function UsersTable({users}: MyComponentProps) {
-
+export default function UsersTable({ users }: MyComponentProps) {
   // const [counts, setCounts] = useState<Record<string, number>>({});
   const [search] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +16,7 @@ export default function UsersTable({users}: MyComponentProps) {
   const firstIndex = lastIndex - rowsPerPage;
   const rows = users.slice(firstIndex, lastIndex);
   const nPage = Math.ceil(users.length / rowsPerPage);
+  const [isCopied, setIsCopied] = useState<string | null>(null);
   //   const numbers = [...Array(nPage + 1).keys()].slice(1);
   const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
 
@@ -53,6 +53,19 @@ export default function UsersTable({users}: MyComponentProps) {
     }
   }
 
+  const copyToClipboard = async (e: React.MouseEvent<HTMLButtonElement>, text: string) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsCopied(text);
+      // Reset the "Copied!" message after a few seconds
+      setTimeout(() => {
+        setIsCopied(null);
+      }, 2000); // 2 seconds
+    } catch (err) {
+      console.error("Failed to copy text: ", err);
+    }
+  };
 
   return (
     <>
@@ -67,21 +80,23 @@ export default function UsersTable({users}: MyComponentProps) {
           />
         </div>
       </div>
-      <div className="  mt-10">
+      <div className="  mt-10 overflow-x-auto">
         <table className=" w-full bg-white table-container rounded-t-xl">
           <thead className=" bg-gold text-primary-100 ">
-            <th className=" lg:rounded-tl-xl hidden lg:table-cell border-r text-left p-4 font-semibold">
-              UID
-            </th>
-            <th className=" border-r text-left p-4 font-semibold rounded-tl-xl lg:rounded-none">
-              Display Name
-            </th>
-            <th className=" border-r text-left p-4 font-semibold rounded-tr-xl">
-              Email
-            </th>
-            {/* <th className=" text-left p-4 rounded-tr-xl font-semibold">
-              Action
-            </th> */}
+            <tr>
+              <th className=" lg:rounded-tl-xl hidden lg:table-cell border-r text-left p-4 font-semibold">
+                UID
+              </th>
+              <th className=" border-r text-left p-4 font-semibold rounded-tl-xl lg:rounded-none">
+                Display Name
+              </th>
+              <th className=" border-r text-left p-4 font-semibold lg:rounded-tr-xl">
+                Email
+              </th>
+              <th className=" lg:hidden  text-left p-4 rounded-tr-xl font-semibold">
+                Copy UID
+              </th>
+            </tr>
           </thead>
           <tbody className="">
             {rows.map((user) => (
@@ -92,19 +107,16 @@ export default function UsersTable({users}: MyComponentProps) {
                 <td className=" border-r p-4 border-t capitalize text-sm font-semibold">
                   {user.displayName}
                 </td>
-                <td className=" border-r p-4 border-t text-xs">
-                  {user.email}
+                <td className=" border-r p-4 border-t text-xs">{user.email}</td>
+                <td className=" p-4 border-t lg:hidden">
+                  <button onClick={(e) => copyToClipboard(e, user.uid)}>
+                    {isCopied && isCopied === user.uid ? (
+                      <Check className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <Copy className="h-4 w-4 text-gray-600" />
+                    )}
+                  </button>
                 </td>
-                {/* <td className=" p-4 border-t">
-                  <div className=" flex flex-row gap-2">
-                    <Link href={`/admin/categories/edit-category/${item.id}`}>
-                      <Pencil className="h-4 w-4" />
-                    </Link>
-                    <button onClick={(e) => handleDelete(e, item.id)}>
-                      <Trash2 className="h-4 w-4 text-red-600" />
-                    </button>
-                  </div>
-                </td> */}
               </tr>
             ))}
           </tbody>

@@ -176,7 +176,7 @@ export default function Navbar({ categories, user }: MyComponentsProps) {
           </nav>
         </Container>
       </header>
-      {cartOpen && <CartMenu onUpdate={closeCart} />}
+      {cartOpen && <CartMenu onUpdate={closeCart} user={user} />}
       {searchOpen && <SearchProduct onUpdate={closeSearch} />}
       {userMenu && <UserMenu onUpdate={closeUserMenu} user={user} />}
       <UserMobileMenu
