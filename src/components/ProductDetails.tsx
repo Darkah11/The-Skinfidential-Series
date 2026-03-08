@@ -123,7 +123,7 @@ export default function ProductDetails({ product }: MyComponentProps) {
               width={300}
               height={500}
               alt="product image"
-              className="w-full aspect-[3/4] "
+              className="w-full aspect-[3/4] object-cover "
             />
             {hasDiscount && (
               <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full font-semibold">
