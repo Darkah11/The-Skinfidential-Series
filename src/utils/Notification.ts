@@ -2,7 +2,6 @@
 import { getAdminAuth, getAdminDb } from "@/config/firebase-admin";
 import { getMessaging } from "firebase-admin/messaging";
 
-
 export async function sendOrderNotification(orderNumber: string) {
   const adminAuth = getAdminAuth();
   const db = getAdminDb();
@@ -18,12 +17,14 @@ export async function sendOrderNotification(orderNumber: string) {
 
       // Filter admins (assuming you store role in custom claims)
       const adminUsers = listUsersResult.users.filter(
-        (user) => user.customClaims?.role === "admin"
+        (user) => user.customClaims?.role === "admin",
       );
 
       for (const adminUser of adminUsers) {
         // Get the push tokens from Firestore under users/{uid}/pushTokens
-        const tokenSnap = await db.collection(`users/${adminUser.uid}/pushTokens`).get();
+        const tokenSnap = await db
+          .collection(`users/${adminUser.uid}/pushTokens`)
+          .get();
 
         tokenSnap.docs.forEach((doc) => {
           const token = doc.data().token;
@@ -42,11 +43,9 @@ export async function sendOrderNotification(orderNumber: string) {
     // Send FCM notification
     await messaging.sendEachForMulticast({
       tokens,
-      notification: {
+      data: {
         title: "New Order",
         body: `Order #${orderNumber} created`,
-      },
-      data: {
         link: `/admin/orders`,
       },
     });

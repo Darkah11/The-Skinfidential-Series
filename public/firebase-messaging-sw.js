@@ -11,8 +11,8 @@ firebase.initializeApp({
 const messaging = firebase.messaging()
 
 messaging.onBackgroundMessage((payload) => {
-    self.registration.showNotification(payload.notification.title, {
-        body: payload.notification.body,
+    self.registration.showNotification(payload.data.title, {
+        body: payload.data.body,
         icon: "/logo.jpg",
         badge: '/logo.png',
         data: payload.data
