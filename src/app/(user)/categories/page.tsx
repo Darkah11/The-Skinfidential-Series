@@ -5,6 +5,7 @@ import Image from "next/image";
 import React from "react";
 import categoryBg from ".././../../../public/category-bg.jpg";
 import Link from "next/link";
+import ConsultUs from "@/components/ConsultUs";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -62,22 +63,24 @@ export default async function CategoryPage({
             </div>
           ) : (
             <div className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {
-                categories.map((category) => (
-                  <Link
-                    href={{
-                      pathname: "/categories",
-                      query: { category: category.name },
-                    }}
-                    key={category.createdAt}
-                    className=" bg-gold/40 rounded-md block px-4 py-4 hover:text-gold hover:bg-primary-100 whitespace-nowrap"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
+              {categories.map((category) => (
+                <Link
+                  href={{
+                    pathname: "/categories",
+                    query: { category: category.name },
+                  }}
+                  key={category.createdAt}
+                  className=" bg-gold/40 rounded-md block px-4 py-4 hover:text-gold hover:bg-primary-100 whitespace-nowrap"
+                >
+                  {category.name}
+                </Link>
+              ))}
             </div>
           )}
         </Container>
+      </section>
+      <section>
+        <ConsultUs />
       </section>
     </>
   );

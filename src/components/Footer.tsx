@@ -19,9 +19,7 @@ export default function Footer() {
                 </h1>
               </Link>
 
-              <p className=" max-w-sm text-gold">
-                glow hard or glow home!
-              </p>
+              <p className=" max-w-sm text-gold">glow hard or glow home!</p>
             </div>
 
             <div className=" flex flex-col md:flex-row md:justify-between md:flex-1 gap-x-3 gap-y-7">
@@ -29,23 +27,18 @@ export default function Footer() {
                 <h4 className="font-semibold mb-4 text-lg ">Pages</h4>
                 <ul className="space-y-3 text-sm text-gray-300 ">
                   <li>
-                    <Link href="#" className="hover:text-gold">
+                    <Link href="/" className="hover:text-gold">
                       Home
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="hover:text-gold">
-                      About us
+                    <Link href="/about-us" className="hover:text-gold">
+                      About Us
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="hover:text-gold">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="hover:text-gold">
-                      Admin
+                    <Link href="/contact-us" className="hover:text-gold">
+                      Contact Us
                     </Link>
                   </li>
                 </ul>
@@ -54,18 +47,13 @@ export default function Footer() {
                 <h4 className="font-semibold mb-4 text-lg">Products</h4>
                 <ul className="space-y-3 text-sm text-gray-300 ">
                   <li>
-                    <Link href="#" className="hover:text-gold">
+                    <Link href="/shop" className="hover:text-gold">
                       Shop
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="hover:text-gold">
+                    <Link href="/categories" className="hover:text-gold">
                       Categories
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="hover:text-gold">
-                      Brand
                     </Link>
                   </li>
                 </ul>
@@ -74,22 +62,29 @@ export default function Footer() {
                 <h4 className="font-semibold mb-4 text-lg">Media</h4>
                 <ul className="space-y-3 text-sm text-gray-300 ">
                   <li>
-                    <Link href="#" className="hover:text-gold">
+                    <Link
+                      target="_blank"
+                      href="https://www.tiktok.com/@theskinfidentialseries?_r=1&_t=ZS-92og7vRblk0"
+                      className="hover:text-gold"
+                    >
                       Tiktok
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="hover:text-gold">
+                    <Link
+                      target="_blank"
+                      href="https://www.instagram.com/_theskinfidentialseries?igsh=ZGd2N3NjOW5oN2p1"
+                      className="hover:text-gold"
+                    >
                       Instagram
                     </Link>
                   </li>
                   <li>
-                    <Link href="#" className="hover:text-gold">
-                      X
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="hover:text-gold">
+                    <Link
+                      target="_blank"
+                      href="https://wa.me/message/AVYNQP6NXUTIM1"
+                      className="hover:text-gold"
+                    >
                       Whatsapp
                     </Link>
                   </li>
@@ -103,6 +98,9 @@ export default function Footer() {
             {/* Copyright */}
             <p>© 2026 The Skinfidential Series. All rights reserved.</p>
           </div>
+          <p className=" text-center mt-8">
+            Made By <Link target="_blank" className=" text-gold italic" href={"https://darkah.vercel.app/"}>Darkah</Link>
+          </p>
         </div>
       </Container>
     </footer>

@@ -5,6 +5,7 @@ import Container from "@/components/Container";
 import Image from "next/image";
 import shopBg from ".././../../../public/shop-bg.jpg";
 import Link from "next/link";
+import ConsultUs from "@/components/ConsultUs";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -47,6 +48,9 @@ export default async function Shop() {
             <ProductsList products={products} />
           </div>
         </Container>
+      </section>
+      <section>
+        <ConsultUs />
       </section>
     </>
   );
