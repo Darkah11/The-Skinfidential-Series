@@ -4,6 +4,9 @@ import { formatPrice } from "@/utils/formatters";
 import { getAllUsers } from "@/utils/users";
 import React from "react";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function Dashboard() {
   const products = await getProducts();
   const categories = await getCategories();
