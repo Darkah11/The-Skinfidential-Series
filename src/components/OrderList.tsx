@@ -32,7 +32,7 @@ export default function OrderList({ orders }: MyComponentsProps) {
                 <p
                   className={` ${order.status === "cancelled" ? "text-red-600" : order.status === "completed" ? "text-green-600" : "text-orange-600"} flex items-center gap-1 bg-gray-200 py-1 px-3 rounded-full w-fit text-xs`}
                 >
-                  <div
+                  <span
                     className={`${order.status === "cancelled" ? "bg-red-600" : order.status === "completed" ? "bg-green-600" : "bg-orange-600"} rounded-full w-[5px] h-[5px]`}
                   />{" "}
                   <span>
@@ -40,16 +40,16 @@ export default function OrderList({ orders }: MyComponentsProps) {
                   </span>
                 </p>
                 <p>-</p>
-                <p className=" text-sm text-gray-600">
+                <p className=" text-xs text-gray-600">
                   {formatDate(order.createdAt)}
                 </p>
               </div>
               <div className=" flex items-center gap-2 mt-3">
-                <div className=" bg-accent text-white w-fit p-2 rounded-md">
+                <div className=" bg-accent text-white w-fit p-1 md:p-2 rounded-md">
                   <Image
                     src={orderImg}
                     alt="receipt icon"
-                    className=" object-cover w-10"
+                    className=" object-cover w-8 md:w-10"
                   />
                 </div>
                 <div>
