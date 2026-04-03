@@ -16,12 +16,14 @@ import UserMobileMenu from "./UserMobileMenu";
 import SearchProduct from "./SearchProducts";
 import UserMenu from "./UserMenu";
 import { User } from "@/types/user";
+import { useTrackPageView } from "@/hooks/useTrackPageView";
 
 interface MyComponentsProps {
   categories: Category[];
   user: User | null;
 }
 export default function Navbar({ categories, user }: MyComponentsProps) {
+  useTrackPageView("Home");
   const [cartOpen, setCartOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);

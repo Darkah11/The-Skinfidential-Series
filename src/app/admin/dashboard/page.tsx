@@ -2,6 +2,7 @@ import AdminHeader from "@/components/AdminHeader";
 import { getCategories, getOrders, getProducts } from "@/utils/firebase";
 import { formatPrice } from "@/utils/formatters";
 import { getAllUsers } from "@/utils/users";
+import VisitCounter from "@/components/VisitCounter";
 import React from "react";
 
 export const dynamic = "force-dynamic";
@@ -82,12 +83,7 @@ export default async function Dashboard() {
                 ₦{formatPrice(grossProfit)}
               </p>
             </div>
-            <div className=" bg-gold/20 px-3 md:px-5 py-5 border border-gold">
-              <h3 className=" text-gray-600 text-lg md:text-xl font-semibold">
-                Website Visits
-              </h3>
-              <p className=" text-primary-100 text-lg md:text-xl font-bold mt-2">0</p>
-            </div>
+            <VisitCounter />
           </div>
         </div>
       </div>
