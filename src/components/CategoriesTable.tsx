@@ -11,22 +11,19 @@ interface MyComponentProps {
 }
 
 export default function CategoriesTable({ categories }: MyComponentProps) {
-  //   const handleDelete = async (id) => {
-  //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
-  //       method: "DELETE",
-  //     });
-  //     if (res.ok) {
-  //       router.refresh();
-  //     }
-  //   };
   const [counts, setCounts] = useState<Record<string, number>>({});
-  const [search] = useState("");
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const filtered = categories.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
-  const rows = categories.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(categories.length / rowsPerPage);
+  const rows = filtered.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(filtered.length / rowsPerPage);
   //   const numbers = [...Array(nPage + 1).keys()].slice(1);
   const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
 
@@ -46,9 +43,6 @@ export default function CategoriesTable({ categories }: MyComponentProps) {
   ) => {
     await deleteCategory(id);
   };
-  const filtered = categories.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase()),
-  );
   function handlePage(id: number) {
     setCurrentPage(id);
   }
@@ -91,8 +85,8 @@ export default function CategoriesTable({ categories }: MyComponentProps) {
           <input
             placeholder="Search categories..."
             value={search}
-            // onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 shadow-md border border-gray-200 py-2 h-[40px] w-full rounded-full"
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 shadow-md border outline-none border-gray-200 py-2 h-[40px] w-full rounded-full"
           />
         </div>
         <Link href={"/admin/categories/add-category"}>

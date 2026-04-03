@@ -12,17 +12,16 @@ export default function ProductsList({ products }: MyComponentProps) {
   const [grid, setGrid] = useState<number>(2);
   const [orderBy, setOrderBy] = useState<string>("default");
 
-
   const sortedProducts = useMemo(() => {
     if (!products) return [];
 
     const sorted = [...products];
 
     switch (orderBy) {
-      case "alphabetical":
-        return sorted.sort((a, b) =>
-          (a.name || "").localeCompare(b.name || ""),
-        );
+      // case "alphabetical":
+      //   return sorted.sort((a, b) =>
+      //     (a.name || "").localeCompare(b.name || ""),
+      //   );
 
       case "latest":
         return sorted.sort(
@@ -38,7 +37,9 @@ export default function ProductsList({ products }: MyComponentProps) {
         return sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
 
       default:
-        return sorted;
+        return sorted.sort((a, b) =>
+          (a.name || "").localeCompare(b.name || ""),
+        );
     }
   }, [products, orderBy]);
 
@@ -46,20 +47,18 @@ export default function ProductsList({ products }: MyComponentProps) {
   // const visibleProducts = sortedProducts.slice(0, visibleCount);
   // const hasMore = visibleCount < sortedProducts.length;
   const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage] = useState(12);
-    const lastIndex = currentPage * rowsPerPage;
-    const firstIndex = lastIndex - rowsPerPage;
-    const rows = sortedProducts.slice(firstIndex, lastIndex);
-    const nPage = Math.ceil(sortedProducts.length / rowsPerPage);
-    const scrollRef = useRef<HTMLDivElement>(null);
+  const [rowsPerPage] = useState(12);
+  const lastIndex = currentPage * rowsPerPage;
+  const firstIndex = lastIndex - rowsPerPage;
+  const rows = sortedProducts.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(sortedProducts.length / rowsPerPage);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, [currentPage]);
-  
-
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentPage]);
 
   return (
     <div>
@@ -102,8 +101,8 @@ export default function ProductsList({ products }: MyComponentProps) {
               }}
               className=" cursor-pointer lg:px-0 lg:text-center text-right bg-transparent w-[190px] box-content md:text-sm text-xs outline-none p-0 font-semibold text-gray-600"
             >
-              <option value="default">DEFAULT SORTING</option>
-              <option value="alphabetical">Sort by alphabetical</option>
+              <option>DEFAULT SORTING</option>
+              {/* <option value="alphabetical">Sort by alphabetical</option> */}
               <option value="latest">Sort by latest</option>
               <option value="price-low">Price: low to high</option>
               <option value="price-high">Price: high to low</option>

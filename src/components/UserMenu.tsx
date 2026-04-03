@@ -55,7 +55,8 @@ export default function UserMenu({ onUpdate, user }: ChildProps) {
           </div>
         </div>
         <Link
-          href={""}
+        onClick={handleClose}
+          href={"/orders"}
           className=" flex font-semibold items-center gap-x-2 px-3 border-b border-gold py-3"
         >
           My Orders

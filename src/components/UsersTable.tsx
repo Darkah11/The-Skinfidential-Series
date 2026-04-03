@@ -9,13 +9,20 @@ interface MyComponentProps {
 
 export default function UsersTable({ users }: MyComponentProps) {
   // const [counts, setCounts] = useState<Record<string, number>>({});
-  const [search] = useState("");
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const filtered = users.filter(
+    (p) =>
+      (p.displayName &&
+        p.displayName.toLowerCase().includes(search.toLowerCase())) ||
+      (p.email && p.email.toLowerCase().includes(search.toLowerCase())) ||
+      (p.uid && p.uid.toLowerCase().includes(search.toLowerCase())),
+  );
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
-  const rows = users.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(users.length / rowsPerPage);
+  const rows = filtered.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(filtered.length / rowsPerPage);
   const [isCopied, setIsCopied] = useState<string | null>(null);
   //   const numbers = [...Array(nPage + 1).keys()].slice(1);
   const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
@@ -30,9 +37,7 @@ export default function UsersTable({ users }: MyComponentProps) {
       setCurrentPage(currentPage + 1);
     }
   }
-  // const filtered = users.filter((p) =>
-  //   p.displayName && p.displayName.toLowerCase().includes(search.toLowerCase()),
-  // );
+
   function handlePage(id: number) {
     setCurrentPage(id);
   }
@@ -53,7 +58,10 @@ export default function UsersTable({ users }: MyComponentProps) {
     }
   }
 
-  const copyToClipboard = async (e: React.MouseEvent<HTMLButtonElement>, text: string) => {
+  const copyToClipboard = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    text: string,
+  ) => {
     e.preventDefault();
     try {
       await navigator.clipboard.writeText(text);
@@ -75,8 +83,8 @@ export default function UsersTable({ users }: MyComponentProps) {
           <input
             placeholder="Search users..."
             value={search}
-            // onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 shadow-md border border-gray-200 py-2 h-[40px] w-full rounded-full"
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 shadow-md border outline-none border-gray-200 py-2 h-[40px] w-full rounded-full"
           />
         </div>
       </div>
