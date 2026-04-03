@@ -772,6 +772,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
         </div>
 
         <button
+        disabled={loading}
           onClick={(e) =>
             pathname.includes(editPath)
               ? handleEditProduct(e)
