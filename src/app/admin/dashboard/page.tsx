@@ -83,7 +83,7 @@ export default async function Dashboard() {
               <h3 className=" text-gray-600 text-lg md:text-xl font-semibold">
                 Website Visits
               </h3>
-              <p className=" text-primary-100 text-lg md:text-xl font-bold mt-2">120</p>
+              <p className=" text-primary-100 text-lg md:text-xl font-bold mt-2">0</p>
             </div>
           </div>
         </div>

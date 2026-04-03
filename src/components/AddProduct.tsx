@@ -65,12 +65,11 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
   const [errors, setErrors] = useState<formErrors>({});
   const [loading, setLoading] = useState(false);
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const { name, value, type } = e.target;
 
     let processedValue: string | number = value;
@@ -84,7 +83,6 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
       [name]: processedValue,
     }));
     console.log(formData);
-    
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -398,21 +396,20 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
               Profit is {formData.price - formData.costPrice}
             </p>
           )}
-          <div className=" lg:w-1/2">
+          <div className="">
             <label
               htmlFor="description"
               className=" text-gray-700 text-[11px] font-semibold  uppercase"
             >
               Description
             </label>
-            <input
+            <textarea
               onChange={handleChange}
-              type="text"
               name="description"
               value={formData.description}
               placeholder="Add product details"
               id="description"
-              className=" outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300"
+              className=" min-h-[120px] outline-none block w-full py-[10px] px-3 mt-[5px] border rounded-sm border-gray-300"
             />
           </div>
           <div className="">

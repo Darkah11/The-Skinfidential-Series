@@ -87,7 +87,7 @@ export default function Navbar({ categories, user }: MyComponentsProps) {
                 {/* <li></li> */}
                 <li className="relative group h-full ">
                   <Link
-                    href={""}
+                    href={"/categories"}
                     className=" flex items-center h-full text-sm hover:text-primary-50"
                   >
                     Categories +

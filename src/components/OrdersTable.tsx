@@ -3,48 +3,27 @@ import { useState } from "react";
 import { formatDate, formatPrice } from "@/utils/formatters";
 import { OrderWithId } from "@/types/order";
 import ViewOrder from "./ViewOrder";
+import { Search } from "lucide-react";
+import Pagination from "./Pagination";
 
 interface MyComponentProps {
   orders: OrderWithId[];
 }
 
 export default function OrdersTable({ orders }: MyComponentProps) {
-  //   const handleDelete = async (id) => {
-  //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
-  //       method: "DELETE",
-  //     });
-  //     if (res.ok) {
-  //       router.refresh();
-  //     }
-  //   };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [search] = useState("");
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const lastIndex = currentPage * rowsPerPage;
-  const firstIndex = lastIndex - rowsPerPage;
-  const rows = orders.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(orders.length / rowsPerPage);
-  //   const numbers = [...Array(nPage + 1).keys()].slice(1);
-  const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
-
-  function prevPage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  }
-  function nextPage() {
-    if (currentPage !== nPage) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
   const filtered = orders.filter((p) =>
     p.orderNumber.toLowerCase().includes(search.toLowerCase()),
   );
-  function handlePage(id: number) {
-    setCurrentPage(id);
-  }
+  const lastIndex = currentPage * rowsPerPage;
+  const firstIndex = lastIndex - rowsPerPage;
+  const rows = filtered.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(filtered.length / rowsPerPage);
+
   function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
     const value = e.target.value;
     if (value == "10") {
@@ -63,23 +42,17 @@ export default function OrdersTable({ orders }: MyComponentProps) {
   }
   return (
     <>
-      {/* <div className="flex w-full md:justify-between md:items-center gap-3">
+      <div className="flex w-full md:justify-between md:items-center gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
-            placeholder="Search products..."
+            placeholder="Search orders by order number..."
             value={search}
-            // onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 shadow-md border border-gray-200 py-2 h-[40px] w-full rounded-full"
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 shadow-md border outline-none border-gray-200 py-2 h-[40px] w-full rounded-full"
           />
         </div>
-        <Link href={"/admin/products/add-product"}>
-          <button className=" w-[40px] h-[40px] md:h-auto md:w-auto flex items-center justify-center md:gap-1 bg-accent md:px-4 md:py-2 text-white rounded-full text-sm">
-            <Plus className=" w-4 h-4" />
-            <span className=" hidden md:block">Add Product</span>
-          </button>
-        </Link>
-      </div> */}
+      </div>
       <div className=" hidden lg:block mt-10">
         <table className=" w-full bg-white table-container rounded-t-xl">
           <thead className=" bg-gold text-primary-100 ">
@@ -160,38 +133,11 @@ export default function OrdersTable({ orders }: MyComponentProps) {
             </label>
           </div>
 
-          <ul className=" flex gap-[2px]">
-            <li>
-              <button
-                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                onClick={prevPage}
-              >
-                {"<"}
-              </button>
-            </li>
-            {numbers.map((n, i) => (
-              <li key={i}>
-                <button
-                  className={
-                    currentPage == n
-                      ? "bg-primary-100 text-white min-w-[25px] min-h-[30px] p-1 rounded-md"
-                      : "bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                  }
-                  onClick={() => handlePage(n)}
-                >
-                  {n}
-                </button>
-              </li>
-            ))}
-            <li>
-              <button
-                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                onClick={nextPage}
-              >
-                {">"}
-              </button>
-            </li>
-          </ul>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={nPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </div>
       <div className="lg:hidden flex flex-col gap-3 py-5 text-primary-100">
@@ -229,7 +175,7 @@ export default function OrdersTable({ orders }: MyComponentProps) {
 
         {filtered.length === 0 && (
           <p className="text-center text-sm text-muted-foreground py-6">
-            No products found
+            No Orders Yet
           </p>
         )}
       </div>

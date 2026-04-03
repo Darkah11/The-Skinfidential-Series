@@ -7,6 +7,7 @@ import Image from "next/image";
 import { formatDate, formatPrice } from "@/utils/formatters";
 import { deleteProduct } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
+import Pagination from "./Pagination";
 
 interface MyComponentProps {
   products: ProductWithId[];
@@ -14,34 +15,19 @@ interface MyComponentProps {
 
 export default function ProductsTable({ products }: MyComponentProps) {
   const router = useRouter();
-  //   const handleDelete = async (id) => {
-  //     const res = await fetch("http://localhost:4000/bloglist/" + id, {
-  //       method: "DELETE",
-  //     });
-  //     if (res.ok) {
-  //       router.refresh();
-  //     }
-  //   };
-  const [search] = useState("");
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const filtered = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   const lastIndex = currentPage * rowsPerPage;
   const firstIndex = lastIndex - rowsPerPage;
-  const rows = products.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(products.length / rowsPerPage);
-  //   const numbers = [...Array(nPage + 1).keys()].slice(1);
-  const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
+  const rows = filtered.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(filtered.length / rowsPerPage);
 
-  function prevPage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  }
-  function nextPage() {
-    if (currentPage !== nPage) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement>,
     id: string,
@@ -50,12 +36,7 @@ export default function ProductsTable({ products }: MyComponentProps) {
     await deleteProduct(id, imagePublicId);
     router.refresh();
   };
-  const filtered = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase()),
-  );
-  function handlePage(id: number) {
-    setCurrentPage(id);
-  }
+  
   function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
     const value = e.target.value;
     if (value == "10") {
@@ -80,8 +61,8 @@ export default function ProductsTable({ products }: MyComponentProps) {
           <input
             placeholder="Search products..."
             value={search}
-            // onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 shadow-md border border-gray-200 py-2 h-[40px] w-full rounded-full"
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 shadow-md border outline-none border-gray-200 py-2 h-[40px] w-full rounded-full"
           />
         </div>
         <Link href={"/admin/products/add-product"}>
@@ -174,38 +155,11 @@ export default function ProductsTable({ products }: MyComponentProps) {
             </label>
           </div>
 
-          <ul className=" flex gap-[2px]">
-            <li>
-              <button
-                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                onClick={prevPage}
-              >
-                {"<"}
-              </button>
-            </li>
-            {numbers.map((n, i) => (
-              <li key={i}>
-                <button
-                  className={
-                    currentPage == n
-                      ? "bg-primary-100 text-white min-w-[25px] min-h-[30px] p-1 rounded-md"
-                      : "bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                  }
-                  onClick={() => handlePage(n)}
-                >
-                  {n}
-                </button>
-              </li>
-            ))}
-            <li>
-              <button
-                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                onClick={nextPage}
-              >
-                {">"}
-              </button>
-            </li>
-          </ul>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={nPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </div>
       <div className="lg:hidden flex flex-col gap-3 py-5 text-primary-100">

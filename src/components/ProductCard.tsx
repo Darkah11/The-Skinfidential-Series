@@ -70,7 +70,7 @@ export default function ProductCard({ product }: MyComponentProps) {
         </div>
         <div className=" border-t border-gray-100 relative  flex flex-col flex-grow justify-between px-3 py-5  bg-white">
           {/* <AddToCartBtn style=" absolute right-3 -top-5 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-500" /> */}
-          <p className=" capitalize text-black text-sm font-medium transition-all duration-300">
+          <p className=" line-clamp-2 capitalize text-black text-sm font-medium transition-all duration-300">
             {product.name}
           </p>
           <div className=" flex justify-between items-center mt-[10px]">

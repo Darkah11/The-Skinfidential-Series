@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import ProductCard from "./ProductCard";
+import Pagination from "./Pagination";
 import { ProductWithId } from "@/types/products";
 
 interface MyComponentProps {
@@ -11,70 +12,59 @@ export default function ProductsList({ products }: MyComponentProps) {
   const [grid, setGrid] = useState<number>(2);
   const [orderBy, setOrderBy] = useState<string>("default");
 
-  // 1. SORT PRODUCTS
-  // const sortedProducts = useMemo(() => {
-  //   if (!products) return [];
 
-  //   const sorted = [...products];
+  const sortedProducts = useMemo(() => {
+    if (!products) return [];
 
-  //   switch (orderBy) {
-  //     case "alphabetical":
-  //       return sorted.sort((a, b) =>
-  //         (a.name || "").localeCompare(b.name || ""),
-  //       );
+    const sorted = [...products];
 
-  //     case "latest":
-  //       return sorted.sort(
-  //         (a, b) =>
-  //           new Date(b.createdAt ?? 0).getTime() -
-  //           new Date(a.createdAt ?? 0).getTime(),
-  //       );
+    switch (orderBy) {
+      case "alphabetical":
+        return sorted.sort((a, b) =>
+          (a.name || "").localeCompare(b.name || ""),
+        );
 
-  //     case "price-low":
-  //       return sorted.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+      case "latest":
+        return sorted.sort(
+          (a, b) =>
+            new Date(b.createdAt ?? 0).getTime() -
+            new Date(a.createdAt ?? 0).getTime(),
+        );
 
-  //     case "price-high":
-  //       return sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+      case "price-low":
+        return sorted.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
 
-  //     default:
-  //       return sorted;
-  //   }
-  // }, [products, orderBy]);
+      case "price-high":
+        return sorted.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+
+      default:
+        return sorted;
+    }
+  }, [products, orderBy]);
 
   // 2. ONLY SHOW WHAT'S CURRENTLY LOADED
   // const visibleProducts = sortedProducts.slice(0, visibleCount);
   // const hasMore = visibleCount < sortedProducts.length;
   const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage] = useState(10);
+    const [rowsPerPage] = useState(12);
     const lastIndex = currentPage * rowsPerPage;
     const firstIndex = lastIndex - rowsPerPage;
-    const rows = products.slice(firstIndex, lastIndex);
-    const nPage = Math.ceil(products.length / rowsPerPage);
-    //   const numbers = [...Array(nPage + 1).keys()].slice(1);
-    const numbers = Array.from({ length: nPage }, (_, i) => i + 1);
+    const rows = sortedProducts.slice(firstIndex, lastIndex);
+    const nPage = Math.ceil(sortedProducts.length / rowsPerPage);
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, [currentPage]);
   
-    function prevPage() {
-      if (currentPage !== 1) {
-        setCurrentPage(currentPage - 1);
-      }
-    }
-    function nextPage() {
-      if (currentPage !== nPage) {
-        setCurrentPage(currentPage + 1);
-      }
-    }
-    // const filtered = products.filter((p) =>
-    //   p.name.toLowerCase().includes(search.toLowerCase()),
-    // );
-    function handlePage(id: number) {
-      setCurrentPage(id);
-    }
 
 
   return (
     <div>
       {/* Header */}
-      <div className=" flex items-center justify-between">
+      <div className=" flex items-center justify-between" ref={scrollRef}>
         <h3 className=" block w-full lg:w-auto text-2xl md:text-3xl font-semibold">
           Products
         </h3>
@@ -139,41 +129,11 @@ export default function ProductsList({ products }: MyComponentProps) {
             ))}
           </div>
 
-          <div className=" mt-8 flex justify-center">
-
-          <ul className=" flex gap-2">
-            <li>
-              <button
-                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                onClick={prevPage}
-              >
-                {"<"}
-              </button>
-            </li>
-            {numbers.map((n, i) => (
-              <li key={i}>
-                <button
-                  className={
-                    currentPage == n
-                      ? "bg-primary-100 text-white min-w-[25px] min-h-[30px] p-1 rounded-md"
-                      : "bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                  }
-                  onClick={() => handlePage(n)}
-                >
-                  {n}
-                </button>
-              </li>
-            ))}
-            <li>
-              <button
-                className="bg-gray-100 min-w-[25px] min-h-[30px] p-1 rounded-md"
-                onClick={nextPage}
-              >
-                {">"}
-              </button>
-            </li>
-          </ul>
-        </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={nPage}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </>
       ) : (
         <div className=" w-full h-40 flex items-center justify-center">
