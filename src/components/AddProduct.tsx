@@ -151,8 +151,9 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     if (formData.costPrice == 0) {
       newErrors.costPrice = "Cost price is required.";
     }
-    if (formData.stock == 0) {
+    if (formData.stock == null) {
       newErrors.stock = "Stock is required.";
+
     }
     if (!formData.image) {
       newErrors.image = "Image is required.";
@@ -225,7 +226,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
     if (formData.categories.length === 0) {
       newErrors.categories = "Add at least one category.";
     }
-    if (!formData.stock || formData.stock == 0) {
+    if (formData.stock == null) {
       newErrors.stock = "Stock is required.";
     }
     if (formData.hasVariants) {
@@ -521,7 +522,7 @@ export default function AddProduct({ categories, product }: MyComponentProps) {
             </label>
             <input
               onChange={handleChange}
-              value={formData.stock || ""}
+              value={formData.stock}
               type="number"
               name="stock"
               id="stock"
